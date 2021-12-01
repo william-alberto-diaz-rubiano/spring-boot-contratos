@@ -9,6 +9,7 @@ import pe.gob.vuce.zee.api.maestros.models.ContratoEntity;
 import pe.gob.vuce.zee.api.maestros.repository.ContratoRepository;
 import pe.gob.vuce.zee.api.maestros.service.ContratoService;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -37,9 +38,9 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public List<ContratoEntity> finByCorrelativo(){
-       //todo implementar
-        return null;
+    public List<ContratoEntity> finByCorrelativo(String numeroContrato, Integer tipoContrato, Integer estado,
+                                                 Timestamp fechaInicio, Timestamp fechaFinal){
+        return contratoRepository.busqueda(numeroContrato,tipoContrato,estado,fechaInicio,fechaFinal,0,0,null,null);
     }
 
     @Override
