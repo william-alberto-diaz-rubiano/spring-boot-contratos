@@ -33,9 +33,6 @@ public class ContratoEntity {
     @Column(name = "vecr_ctrt_ddocumento", nullable = false, length = 10)
     private String documento;
 
-    @Column(name = "vems_comp_correl_act", nullable = false, length = 10)
-    private String actividad;
-
     @Column(name = "vecr_ctrt_id_usuario", nullable = false)
     private Integer usuarioZee;
 
