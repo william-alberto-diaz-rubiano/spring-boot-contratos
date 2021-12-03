@@ -32,6 +32,7 @@ public class ContratoController {
                                                                             @RequestParam(name = "fechaInicial", required = false) Timestamp fechaInicial,
                                                                             @RequestParam(name = "fechaFinal", required = false) Timestamp fechaFinal, Pageable pageable) {
         ResponseDTO<?> response;
+
         Page<ContratoEntity> resultado = contratoService.finByCorrelativo(numeroContrato,tipoContrato, estado,
                 fechaInicial,fechaFinal,pageable);
         response = new ResponseDTO<>(Constantes.NO_ERROR, resultado);
