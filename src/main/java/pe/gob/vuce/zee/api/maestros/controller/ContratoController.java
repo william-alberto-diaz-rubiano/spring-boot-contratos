@@ -1,5 +1,7 @@
 package pe.gob.vuce.zee.api.maestros.controller;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pe.gob.vuce.zee.api.maestros.models.ContratoEntity;
@@ -18,8 +20,13 @@ public class ContratoController {
     }
 
     @GetMapping
-    public List<ContratoEntity> getContratos() {
-        return contratoService.findAll();
+    public Page<ContratoEntity> getContratos(@RequestParam(name = "numeroContrato", required = false) String numeroContrato,
+                                             @RequestParam(name = "tipoContrato", required = false) Integer tipoContrato,
+                                             @RequestParam(name = "estado", required = false) Integer estado,
+                                             @RequestParam(name = "fechaInicial", required = false) Timestamp fechaInicial,
+                                             @RequestParam(name = "fechaFinal", required = false) Timestamp fechaFinal, Pageable pageable) {
+        return contratoService.finByCorrelativo(numeroContrato,tipoContrato, estado,
+                fechaInicial,fechaFinal,pageable);
     }
 
     @PostMapping
@@ -32,13 +39,6 @@ public class ContratoController {
         return contratoService.finByClienteId(clientId);
     }
 
-    @GetMapping("/findByFilters")
-    public List<ContratoEntity> getContratosByFilters(@RequestParam(name = "numeroContrato", required = false) String numeroContrato,
-                                                      @RequestParam(name = "tipoContrato", required = false) Integer tipoContrato,
-                                                      @RequestParam(name = "estado", required = false) Integer estado,
-                                                      @RequestParam(name = "fechaInicial", required = false) Timestamp fechaInicial,
-                                                      @RequestParam(name = "fechaFinal", required = false) Timestamp fechaFinal) {
-        return contratoService.finByCorrelativo(numeroContrato, tipoContrato, estado, fechaInicial, fechaFinal);
-    }
+
 
 }

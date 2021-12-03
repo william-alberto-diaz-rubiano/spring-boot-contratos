@@ -1,5 +1,8 @@
 package pe.gob.vuce.zee.api.maestros.repository.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import pe.gob.vuce.zee.api.maestros.models.ContratoEntity;
 import pe.gob.vuce.zee.api.maestros.repository.ContratoCustomRepository;
 import pe.gob.vuce.zee.api.maestros.repository.ContratoRepository;
@@ -43,8 +46,19 @@ public class ContratoRepositoryImpl implements ContratoCustomRepository {
     }
 
     @Override
+    public Page<ContratoEntity> busquedaPageable(String numeroContrato, Integer tipoContrato, Integer estado,
+                                                 Timestamp fechaInicio, Timestamp fechaFinal, Pageable pageable) {
+        var offset = pageable.getPageNumber() * pageable.getPageSize();
+        var resultList = busqueda(numeroContrato,tipoContrato, estado,
+                fechaInicio,fechaFinal,offset, pageable.getPageSize(), null, null);
+        var count = contar(numeroContrato,tipoContrato, estado, fechaInicio, fechaFinal);
+        return new PageImpl<>(resultList, pageable, count);
+    }
+
+    @Override
     public List<ContratoEntity> busqueda(String numeroContrato, Integer tipoContrato, Integer estado,
-                                         Timestamp fechaInicio, Timestamp fechaFinal, int offset, int size, String sort, String filter) {
+                                         Timestamp fechaInicio, Timestamp fechaFinal, int
+                                                     offset, int size, String sort, String filter) {
         var cb = em.getCriteriaBuilder();
         var cq = cb.createQuery(ContratoEntity.class);
         var entityRoot = cq.from(ContratoEntity.class);
@@ -96,5 +110,21 @@ public class ContratoRepositoryImpl implements ContratoCustomRepository {
             result = result.setMaxResults(size);
         }
         return result.getResultList();
+    }
+
+    @Override
+    public Long contar(String numeroContrato, Integer tipoContrato, Integer estado,
+                        Timestamp fechaInicio, Timestamp fechaFinal) {
+        var cb = em.getCriteriaBuilder();
+        var cq = cb.createQuery(Long.class);
+        var entityRoot = cq.from(ContratoEntity.class);
+        cq.select(cb.count(entityRoot));
+        var predicates = predicados(cb, entityRoot,numeroContrato,tipoContrato, estado,
+                fechaInicio, fechaFinal);
+        if (predicates.length > 0) {
+            cq.where(predicates);
+        }
+        var query = em.createQuery(cq);
+        return query.getSingleResult();
     }
 }

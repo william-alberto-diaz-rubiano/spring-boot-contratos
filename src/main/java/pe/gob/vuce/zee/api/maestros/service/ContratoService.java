@@ -1,5 +1,7 @@
 package pe.gob.vuce.zee.api.maestros.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import pe.gob.vuce.zee.api.maestros.models.ContratoEntity;
 
 import java.sql.Timestamp;
@@ -11,8 +13,8 @@ public interface ContratoService {
 
     List<ContratoEntity> finByClienteId(Integer clientId);
 
-    List<ContratoEntity> finByCorrelativo(String numeroContrato, Integer tipoContrato, Integer estado,
-                                          Timestamp fechaInicio, Timestamp fechaFinal);
+    Page<ContratoEntity> finByCorrelativo(String numeroContrato, Integer tipoContrato, Integer estado,
+                                          Timestamp fechaInicio, Timestamp fechaFinal, Pageable pageable);
 
     List<ContratoEntity> finByUsuario();
 }

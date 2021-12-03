@@ -1,6 +1,8 @@
 package pe.gob.vuce.zee.api.maestros.service.impl;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pe.gob.vuce.zee.api.maestros.base.Constantes;
 import pe.gob.vuce.zee.api.maestros.dto.MaestroDTO;
@@ -38,9 +40,10 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public List<ContratoEntity> finByCorrelativo(String numeroContrato, Integer tipoContrato, Integer estado,
-                                                 Timestamp fechaInicio, Timestamp fechaFinal){
-        return contratoRepository.busqueda(numeroContrato,tipoContrato,estado,fechaInicio,fechaFinal,0,0,null,null);
+    public Page<ContratoEntity> finByCorrelativo(String numeroContrato, Integer tipoContrato, Integer estado,
+                                                 Timestamp fechaInicio, Timestamp fechaFinal, Pageable pageable){
+        Page<ContratoEntity> contratoList = contratoRepository.busquedaPageable(numeroContrato,tipoContrato,estado,fechaInicio,fechaFinal,pageable);
+       return contratoList;
     }
 
     @Override
