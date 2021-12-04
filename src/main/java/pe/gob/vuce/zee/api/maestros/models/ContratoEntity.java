@@ -93,4 +93,7 @@ public class ContratoEntity {
     @Column(name = "vecr_ctrt_usr_update")
     private Timestamp usuarioModificacion;
 
+    @Column(name = "vecr_ctrt_usr_nombre")
+    private String usuarioNombre;
+
 }
