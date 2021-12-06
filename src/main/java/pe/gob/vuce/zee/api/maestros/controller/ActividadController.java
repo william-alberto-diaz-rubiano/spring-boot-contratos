@@ -36,6 +36,7 @@ public class ActividadController {
     @DeleteMapping
     public ResponseEntity<ResponseDTO<?>> eliminarActividad(@RequestBody @Valid ActividadDTO actividadDTO) {
         ResponseDTO<?> response;
+
         response = new ResponseDTO<>(Constantes.NO_ERROR, null);
         return ResponseEntity.ok(response);
     }
