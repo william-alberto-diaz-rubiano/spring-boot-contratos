@@ -18,7 +18,7 @@ public class ContratoLoteController {
 
     private final ContratoLoteService contratoLoteService;
 
-    @GetMapping("/contrato/{idContrato}")
+    @GetMapping("{idContrato}/lotes")
     public ResponseEntity<ResponseDTO<?>> getContrato(@PathVariable UUID idContrato) throws IOException {
         ResponseDTO<?> response;
          LoteContratoDTO loteContratoDTO = contratoLoteService.findByContrato(idContrato);
