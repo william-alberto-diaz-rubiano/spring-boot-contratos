@@ -1,9 +1,14 @@
 package pe.gob.vuce.zee.api.maestros;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import javax.annotation.PostConstruct;
 
 @SpringBootApplication
 public class MaestrosApplication {
@@ -12,9 +17,16 @@ public class MaestrosApplication {
 		SpringApplication.run(MaestrosApplication.class, args);
 	}
 
+	@Autowired
+	private ObjectMapper objectMapper;
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
+	}
+
+	@PostConstruct
+	public void setUp() {
+		objectMapper.registerModule(new JavaTimeModule());
 	}
 
 }

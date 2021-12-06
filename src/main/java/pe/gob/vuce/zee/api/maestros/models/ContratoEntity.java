@@ -1,7 +1,6 @@
 package pe.gob.vuce.zee.api.maestros.models;
 
 import lombok.*;
-import org.bouncycastle.util.Times;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;

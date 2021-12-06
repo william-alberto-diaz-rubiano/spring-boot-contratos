@@ -25,23 +25,25 @@ jar {
 }
 
 dependencies {
-	implementation group: 'com.opencsv', name: 'opencsv', version: '5.5.2'
-	implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.0.0'
-	implementation 'io.springfox:springfox-boot-starter:3.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.0'
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.4'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.5.2'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.5.12'
 	implementation 'org.modelmapper:modelmapper:2.3.5'
+	compileOnly "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.4"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+	implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
+
 }
 
 
