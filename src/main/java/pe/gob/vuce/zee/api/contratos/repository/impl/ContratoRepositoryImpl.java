@@ -42,11 +42,11 @@ public class ContratoRepositoryImpl implements ContratoCustomRepository {
             predicates.add(cb.greaterThanOrEqualTo(entityRoot.get("fechaInicial"), fechaInicial));
         }
         if (fechaFinal != null && fechaInicial == null) {
-            predicates.add(cb.lessThanOrEqualTo(entityRoot.get("fechaFinal"), fechaFinal));
+            predicates.add(cb.lessThanOrEqualTo(entityRoot.get("fechaVencimiento"), fechaFinal));
         }
         if (fechaFinal != null && fechaInicial != null) {
             predicates.add(cb.greaterThanOrEqualTo(entityRoot.get("fechaInicial"), fechaInicial));
-            predicates.add(cb.lessThanOrEqualTo(entityRoot.get("fechaFinal"), fechaFinal));
+            predicates.add(cb.lessThanOrEqualTo(entityRoot.get("fechaVencimiento"), fechaFinal));
         }
         return predicates.toArray(new Predicate[0]);
     }
