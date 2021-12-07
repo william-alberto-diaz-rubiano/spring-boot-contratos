@@ -1,7 +1,7 @@
 package pe.gob.vuce.zee.api.contratos.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +11,6 @@ import pe.gob.vuce.zee.api.contratos.dto.ResponseDTO;
 import pe.gob.vuce.zee.api.contratos.service.ContratoLoteService;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -40,7 +38,7 @@ public class ContratoLoteController {
             @RequestParam(name = "usuarioZEE", required = false) UUID usuario,
             @RequestParam(name = "tipoActividad", required = false) UUID tipoActividad, Pageable pageable) throws IOException {
         ResponseDTO<?> response;
-        List<LoteContratoDTO> loteContratoDTO = contratoLoteService.findAll();
+        Page<LoteContratoDTO> loteContratoDTO = contratoLoteService.findAll(pageable);
         response = new ResponseDTO<>(Constantes.NO_ERROR, loteContratoDTO);
         return ResponseEntity.ok(response);
     }

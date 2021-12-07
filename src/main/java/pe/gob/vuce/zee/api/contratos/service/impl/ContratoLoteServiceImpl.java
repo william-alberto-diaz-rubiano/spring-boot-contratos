@@ -3,6 +3,9 @@ package pe.gob.vuce.zee.api.contratos.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pe.gob.vuce.zee.api.contratos.consumer.LoteAPI;
@@ -145,12 +148,23 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     }
 
     @Override
-    public List<LoteContratoDTO> findAll(){
+    public Page<LoteContratoDTO> findAll(Pageable pageable){
         List<LoteContratoEntity> listado = contratoLoteRepository.findAll();
         List<LoteContratoDTO> dtos = listado
                 .stream()
                 .map(contrato -> modelMapper.map(contrato, LoteContratoDTO.class))
                 .collect(Collectors.toList());
-        return dtos;
+        List<LoteContratoDTO> contratosDTO = new ArrayList<>();
+        for (LoteContratoDTO loteContratoDTO:dtos
+             ) {
+            try {
+                loteContratoDTO.setLote(buscarPorId(loteContratoDTO.getIdLote()));
+                contratosDTO.add(loteContratoDTO);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return new PageImpl<>(contratosDTO, pageable, listado.size());
     }
 }

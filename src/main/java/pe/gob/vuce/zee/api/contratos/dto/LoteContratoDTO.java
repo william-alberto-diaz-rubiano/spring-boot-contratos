@@ -30,5 +30,6 @@ public class LoteContratoDTO {
     private Timestamp fechaModificacion;
     private UUID usuarioId;
     private String usuarioNombre;
-    private String loteObj;
+    private LoteDTO lote;
+    private UUID idLote;
 }
