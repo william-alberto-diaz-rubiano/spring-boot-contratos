@@ -17,7 +17,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LoteContratoDTO {
     private UUID idContratoLote;
-    private UUID contrato;
+    private ContratoDTO contrato;
     private List<LoteDTO> lotes;
     private Integer costo;
     private Integer tamano;

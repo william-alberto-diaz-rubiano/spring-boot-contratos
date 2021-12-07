@@ -2,11 +2,14 @@ package pe.gob.vuce.zee.api.contratos.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pe.gob.vuce.zee.api.contratos.consumer.LoteAPI;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoDTO;
 import pe.gob.vuce.zee.api.contratos.dto.LoteContratoDTO;
 import pe.gob.vuce.zee.api.contratos.dto.LoteDTO;
+import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
 import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoLoteRepository;
 import pe.gob.vuce.zee.api.contratos.service.ContratoLoteService;
@@ -16,12 +19,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ContratoLoteServiceImpl implements ContratoLoteService {
 
+    private final ModelMapper modelMapper;
     private final LoteAPI loteAPI;
     private final ContratoLoteRepository contratoLoteRepository;
 
@@ -54,7 +59,9 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         LoteContratoDTO loteContratoDTO = new LoteContratoDTO();
         if(listContrato.size() != 0){
             LoteContratoEntity loteContratoEntity = listContrato.get(0);
-            loteContratoDTO.setContrato(loteContratoEntity.getIdContrato());
+            loteContratoDTO.setContrato(
+                    modelMapper.map(loteContratoEntity.getContrato(),
+                            ContratoDTO.class));
             loteContratoDTO.setCosto(loteContratoEntity.getCosto());
             loteContratoDTO.setActivo(loteContratoEntity.getActivo());
             loteContratoDTO.setEstado(loteContratoEntity.getEstado());
@@ -84,7 +91,8 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         LoteContratoEntity loteContratoEntity = new LoteContratoEntity();
         loteContratoEntity=contratoLoteRepository.getById(idContratoLote);
         if(loteContratoEntity != null){
-            loteContratoDTO.setContrato(loteContratoEntity.getIdContrato());
+            loteContratoDTO.setContrato(modelMapper.map(loteContratoEntity.getContrato(),
+                    ContratoDTO.class));
             loteContratoDTO.setCosto(loteContratoEntity.getCosto());
             loteContratoDTO.setActivo(loteContratoEntity.getActivo());
             loteContratoDTO.setEstado(loteContratoEntity.getEstado());
@@ -118,7 +126,8 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         List<LoteContratoEntity> loteContratoSave= new ArrayList<>();
         for (LoteDTO loteobj:loteDTOS
              ) {
-            loteContratoEntity.setIdContrato(loteContratoDTO.getIdContratoLote());
+            loteContratoEntity.setContrato(modelMapper.map(loteContratoDTO.getContrato(),
+                    ContratoEntity.class));
             loteContratoEntity.setIdLote(loteobj.getId());
             loteContratoEntity.setCosto(loteContratoDTO.getCosto());
             loteContratoEntity.setActivo(1);
@@ -132,6 +141,16 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
             loteContratoSave.add(loteContratoEntity);
         }
         contratoLoteRepository.saveAll(loteContratoSave);
-        return findByContrato(loteContratoDTO.getContrato());
+        return findByContrato(loteContratoDTO.getContrato().getId());
+    }
+
+    @Override
+    public List<LoteContratoDTO> findAll(){
+        List<LoteContratoEntity> listado = contratoLoteRepository.findAll();
+        List<LoteContratoDTO> dtos = listado
+                .stream()
+                .map(contrato -> modelMapper.map(contrato, LoteContratoDTO.class))
+                .collect(Collectors.toList());
+        return dtos;
     }
 }

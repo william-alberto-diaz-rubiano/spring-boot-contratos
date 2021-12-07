@@ -3,6 +3,7 @@ package pe.gob.vuce.zee.api.contratos.service;
 import pe.gob.vuce.zee.api.contratos.dto.LoteContratoDTO;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 public interface ContratoLoteService {
@@ -12,4 +13,6 @@ public interface ContratoLoteService {
     LoteContratoDTO deleteLoteContrato(LoteContratoDTO loteContratoDTO);
 
     LoteContratoDTO crearLoteContrato(LoteContratoDTO loteContratoDTO) throws IOException;
+
+    List<LoteContratoDTO> findAll();
 }

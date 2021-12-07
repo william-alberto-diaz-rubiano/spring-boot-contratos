@@ -23,9 +23,9 @@ public class LoteContratoEntity {
     @Type(type="pg-uuid")
     private UUID id;
 
-    @Type(type="pg-uuid")
-    @Column(name = "vecr_lote_id_cont_fk", nullable = false)
-    private UUID idContrato;
+    @ManyToOne
+    @JoinColumn(name = "vecr_lote_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
+    private ContratoEntity contrato;
 
     @Type(type="pg-uuid")
     @Column(name = "vecr_lote_codg_lotes", nullable = false)
