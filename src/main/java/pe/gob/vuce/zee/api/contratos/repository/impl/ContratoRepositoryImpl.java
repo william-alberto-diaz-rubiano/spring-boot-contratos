@@ -35,6 +35,9 @@ public class ContratoRepositoryImpl implements ContratoCustomRepository {
         if (estado != null) {
             predicates.add(cb.equal(entityRoot.get("estado"), estado));
         }
+        if (usuario != null) {
+            predicates.add(cb.equal(entityRoot.get("usuarioCreacion").get("id"), usuario));
+        }
         if (fechaInicial != null && fechaFinal == null) {
             predicates.add(cb.greaterThanOrEqualTo(entityRoot.get("fechaInicial"), fechaInicial));
         }
