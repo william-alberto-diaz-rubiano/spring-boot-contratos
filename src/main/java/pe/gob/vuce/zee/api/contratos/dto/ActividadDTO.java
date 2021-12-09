@@ -32,4 +32,5 @@ public class ActividadDTO {
     public PersonaDTO idUsuarioActividad;
     public Timestamp fechaActualizacionActividad;
     public PersonaDTO UsuarioModificacionActividad;
+    public MaestroDTO tipoActividadEconomica;
 }

@@ -26,6 +26,10 @@ public class ActividadEntity {
     private MaestroEntity idActividad;
 
     @ManyToOne
+    @JoinColumn(name = "vecr_actv_id_econ_fk", referencedColumnName = "vems_gcon_idllave_pk")
+    private MaestroEntity tipoActividadEconomica;
+
+    @ManyToOne
     @JoinColumn(name = "vecr_actv_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
     private ContratoEntity contrato;
 
