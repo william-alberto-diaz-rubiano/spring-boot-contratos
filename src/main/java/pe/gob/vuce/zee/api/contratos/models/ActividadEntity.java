@@ -23,7 +23,7 @@ public class ActividadEntity {
 
     @ManyToOne
     @JoinColumn(name = "vecr_actv_id_acti_fk", referencedColumnName = "vems_gcon_idllave_pk")
-    private MaestroEntity idActividad;
+    private MaestroEntity  idActividad;
 
     @ManyToOne
     @JoinColumn(name = "vecr_actv_id_econ_fk", referencedColumnName = "vems_gcon_idllave_pk")
