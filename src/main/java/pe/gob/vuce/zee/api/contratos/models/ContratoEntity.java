@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -95,5 +97,8 @@ public class ContratoEntity {
 
     @Column(name = "vecr_ctrt_datecreate")
     private Timestamp fechaCreacion;
+
+    @OneToMany(mappedBy="contrato")
+    private List<ActividadEntity> actividad;
 
 }

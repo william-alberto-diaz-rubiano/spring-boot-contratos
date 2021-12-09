@@ -5,7 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
+import pe.gob.vuce.zee.api.contratos.models.MaestroEntity;
+import pe.gob.vuce.zee.api.contratos.models.PersonaEntity;
 
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -15,19 +20,16 @@ import java.util.UUID;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ActividadDTO {
-    public UUID idActividad;
-    public UUID idContrato;
-    public UUID idTipoActividad;
-    public UUID idActividadEconomica;
-    public UUID idAlmacen;
+    public UUID id;
+    public MaestroDTO idActividad;
     public Timestamp fechaInicial;
-    public Timestamp fechaFinal;
+    public Timestamp fechaFinl;
     public Integer idCliente;
-    public Integer idOrganzacion;
+    public Integer idOrganizacion;
     public Integer estado;
     public Integer activo;
-    public Timestamp fechaCreacion;
-    public UUID usuarioCreacion;
-    public Timestamp fechaModificacion;
-    public UUID usuarioModificacion;
+    public Timestamp fechaCreacionActividad;
+    public PersonaDTO idUsuarioActividad;
+    public Timestamp fechaActualizacionActividad;
+    public PersonaDTO UsuarioModificacionActividad;
 }

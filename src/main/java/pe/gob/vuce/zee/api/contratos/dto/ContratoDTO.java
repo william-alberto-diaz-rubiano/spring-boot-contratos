@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -39,4 +40,5 @@ public class ContratoDTO {
     private Timestamp fechaModificacio;
     private Timestamp fechaCreacion;
     private Integer flag;
+    private List<ActividadDTO> actividad;
 }
