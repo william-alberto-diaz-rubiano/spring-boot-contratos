@@ -41,4 +41,5 @@ public class ContratoDTO {
     private Timestamp fechaCreacion;
     private Integer flag;
     private List<ActividadDTO> actividad;
+    private List<AdendaDTO> adenda;
 }

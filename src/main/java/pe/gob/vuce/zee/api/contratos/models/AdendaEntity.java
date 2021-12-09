@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class AdendaEntity {
     @Id
-    @Column(name = "vecr_ctrt_idllave_pk")
+    @Column(name = "vead_aden_idllave_pk")
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "UUIDGenerator")
     private UUID id;
@@ -28,8 +28,9 @@ public class AdendaEntity {
     @Column(name = "vead_aden_numeroaden", nullable = false)
     private Integer numeroAdenda;
 
-    @Column(name = "vead_aden_id_cont_fk", nullable = false)
-    private UUID idContrato;
+    @ManyToOne
+    @JoinColumn(name = "vead_aden_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
+    private ContratoEntity contrato;
 
     @Column(name = "vead_aden_id_usrn_fk", nullable = false)
     private UUID idUsuarioZee;

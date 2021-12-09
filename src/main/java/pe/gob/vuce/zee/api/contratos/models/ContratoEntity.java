@@ -101,4 +101,7 @@ public class ContratoEntity {
     @OneToMany(mappedBy="contrato")
     private List<ActividadEntity> actividad;
 
+    @OneToMany(mappedBy="contrato")
+    private List<AdendaEntity> adenda;
+
 }
