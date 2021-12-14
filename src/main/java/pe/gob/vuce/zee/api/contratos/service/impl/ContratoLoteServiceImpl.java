@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pe.gob.vuce.zee.api.contratos.consumer.LoteAPI;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoDTO;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteBandejaDTO;
 import pe.gob.vuce.zee.api.contratos.dto.LoteContratoDTO;
 import pe.gob.vuce.zee.api.contratos.dto.LoteDTO;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
@@ -166,5 +167,10 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         }
 
         return new PageImpl<>(contratosDTO, pageable, listado.size());
+    }
+
+    @Override
+    public Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
+        return contratoLoteRepository.busquedaAvanzada(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, pageable);
     }
 }

@@ -8,7 +8,7 @@ import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
 import java.util.List;
 import java.util.UUID;
 
-public interface ContratoLoteRepository extends JpaRepository<LoteContratoEntity, UUID> {
+public interface ContratoLoteRepository extends JpaRepository<LoteContratoEntity, UUID>, ContratoLoteCustomRepository {
 
     @Query(value = "select vl.* from vecr_lote vl \n" +
             "where vl.vecr_lote_id_cont_fk = :idContrato ", nativeQuery = true)
