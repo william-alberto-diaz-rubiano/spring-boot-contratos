@@ -59,11 +59,11 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         var predicados = new ArrayList<String>();
         var parametros = new HashMap<String, Object>();
         if (numeroContrato != null && !numeroContrato.isEmpty()) {
-            predicados.add(" contrato2.vecr_ctrt_cod_contra LIKE CONCAT('%s',:numeroContrato,'%s')");
+            predicados.add(" contrato2.vecr_ctrt_cod_contra LIKE CONCAT('%',:numeroContrato,'%')");
             parametros.put("numeroContrato", numeroContrato);
         }
         if (numeroLote != null && !numeroLote.isEmpty()) {
-            predicados.add(" lote.velt_clot_nombre_lot LIKE CONCAT('%s',:numeroLote,'%s')");
+            predicados.add(" lote.velt_clot_nombre_lot LIKE CONCAT('%',:numeroLote,'%')");
             parametros.put("numeroLote", numeroLote);
         }
         if (usuarioId != null) {
@@ -79,7 +79,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
             parametros.put("actividadEconomica", actividadEconomica);
         }
         if (numeroAdenda != null && !numeroAdenda.isEmpty()) {
-            predicados.add(" adenda2.vead_aden_numeroaden LIKE CONCAT('%s',:numeroAdenda,'%s')");
+            predicados.add(" adenda2.vead_aden_numeroaden LIKE CONCAT('%',:numeroAdenda,'%')");
             parametros.put("numeroAdenda", numeroAdenda);
         }
 
@@ -134,11 +134,11 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         var predicados = new ArrayList<String>();
         var parametros = new HashMap<String, Object>();
         if (numeroContrato != null && !numeroContrato.isEmpty()) {
-            predicados.add(" contrato2.vecr_ctrt_cod_contra LIKE CONCAT('%s',:numeroContrato,'%s')");
+            predicados.add(" contrato2.vecr_ctrt_cod_contra LIKE CONCAT('%',:numeroContrato,'%')");
             parametros.put("numeroContrato", numeroContrato);
         }
         if (numeroLote != null && !numeroLote.isEmpty()) {
-            predicados.add(" lote.velt_clot_nombre_lot LIKE CONCAT('%s',:numeroLote,'%s')");
+            predicados.add(" lote.velt_clot_nombre_lot LIKE CONCAT('%',:numeroLote,'%')");
             parametros.put("numeroLote", numeroLote);
         }
         if (usuarioId != null) {
@@ -154,7 +154,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
             parametros.put("actividadEconomica", actividadEconomica);
         }
         if (numeroAdenda != null && !numeroAdenda.isEmpty()) {
-            predicados.add(" adenda2.vead_aden_numeroaden LIKE CONCAT('%s',:numeroAdenda,'%s')");
+            predicados.add(" adenda2.vead_aden_numeroaden LIKE CONCAT('%',:numeroAdenda,'%')");
             parametros.put("numeroAdenda", numeroAdenda);
         }
 
