@@ -22,8 +22,12 @@ public class ContratoLoteController {
     private final ContratoLoteService contratoLoteService;
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<Page<ContratoLoteBandejaDTO>>> getBandejaContratoLote(
+    public ResponseEntity<ResponseDTO<?>> getBandejaContratoLote(
+            @RequestParam(name="tipo") Integer tipoBandeja,
             @RequestParam(name="contrato", required=false) String numeroContrato,
+            @RequestParam(name="contratoId", required=false) UUID contratoId,
+            @RequestParam(name="adendaId", required=false) UUID adendaId,
+            @RequestParam(name="loteId", required=false) UUID loteId,
             @RequestParam(name="usuario", required=false) UUID usuarioId,
             @RequestParam(name="adenda", required=false) String numeroAdenda,
             @RequestParam(name="lote", required=false) String numeroLote,
@@ -31,8 +35,13 @@ public class ContratoLoteController {
             @RequestParam(name="actividad-economica", required=false) UUID actividadEconomica,
             Pageable pageable
     ) {
-        var result = contratoLoteService.busquedaAvanzada(numeroContrato, usuarioId, numeroAdenda,
-                numeroLote, tipoActividad, actividadEconomica, pageable);
+        Page<?> result;
+        if (tipoBandeja == 1) {
+            result = contratoLoteService.busquedaAvanzada(numeroContrato, usuarioId, numeroAdenda,
+                    numeroLote, tipoActividad, actividadEconomica, pageable);
+        } else {
+            result = contratoLoteService.busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, pageable);
+        }
         var body = new ResponseDTO<>(Constantes.NO_ERROR, result);
         return ResponseEntity.ok(body);
     }

@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import pe.gob.vuce.zee.api.contratos.consumer.LoteAPI;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoDTO;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteBandejaDTO;
-import pe.gob.vuce.zee.api.contratos.dto.LoteContratoDTO;
-import pe.gob.vuce.zee.api.contratos.dto.LoteDTO;
+import pe.gob.vuce.zee.api.contratos.dto.*;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
 import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoLoteRepository;
@@ -171,6 +168,11 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
 
     @Override
     public Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
-        return contratoLoteRepository.busquedaAvanzada(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, pageable);
+        return contratoLoteRepository.busquedaAvanzada1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, pageable);
+    }
+
+    @Override
+    public Page<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, Pageable pageable) {
+        return contratoLoteRepository.busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, pageable);
     }
 }

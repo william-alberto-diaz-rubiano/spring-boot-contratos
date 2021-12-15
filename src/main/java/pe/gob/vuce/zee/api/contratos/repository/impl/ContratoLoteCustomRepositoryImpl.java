@@ -6,12 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteBandeja2DTO;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteBandejaDTO;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoLoteCustomRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.text.MessageFormat;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,15 +27,93 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     private final EntityManager entityManager;
 
     @Override
-    public Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
+    public Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
         var offset = pageable.getPageNumber() * pageable.getPageSize();
         int size = pageable.getPageSize();
-        List<ContratoLoteBandejaDTO> resultList = busquedaAvanzada(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
-        var total = contar(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica);
+        List<ContratoLoteBandejaDTO> resultList = busquedaAvanzada1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
+        var total = contar1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica);
         return new PageImpl<>(resultList, pageable, total);
     }
 
-    private List<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
+    @Override
+    public Page<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, Pageable pageable) {
+        var offset = pageable.getPageNumber() * pageable.getPageSize();
+        int size = pageable.getPageSize();
+        List<ContratoLoteBandeja2DTO> resultList = busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, offset, size);
+        var total = contar2(usuarioId, contratoId, adendaId, loteId);
+        return new PageImpl<>(resultList, pageable, total);
+    }
+
+    private List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size) {
+        var sqlTemplate = "SELECT " +
+                "CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) id, " +
+                "tipo_contrato.vems_gcon_descripcin contrato_tipo, " +
+                "contrato.vecr_ctrt_cod_contra contrato_numero, " +
+                "(SELECT COUNT(adenda.vead_aden_idllave_pk) FROM vuce_zee.vead_aden adenda WHERE adenda.vead_aden_id_cont_fk = contrato.vecr_ctrt_idllave_pk) adendas_cantidad, " +
+                "lote.velt_clot_nombre_lot lote_nombre, " +
+                "lote.velt_clot_precio_lot lote_costo, " +
+                "lote.velt_clot_tamanio_m2 lote_tamanio " +
+                "FROM vuce_zee.vecr_ctrt contrato " +
+                "INNER JOIN vuce_zee.vems_gcon tipo_contrato ON contrato.vecr_ctrt_id_tipo_cn = tipo_contrato.vems_gcon_idllave_pk " +
+                "INNER JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
+                "INNER JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
+                "INNER JOIN vuce_zee.vepr_pers usuario ON contrato.vecr_ctrt_id_usuario = usuario.vepr_pers_idllave_pk " +
+                "WHERE " +
+                "contrato.vecr_ctrt_cod_active != 9 %s ";
+        var predicados = new ArrayList<String>();
+        var parametros = new HashMap<String, Object>();
+        predicados.add("CAST(contrato.vecr_ctrt_id_usuario AS VARCHAR) = :usuarioId");
+        parametros.put("usuarioId", usuarioId.toString());
+        if (contratoId != null) {
+            predicados.add("CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) = :contratoId");
+            parametros.put("contratoId", contratoId.toString());
+        }
+        if (adendaId != null) {
+            predicados.add("contrato.vecr_ctrt_idllave_pk IN (SELECT DISTINCT(adenda2.vead_aden_id_cont_fk) FROM vuce_zee.vead_aden adenda2 WHERE CAST(adenda2.vead_aden_idllave_pk AS VARCHAR) = :adendaId)");
+            parametros.put("adendaId", adendaId.toString());
+        }
+        if (loteId != null) {
+            predicados.add("CAST(lote.velt_clot_idllave_pk AS VARCHAR) = :loteId");
+            parametros.put("loteId", loteId.toString());
+        }
+
+        var where = "";
+        if (!predicados.isEmpty()) {
+            where = "AND " + String.join(" AND ", predicados);
+        }
+
+        var sql = String.format(sqlTemplate, where);
+
+        var nativeQuery = entityManager.createNativeQuery(sql);
+
+        if (offset != -1) {
+            nativeQuery.setFirstResult(offset);
+        }
+
+        if (size != -1) {
+            nativeQuery.setMaxResults(size);
+        }
+
+        parametros.forEach(nativeQuery::setParameter);
+
+        List<Object[]> result = nativeQuery.getResultList();
+
+        return result.stream()
+                .map(x ->
+                        ContratoLoteBandeja2DTO.builder()
+                                .id(UUID.fromString(x[0].toString()))
+                                .contratoTipo(x[1].toString())
+                                .contratoNumero(x[2].toString())
+                                .cantidadAdendas(Integer.parseInt(x[3].toString()))
+                                .loteNombre(x[4].toString())
+                                .costo(new BigDecimal(x[5].toString()))
+                                .tamanio(new BigDecimal(x[6].toString()))
+                                .build())
+                .collect(Collectors.toList());
+    }
+
+
+    private List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
         var sqlTemplate = "SELECT " +
                 "       CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) as id, " +
                 "       contrato.vecr_ctrt_cod_contra as contrato_numero, " +
@@ -121,8 +200,8 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     }
 
 
-    private Integer contar(String numeroContrato, UUID usuarioId, String numeroAdenda,
-                           String numeroLote, UUID tipoActividad, UUID actividadEconomica) {
+    private Integer contar1(String numeroContrato, UUID usuarioId, String numeroAdenda,
+                            String numeroLote, UUID tipoActividad, UUID actividadEconomica) {
         var sqlTemplate = "SELECT COUNT(DISTINCT(contrato2.vecr_ctrt_idllave_pk)) " +
                 "    FROM vuce_zee.vecr_ctrt contrato2 " +
                 "             INNER JOIN vuce_zee.vecr_lote contrato_lote2 ON contrato_lote2.vecr_lote_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
@@ -168,6 +247,48 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
 
         parametros.forEach(nativeQuery::setParameter);
 
-        return nativeQuery.getFirstResult();
+        return Integer.parseInt(nativeQuery.getSingleResult().toString());
+    }
+
+    private Integer contar2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId) {
+        var sqlTemplate = "SELECT COUNT(*) " +
+                "FROM vuce_zee.vecr_ctrt contrato " +
+                "INNER JOIN vuce_zee.vems_gcon tipo_contrato ON contrato.vecr_ctrt_id_tipo_cn = tipo_contrato.vems_gcon_idllave_pk " +
+                "INNER JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
+                "INNER JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
+                "INNER JOIN vuce_zee.vepr_pers usuario ON contrato.vecr_ctrt_id_usuario = usuario.vepr_pers_idllave_pk " +
+                "WHERE " +
+                "      contrato.vecr_ctrt_cod_active != 9 %s ";
+        var predicados = new ArrayList<String>();
+        var parametros = new HashMap<String, Object>();
+        if (usuarioId != null) {
+            predicados.add("contrato.vecr_ctrt_id_usuario = :usuarioId");
+            parametros.put("usuarioId", usuarioId);
+        }
+        if (contratoId != null) {
+            predicados.add("contrato.vecr_ctrt_idllave_pk = :contratoId");
+            parametros.put("contratoId", contratoId);
+        }
+        if (adendaId != null) {
+            predicados.add("contrato.vecr_ctrt_idllave_pk IN (SELECT DISTINCT(adenda2.vead_aden_id_cont_fk) FROM vuce_zee.vead_aden adenda2 WHERE adenda2.vead_aden_idllave_pk = :adendaId)");
+            parametros.put("adendaId", adendaId);
+        }
+        if (loteId != null) {
+            predicados.add("lote.velt_clot_idllave_pk = :loteId");
+            parametros.put("loteId", loteId);
+        }
+
+        var where = "";
+        if (!predicados.isEmpty()) {
+            where = "AND " + String.join(" AND ", predicados);
+        }
+
+        var sql = String.format(sqlTemplate, where);
+
+        var nativeQuery = entityManager.createNativeQuery(sql);
+
+        parametros.forEach(nativeQuery::setParameter);
+
+        return Integer.parseInt(nativeQuery.getSingleResult().toString());
     }
 }
