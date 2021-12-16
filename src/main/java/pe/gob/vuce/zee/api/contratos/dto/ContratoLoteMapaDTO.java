@@ -8,8 +8,13 @@ import java.util.UUID;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LoteMapaDTO {
-    private UUID id;
+public class ContratoLoteMapaDTO {
+    private UUID loteId;
+    private UUID contratoId;
+    private String contratoCodigo;
+    private UUID adendaId;
+    private Integer adendaNumero;
+
     private String nombre;
     private String referencia;
 
@@ -25,4 +30,5 @@ public class LoteMapaDTO {
 
     private String polylines;
     private Integer zoomMapa;
+
 }

@@ -6,9 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.gob.vuce.zee.api.contratos.base.Constantes;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteBandejaDTO;
 import pe.gob.vuce.zee.api.contratos.dto.LoteContratoDTO;
-import pe.gob.vuce.zee.api.contratos.dto.LoteMapaDTO;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteMapaDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ResponseDTO;
 import pe.gob.vuce.zee.api.contratos.service.ContratoLoteService;
 
@@ -48,7 +47,7 @@ public class ContratoLoteController {
     }
 
     @GetMapping("{idContrato}/lotes")
-    public ResponseEntity<ResponseDTO<Page<LoteMapaDTO>>> getLotes(@PathVariable UUID idContrato, Pageable pageable) {
+    public ResponseEntity<ResponseDTO<Page<ContratoLoteMapaDTO>>> getLotes(@PathVariable UUID idContrato, Pageable pageable) {
         var result = contratoLoteService.buscarLotesPorContrato(idContrato, pageable);
         var body = new ResponseDTO<>(Constantes.NO_ERROR, result);
         return ResponseEntity.ok(body);

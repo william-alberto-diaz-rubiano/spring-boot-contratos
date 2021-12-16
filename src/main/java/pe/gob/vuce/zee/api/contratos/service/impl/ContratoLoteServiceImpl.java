@@ -203,9 +203,20 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     }
 
     @Override
-    public Page<LoteMapaDTO> buscarLotesPorContrato(UUID contratoID, Pageable pageable) {
-        var resultEntity = loteRepository.findLoteByContratoAndActivo(contratoID, Constantes.HABILITADO, pageable);
-        var resultDto = resultEntity.getContent().stream().map(x -> modelMapper.map(x, LoteMapaDTO.class)).collect(Collectors.toList());
+    public Page<ContratoLoteMapaDTO> buscarLotesPorContrato(UUID contratoID, Pageable pageable) {
+        var resultEntity = contratoLoteRepository.findByContratoAndActivo(contratoID, Constantes.HABILITADO, pageable);
+        List<ContratoLoteMapaDTO> resultDto = new ArrayList<>();
+        for(var entity : resultEntity){
+            var dto = modelMapper.map(entity.getLote(), ContratoLoteMapaDTO.class);
+            dto.setContratoId(entity.getContrato().getId());
+            dto.setContratoCodigo(entity.getContrato().getNumeroContrato());
+            var adenda = entity.getContrato().getAdenda().stream().sorted((x,y) -> Integer.compare(y.getNumeroAdenda(), x.getNumeroAdenda())).findFirst();
+            adenda.ifPresent(x -> {
+                dto.setAdendaId(x.getId());
+                dto.setAdendaNumero(x.getNumeroAdenda());
+            });
+            resultDto.add(dto);
+        }
         return new PageImpl<>(resultDto, pageable, resultEntity.getTotalElements());
     }
 }

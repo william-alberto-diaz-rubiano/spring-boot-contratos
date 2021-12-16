@@ -20,5 +20,4 @@ public interface ContratoLoteRepository extends JpaRepository<LoteContratoEntity
     @Query("SELECT lc FROM LoteContratoEntity lc WHERE lc.contrato.id = ?1 AND lc.activo = ?2 ORDER BY lc.lote.nombre")
     Page<LoteContratoEntity> findByContratoAndActivo(UUID contratoId, Integer activo, Pageable pageable);
 
-
 }

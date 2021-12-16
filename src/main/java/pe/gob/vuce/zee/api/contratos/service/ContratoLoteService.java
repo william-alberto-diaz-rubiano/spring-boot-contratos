@@ -6,7 +6,6 @@ import pe.gob.vuce.zee.api.contratos.dto.*;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 public interface ContratoLoteService {
@@ -25,5 +24,5 @@ public interface ContratoLoteService {
 
     Page<LoteContratoDetalleDTO> detalleByContrato(UUID contratoId, Pageable pageable);
 
-    Page<LoteMapaDTO> buscarLotesPorContrato(UUID contratoID, Pageable pageable);
+    Page<ContratoLoteMapaDTO> buscarLotesPorContrato(UUID contratoID, Pageable pageable);
 }
