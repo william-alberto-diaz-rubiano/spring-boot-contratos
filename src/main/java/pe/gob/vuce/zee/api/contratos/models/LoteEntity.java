@@ -36,6 +36,14 @@ public class LoteEntity {
     @Basic
     @Column(name = "velt_clot_precio_lot")
     private BigDecimal precio;
+    @ManyToOne
+    @JoinColumn(name = "velt_clot_codg_etapa", referencedColumnName = "velt_remb_idllave_pk")
+    private EtapaManzanaBloqueEntity etapa;
+    @ManyToOne
+    @JoinColumn(name = "velt_clot_codg_manza", referencedColumnName = "velt_remb_idllave_pk")
+    private EtapaManzanaBloqueEntity manzana;
+    @Column(name = "velt_clot_ppolylines")
+    private String polylines;
 
     @Override
     public boolean equals(Object o) {

@@ -14,6 +14,7 @@ import pe.gob.vuce.zee.api.contratos.dto.*;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
 import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoLoteRepository;
+import pe.gob.vuce.zee.api.contratos.repository.LoteRepository;
 import pe.gob.vuce.zee.api.contratos.service.ContratoLoteService;
 
 import javax.persistence.EntityNotFoundException;
@@ -31,6 +32,7 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     private final ModelMapper modelMapper;
     private final LoteAPI loteAPI;
     private final ContratoLoteRepository contratoLoteRepository;
+    private final LoteRepository loteRepository;
 
     public LoteDTO buscarPorId(UUID uuid) throws IOException {
         var response = loteAPI.getLote(uuid).execute();
@@ -59,7 +61,7 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         List<LoteContratoEntity> listContrato = contratoLoteRepository.finByContrato(idContrato);
         List<LoteDTO> lotes = new ArrayList<>();
         LoteContratoDTO loteContratoDTO = new LoteContratoDTO();
-        if(listContrato.size() != 0){
+        if (listContrato.size() != 0) {
             LoteContratoEntity loteContratoEntity = listContrato.get(0);
             loteContratoDTO.setContrato(
                     modelMapper.map(loteContratoEntity.getContrato(),
@@ -80,7 +82,7 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
 //            }
             loteContratoDTO.setLotes(lotes);
             return loteContratoDTO;
-        }else {
+        } else {
             throw new EntityNotFoundException("No existe el contrato buscado");
         }
 
@@ -91,8 +93,8 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         LoteContratoDTO loteContratoDTO = new LoteContratoDTO();
         List<LoteDTO> lotes = new ArrayList<>();
         LoteContratoEntity loteContratoEntity = new LoteContratoEntity();
-        loteContratoEntity=contratoLoteRepository.getById(idContratoLote);
-        if(loteContratoEntity != null){
+        loteContratoEntity = contratoLoteRepository.getById(idContratoLote);
+        if (loteContratoEntity != null) {
             loteContratoDTO.setContrato(modelMapper.map(loteContratoEntity.getContrato(),
                     ContratoDTO.class));
             loteContratoDTO.setCosto(loteContratoEntity.getCosto());
@@ -108,14 +110,14 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
 //            LoteDTO loteDTO = buscarPorId(loteContratoEntity.getIdLote());
             loteContratoDTO.setLotes(lotes);
             return loteContratoDTO;
-        }else {
+        } else {
             throw new EntityNotFoundException("No existe la asociacion buscada buscado");
         }
 
     }
 
     @Override
-    public LoteContratoDTO deleteLoteContrato(LoteContratoDTO loteContratoDTO){
+    public LoteContratoDTO deleteLoteContrato(LoteContratoDTO loteContratoDTO) {
         LoteContratoEntity loteContratoEntity = contratoLoteRepository.getById(loteContratoDTO.getIdContratoLote());
         contratoLoteRepository.delete(loteContratoEntity);
         return loteContratoDTO;
@@ -125,9 +127,9 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     public LoteContratoDTO crearLoteContrato(LoteContratoDTO loteContratoDTO) throws IOException {
         List<LoteDTO> loteDTOS = loteContratoDTO.getLotes();
         LoteContratoEntity loteContratoEntity = new LoteContratoEntity();
-        List<LoteContratoEntity> loteContratoSave= new ArrayList<>();
-        for (LoteDTO loteobj:loteDTOS
-             ) {
+        List<LoteContratoEntity> loteContratoSave = new ArrayList<>();
+        for (LoteDTO loteobj : loteDTOS
+        ) {
             loteContratoEntity.setContrato(modelMapper.map(loteContratoDTO.getContrato(),
                     ContratoEntity.class));
 //            loteContratoEntity.setIdLote(loteobj.getId());
@@ -147,15 +149,15 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     }
 
     @Override
-    public Page<LoteContratoDTO> findAll(Pageable pageable){
+    public Page<LoteContratoDTO> findAll(Pageable pageable) {
         List<LoteContratoEntity> listado = contratoLoteRepository.findAll();
         List<LoteContratoDTO> dtos = listado
                 .stream()
                 .map(contrato -> modelMapper.map(contrato, LoteContratoDTO.class))
                 .collect(Collectors.toList());
         List<LoteContratoDTO> contratosDTO = new ArrayList<>();
-        for (LoteContratoDTO loteContratoDTO:dtos
-             ) {
+        for (LoteContratoDTO loteContratoDTO : dtos
+        ) {
             try {
                 loteContratoDTO.setLote(buscarPorId(loteContratoDTO.getIdLote()));
                 contratosDTO.add(loteContratoDTO);
@@ -181,11 +183,12 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     public Page<LoteContratoDetalleDTO> detalleByContrato(UUID contratoId, Pageable pageable) {
         var resultEntity = contratoLoteRepository.findByContratoAndActivo(contratoId, Constantes.HABILITADO, pageable);
         List<LoteContratoDetalleDTO> resultDto = new ArrayList<>();
-        for(var loteContratoEntity : resultEntity){
-            for(var actividadEntity: loteContratoEntity.getContrato().getActividad()){
+        for (var loteContratoEntity : resultEntity) {
+            for (var actividadEntity : loteContratoEntity.getContrato().getActividad()) {
                 var dto = modelMapper.map(loteContratoEntity, LoteContratoDetalleDTO.class);
                 dto.setActividadId(actividadEntity.getId());
                 dto.setActividadDescripcion(actividadEntity.getActividad().getDescripcion());
+                dto.setTipoActividadId(actividadEntity.getTipoActividadEconomica().getId());
                 dto.setTipoActividadDescripcion(actividadEntity.getTipoActividadEconomica().getDescripcion());
                 dto.setAlmacenId(actividadEntity.getAlmacen().getId());
                 dto.setAlmacenCodigo(actividadEntity.getAlmacen().getCodigo());
@@ -196,6 +199,13 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
                 resultDto.add(dto);
             }
         }
+        return new PageImpl<>(resultDto, pageable, resultEntity.getTotalElements());
+    }
+
+    @Override
+    public Page<LoteMapaDTO> buscarLotesPorContrato(UUID contratoID, Pageable pageable) {
+        var resultEntity = loteRepository.findLoteByContratoAndActivo(contratoID, Constantes.HABILITADO, pageable);
+        var resultDto = resultEntity.getContent().stream().map(x -> modelMapper.map(x, LoteMapaDTO.class)).collect(Collectors.toList());
         return new PageImpl<>(resultDto, pageable, resultEntity.getTotalElements());
     }
 }
