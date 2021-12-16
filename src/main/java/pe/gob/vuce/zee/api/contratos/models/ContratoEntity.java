@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -34,13 +36,13 @@ public class ContratoEntity {
     private String documento;
 
     @Column(name = "vecr_ctrt_fecha_inic", nullable = false)
-    private Timestamp fechaInicial;
+    private LocalDate fechaInicial;
 
     @Column(name = "vecr_ctrt_fecha_venc", nullable = false)
-    private Timestamp fechaVencimiento;
+    private LocalDate fechaVencimiento;
 
     @Column(name = "vecr_ctrt_fecha_acti", nullable = false)
-    private Timestamp fechaInicioActividades;
+    private LocalDate fechaInicioActividades;
 
     @Column(name = "vecr_ctrt_num_expedn", nullable = false, length = 50)
     private String numeroExpediente;
@@ -50,14 +52,14 @@ public class ContratoEntity {
     private MaestroEntity motivoProrroga;
 
     @Column(name = "vecr_ctrt_fech_prorg")
-    private Timestamp fechaProrroga;
+    private LocalDate fechaProrroga;
 
     @ManyToOne
     @JoinColumn(name = "vecr_ctrt_motv_cance", referencedColumnName = "vems_gcon_idllave_pk")
     private MaestroEntity motivoCancelacion;
 
     @Column(name = "vecr_ctrt_fech_cance")
-    private Timestamp fechaCancelacion;
+    private LocalDate fechaCancelacion;
 
     @Column(name = "vecr_ctrt_cotr_posec")
     private Integer numeroContratoPosecion;

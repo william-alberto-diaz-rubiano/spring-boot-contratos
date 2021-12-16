@@ -5,6 +5,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -22,22 +24,26 @@ public class ActividadEntity {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "vecr_actv_id_acti_fk", referencedColumnName = "vems_gcon_idllave_pk")
-    private MaestroEntity  idActividad;
+    @JoinColumn(name = "vecr_actv_id_econ_fk", referencedColumnName = "vems_gcon_idllave_pk")
+    private MaestroEntity  actividad;
 
     @ManyToOne
-    @JoinColumn(name = "vecr_actv_id_econ_fk", referencedColumnName = "vems_gcon_idllave_pk")
+    @JoinColumn(name = "vecr_actv_id_acti_fk", referencedColumnName = "vems_gcon_idllave_pk")
     private MaestroEntity tipoActividadEconomica;
 
     @ManyToOne
     @JoinColumn(name = "vecr_actv_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
     private ContratoEntity contrato;
 
+    @ManyToOne
+    @JoinColumn(name = "vecr_actv_id_alma_fk", referencedColumnName = "vems_alma_idllave_pk")
+    private AlmacenEntity almacen;
+
     @Column(name = "vecr_actv_fecha_inic", nullable = false)
-    private Timestamp fechaInicial;
+    private LocalDate fechaInicial;
 
     @Column(name = "vecr_actv_fecha_fina", nullable = false)
-    private Timestamp fechaFinl;
+    private LocalDate fechaFinl;
 
     @Column(name = "vecr_actv_cliente_fk", nullable = false)
     private Integer idCliente;
@@ -52,14 +58,14 @@ public class ActividadEntity {
     private Integer activo;
 
     @Column(name = "vecr_actv_datecreate",nullable = false)
-    private Timestamp fechaCreacionActividad;
+    private LocalDateTime fechaCreacionActividad;
 
     @ManyToOne
     @JoinColumn(name = "vecr_actv_usr_create", referencedColumnName = "vepr_pers_idllave_pk")
     private PersonaEntity idUsuarioActividad;
 
     @Column(name = "vecr_actv_dateupdate")
-    private Timestamp fechaActualizacionActividad;
+    private LocalDateTime fechaActualizacionActividad;
 
     @ManyToOne
     @JoinColumn(name = "vecr_actv_usr_update", referencedColumnName = "vepr_pers_idllave_pk")

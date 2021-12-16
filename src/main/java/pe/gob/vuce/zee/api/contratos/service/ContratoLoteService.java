@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteBandeja2DTO;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteBandejaDTO;
 import pe.gob.vuce.zee.api.contratos.dto.LoteContratoDTO;
+import pe.gob.vuce.zee.api.contratos.dto.LoteContratoDetalleDTO;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
@@ -24,4 +25,6 @@ public interface ContratoLoteService {
     Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable);
 
     Page<ContratoLoteBandeja2DTO> busquedaAvanzada2(@NotNull UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, Pageable pageable);
+
+    Page<LoteContratoDetalleDTO> detalleByContrato(UUID contratoId, Pageable pageable);
 }

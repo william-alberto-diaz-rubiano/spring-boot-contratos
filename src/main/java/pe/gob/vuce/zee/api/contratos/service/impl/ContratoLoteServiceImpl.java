@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import pe.gob.vuce.zee.api.contratos.base.Constantes;
 import pe.gob.vuce.zee.api.contratos.consumer.LoteAPI;
 import pe.gob.vuce.zee.api.contratos.dto.*;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
@@ -73,10 +74,10 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
             loteContratoDTO.setIdCliente(loteContratoEntity.getIdCliente());
             loteContratoDTO.setUsuarioId(loteContratoEntity.getUsuarioCreacion());
             loteContratoDTO.setUsuarioNombre("DEMO");
-            for (LoteContratoEntity loteobj:listContrato) {
-               LoteDTO loteDTO = buscarPorId(loteobj.getIdLote());
-               lotes.add(loteDTO);
-            }
+//            for (LoteContratoEntity loteobj:listContrato) {
+//               LoteDTO loteDTO = buscarPorId(loteobj.getIdLote());
+//               lotes.add(loteDTO);
+//            }
             loteContratoDTO.setLotes(lotes);
             return loteContratoDTO;
         }else {
@@ -104,7 +105,7 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
             loteContratoDTO.setIdCliente(loteContratoEntity.getIdCliente());
             loteContratoDTO.setUsuarioId(loteContratoEntity.getUsuarioCreacion());
             loteContratoDTO.setUsuarioNombre("DEMO");
-            LoteDTO loteDTO = buscarPorId(loteContratoEntity.getIdLote());
+//            LoteDTO loteDTO = buscarPorId(loteContratoEntity.getIdLote());
             loteContratoDTO.setLotes(lotes);
             return loteContratoDTO;
         }else {
@@ -129,7 +130,7 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
              ) {
             loteContratoEntity.setContrato(modelMapper.map(loteContratoDTO.getContrato(),
                     ContratoEntity.class));
-            loteContratoEntity.setIdLote(loteobj.getId());
+//            loteContratoEntity.setIdLote(loteobj.getId());
             loteContratoEntity.setCosto(loteContratoDTO.getCosto());
             loteContratoEntity.setActivo(1);
             loteContratoEntity.setEstado(1);
@@ -174,5 +175,27 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     @Override
     public Page<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, Pageable pageable) {
         return contratoLoteRepository.busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, pageable);
+    }
+
+    @Override
+    public Page<LoteContratoDetalleDTO> detalleByContrato(UUID contratoId, Pageable pageable) {
+        var resultEntity = contratoLoteRepository.findByContratoAndActivo(contratoId, Constantes.HABILITADO, pageable);
+        List<LoteContratoDetalleDTO> resultDto = new ArrayList<>();
+        for(var loteContratoEntity : resultEntity){
+            for(var actividadEntity: loteContratoEntity.getContrato().getActividad()){
+                var dto = modelMapper.map(loteContratoEntity, LoteContratoDetalleDTO.class);
+                dto.setActividadId(actividadEntity.getId());
+                dto.setActividadDescripcion(actividadEntity.getActividad().getDescripcion());
+                dto.setTipoActividadDescripcion(actividadEntity.getTipoActividadEconomica().getDescripcion());
+                dto.setAlmacenId(actividadEntity.getAlmacen().getId());
+                dto.setAlmacenCodigo(actividadEntity.getAlmacen().getCodigo());
+                dto.setFechaInicio(loteContratoEntity.getContrato().getFechaInicial());
+                dto.setFechaFin(loteContratoEntity.getContrato().getFechaVencimiento());
+                dto.setFechaInicioPv(actividadEntity.getFechaInicial());
+                dto.setFechaFinPv(actividadEntity.getFechaInicial());
+                resultDto.add(dto);
+            }
+        }
+        return new PageImpl<>(resultDto, pageable, resultEntity.getTotalElements());
     }
 }

@@ -69,11 +69,11 @@ public class ContratoLoteController {
 //        return ResponseEntity.ok(response);
 //    }
 
-    @GetMapping("/{idContratoLote}")
-    public ResponseEntity<ResponseDTO<?>> getById(@PathVariable UUID idContratoLote) throws IOException {
+    @GetMapping("/{contratoId}")
+    public ResponseEntity<ResponseDTO<?>> getById(@PathVariable UUID contratoId, Pageable pageable) throws IOException {
         ResponseDTO<?> response;
-        var loteContratoDTO = contratoLoteService.findbyId(idContratoLote);
-        response = new ResponseDTO<>(Constantes.NO_ERROR, loteContratoDTO);
+        var resultDto = contratoLoteService.detalleByContrato(contratoId, pageable);
+        response = new ResponseDTO<>(Constantes.NO_ERROR, resultDto);
         return ResponseEntity.ok(response);
     }
 
