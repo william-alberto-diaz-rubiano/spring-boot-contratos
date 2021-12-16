@@ -36,4 +36,7 @@ public class ContratoLoteMapaDTO {
     private BigDecimal latitud;
     private BigDecimal longitud;
 
+    private UUID usuarioId;
+    private String usuarioNombre;
+
 }

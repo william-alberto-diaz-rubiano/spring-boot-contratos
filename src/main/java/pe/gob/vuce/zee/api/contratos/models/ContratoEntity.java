@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -84,7 +85,7 @@ public class ContratoEntity {
 
     @ManyToOne
     @JoinColumn(name = "vecr_ctrt_id_usuario", referencedColumnName = "vepr_pers_idllave_pk")
-    private PersonaEntity idUsuario;
+    private PersonaEntity usuario;
 
     @ManyToOne
     @JoinColumn(name = "vecr_ctrt_usr_create", referencedColumnName = "vepr_pers_idllave_pk")
@@ -101,9 +102,23 @@ public class ContratoEntity {
     private Timestamp fechaCreacion;
 
     @OneToMany(mappedBy="contrato")
+    @ToString.Exclude
     private List<ActividadEntity> actividad;
 
     @OneToMany(mappedBy="contrato")
+    @ToString.Exclude
     private List<AdendaEntity> adenda;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContratoEntity that = (ContratoEntity) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

@@ -21,6 +21,7 @@ import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -210,6 +211,13 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
             var dto = modelMapper.map(entity.getLote(), ContratoLoteMapaDTO.class);
             dto.setContratoId(entity.getContrato().getId());
             dto.setContratoCodigo(entity.getContrato().getNumeroContrato());
+            var usuario = entity.getContrato().getUsuario();
+            var usuarioNombre = Optional.ofNullable(usuario.getNombre()).orElse("");
+            var usuarioApellidoPaterno = Optional.ofNullable(usuario.getApellidoP()).orElse("");
+            var usuarioApellidoMaterno = Optional.ofNullable(usuario.getApellidoM()).orElse("");
+            var usuarioNombreCompleto = String.join(" ", usuarioApellidoPaterno, usuarioApellidoMaterno, usuarioNombre);
+            dto.setUsuarioId(usuario.getId());
+            dto.setUsuarioNombre(usuarioNombreCompleto.trim());
             var adenda = entity.getContrato().getAdenda().stream().sorted((x,y) -> Integer.compare(y.getNumeroAdenda(), x.getNumeroAdenda())).findFirst();
             adenda.ifPresent(x -> {
                 dto.setAdendaId(x.getId());
