@@ -3,6 +3,8 @@ package pe.gob.vuce.zee.api.contratos.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -30,5 +32,8 @@ public class ContratoLoteMapaDTO {
 
     private String polylines;
     private Integer zoomMapa;
+    private Integer estado;
+    private BigDecimal latitud;
+    private BigDecimal longitud;
 
 }

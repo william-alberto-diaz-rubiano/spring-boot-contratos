@@ -36,6 +36,18 @@ public class LoteEntity {
     @Basic
     @Column(name = "velt_clot_precio_lot")
     private BigDecimal precio;
+    @Basic
+    @Column(name = "velt_clot_latitude")
+    private BigDecimal latitud;
+    @Basic
+    @Column(name = "velt_clot_longitude")
+    private BigDecimal longitud;
+    @Basic
+    @Column(name = "velt_clot_zoom_mapa")
+    private BigDecimal zoomMapa;
+    @Basic
+    @Column(name = "velt_clot_cod_estado")
+    private BigDecimal estado;
     @ManyToOne
     @JoinColumn(name = "velt_clot_codg_etapa", referencedColumnName = "velt_remb_idllave_pk")
     private EtapaManzanaBloqueEntity etapa;
