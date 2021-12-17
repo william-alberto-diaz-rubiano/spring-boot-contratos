@@ -171,7 +171,7 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     }
 
     @Override
-    public Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
+    public Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
         return contratoLoteRepository.busquedaAvanzada1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, pageable);
     }
 
@@ -207,7 +207,7 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     public Page<ContratoLoteMapaDTO> buscarLotesPorContrato(UUID contratoID, Pageable pageable) {
         var resultEntity = contratoLoteRepository.findByContratoAndActivo(contratoID, Constantes.HABILITADO, pageable);
         List<ContratoLoteMapaDTO> resultDto = new ArrayList<>();
-        for(var entity : resultEntity){
+        for (var entity : resultEntity) {
             var dto = modelMapper.map(entity.getLote(), ContratoLoteMapaDTO.class);
             dto.setContratoId(entity.getContrato().getId());
             dto.setContratoCodigo(entity.getContrato().getNumeroContrato());
@@ -218,7 +218,7 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
             var usuarioNombreCompleto = String.join(" ", usuarioApellidoPaterno, usuarioApellidoMaterno, usuarioNombre);
             dto.setUsuarioId(usuario.getId());
             dto.setUsuarioNombre(usuarioNombreCompleto.trim());
-            var adenda = entity.getContrato().getAdenda().stream().sorted((x,y) -> Integer.compare(y.getNumeroAdenda(), x.getNumeroAdenda())).findFirst();
+            var adenda = entity.getContrato().getAdenda().stream().sorted((x, y) -> Integer.compare(y.getNumeroAdenda(), x.getNumeroAdenda())).findFirst();
             adenda.ifPresent(x -> {
                 dto.setAdendaId(x.getId());
                 dto.setAdendaNumero(x.getNumeroAdenda());
@@ -226,5 +226,31 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
             resultDto.add(dto);
         }
         return new PageImpl<>(resultDto, pageable, resultEntity.getTotalElements());
+    }
+
+    @Override
+    public List<ContratoLoteMapaDTO> busquedaAvanzadaMapa(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId) {
+        var resultEntity = contratoLoteRepository.busquedaAvanzadaMapa(numeroContrato, usuarioId, numeroAdenda,
+                numeroLote, tipoActividadId, actividadEconomicaId);
+        List<ContratoLoteMapaDTO> resultDto = new ArrayList<>();
+        for (var entity : resultEntity) {
+            var dto = modelMapper.map(entity.getLote(), ContratoLoteMapaDTO.class);
+            dto.setContratoId(entity.getContrato().getId());
+            dto.setContratoCodigo(entity.getContrato().getNumeroContrato());
+            var usuario = entity.getContrato().getUsuario();
+            var usuarioNombre = Optional.ofNullable(usuario.getNombre()).orElse("");
+            var usuarioApellidoPaterno = Optional.ofNullable(usuario.getApellidoP()).orElse("");
+            var usuarioApellidoMaterno = Optional.ofNullable(usuario.getApellidoM()).orElse("");
+            var usuarioNombreCompleto = String.join(" ", usuarioApellidoPaterno, usuarioApellidoMaterno, usuarioNombre);
+            dto.setUsuarioId(usuario.getId());
+            dto.setUsuarioNombre(usuarioNombreCompleto.trim());
+            var adenda = entity.getContrato().getAdenda().stream().sorted((x, y) -> Integer.compare(y.getNumeroAdenda(), x.getNumeroAdenda())).findFirst();
+            adenda.ifPresent(x -> {
+                dto.setAdendaId(x.getId());
+                dto.setAdendaNumero(x.getNumeroAdenda());
+            });
+            resultDto.add(dto);
+        }
+        return resultDto;
     }
 }

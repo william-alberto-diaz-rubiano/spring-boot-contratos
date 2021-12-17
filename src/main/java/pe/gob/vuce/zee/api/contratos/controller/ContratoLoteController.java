@@ -29,18 +29,23 @@ public class ContratoLoteController {
             @RequestParam(name="adendaId", required=false) UUID adendaId,
             @RequestParam(name="loteId", required=false) UUID loteId,
             @RequestParam(name="usuario", required=false) UUID usuarioId,
-            @RequestParam(name="adenda", required=false) String numeroAdenda,
+            @RequestParam(name="adenda", required=false) Integer numeroAdenda,
             @RequestParam(name="lote", required=false) String numeroLote,
-            @RequestParam(name="tipo-actividad", required=false) UUID tipoActividad,
-            @RequestParam(name="actividad-economica", required=false) UUID actividadEconomica,
+            @RequestParam(name="tipo-actividad", required=false) UUID tipoActividadId,
+            @RequestParam(name="actividad-economica", required=false) UUID actividadEconomicaId,
             Pageable pageable
     ) {
-        Page<?> result;
+        Object result = null;
         if (tipoBandeja == 1) {
             result = contratoLoteService.busquedaAvanzada(numeroContrato, usuarioId, numeroAdenda,
-                    numeroLote, tipoActividad, actividadEconomica, pageable);
-        } else {
+                    numeroLote, tipoActividadId, actividadEconomicaId, pageable);
+        }
+        if (tipoBandeja == 2) {
             result = contratoLoteService.busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, pageable);
+        }
+
+        if(tipoBandeja == 3){
+            result = this.contratoLoteService.busquedaAvanzadaMapa(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividadId, actividadEconomicaId);
         }
         var body = new ResponseDTO<>(Constantes.NO_ERROR, result);
         return ResponseEntity.ok(body);

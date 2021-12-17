@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoDTO;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
+import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoRepository;
 import pe.gob.vuce.zee.api.contratos.service.ContratoService;
 
@@ -51,9 +52,7 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public List<ContratoEntity> finByUsuario(){
-       //todo implementar
+    public Page<ContratoDTO> finByUsuario(UUID usuarioId, Pageable pageable) {
         return null;
     }
-
 }

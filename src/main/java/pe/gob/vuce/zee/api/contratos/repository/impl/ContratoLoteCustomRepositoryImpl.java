@@ -8,11 +8,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteBandeja2DTO;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteBandejaDTO;
+import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
+import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
+import pe.gob.vuce.zee.api.contratos.models.LoteEntity;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoLoteCustomRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +32,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     private final EntityManager entityManager;
 
     @Override
-    public Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
+    public Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
         var offset = pageable.getPageNumber() * pageable.getPageSize();
         int size = pageable.getPageSize();
         List<ContratoLoteBandejaDTO> resultList = busquedaAvanzada1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
@@ -42,6 +47,85 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         List<ContratoLoteBandeja2DTO> resultList = busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, offset, size);
         var total = contar2(usuarioId, contratoId, adendaId, loteId);
         return new PageImpl<>(resultList, pageable, total);
+    }
+
+    private Predicate[] predicadosMapaAvanzado1(CriteriaBuilder cb, Root<ContratoEntity> entityRoot, String numeroContrato,
+                                                UUID tipoContrato, Integer estado,
+                                                UUID lote, String documento, UUID tipoDocumento,
+                                                UUID usuario, UUID tipoActividad, Timestamp fechaInicial,
+                                                Timestamp fechaFinal) {
+        var predicates = new ArrayList<Predicate>();
+
+        if (numeroContrato != null && !numeroContrato.isEmpty()) {
+            predicates.add(cb.like(cb.upper(entityRoot.get("numeroContrato")), "%" + numeroContrato.toUpperCase() + "%"));
+        }
+        if (tipoContrato != null) {
+            predicates.add(cb.like(entityRoot.get("tipoContrato").get("descripcion"), "%" + tipoContrato + "%"));
+        }
+        if (estado != null) {
+            predicates.add(cb.equal(entityRoot.get("estado"), estado));
+        }
+        if (usuario != null) {
+            predicates.add(cb.equal(entityRoot.get("usuarioCreacion").get("id"), usuario));
+        }
+        if (fechaInicial != null && fechaFinal == null) {
+            predicates.add(cb.greaterThanOrEqualTo(entityRoot.get("fechaInicial"), fechaInicial));
+        }
+        if (fechaFinal != null && fechaInicial == null) {
+            predicates.add(cb.lessThanOrEqualTo(entityRoot.get("fechaVencimiento"), fechaFinal));
+        }
+        if (fechaFinal != null && fechaInicial != null) {
+            predicates.add(cb.greaterThanOrEqualTo(entityRoot.get("fechaInicial"), fechaInicial));
+            predicates.add(cb.lessThanOrEqualTo(entityRoot.get("fechaVencimiento"), fechaFinal));
+        }
+        return predicates.toArray(new Predicate[0]);
+    }
+
+    @Override
+    public List<LoteContratoEntity> busquedaAvanzadaMapa(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId) {
+        var cb = entityManager.getCriteriaBuilder();
+        var cq = cb.createQuery(LoteContratoEntity.class);
+        var loteContratoFrom = cq.from(LoteContratoEntity.class);
+        var contratoJoin = loteContratoFrom.join("contrato", JoinType.INNER);
+        var actividadJoin = contratoJoin.join("actividad", JoinType.INNER);
+        var adendaJoin = contratoJoin.join("adenda", JoinType.LEFT);
+
+        var predicates = new ArrayList<Predicate>();
+
+        if(numeroContrato != null && !numeroContrato.isEmpty()){
+            predicates.add(cb.like(cb.upper(contratoJoin.get("numeroContrato")), "%" + numeroContrato.toUpperCase() + "%"));
+        }
+
+        if(usuarioId != null){
+            predicates.add(cb.equal(contratoJoin.get("usuario").get("id"), usuarioId));
+        }
+
+        if(numeroAdenda != null){
+            predicates.add(cb.equal(adendaJoin.get("numeroAdenda"), numeroAdenda));
+        }
+
+        if(numeroLote != null && !numeroLote.isEmpty()){
+            predicates.add(cb.like(cb.upper(loteContratoFrom.get("lote").get("nombre")), "%" + numeroLote.toUpperCase() + "%"));
+        }
+
+        if(tipoActividadId != null){
+            predicates.add(cb.equal(actividadJoin.get("tipoActividadEconomica").get("id"), tipoActividadId));
+        }
+
+        if(actividadEconomicaId != null){
+            predicates.add(cb.equal(actividadJoin.get("actividad").get("id"), actividadEconomicaId));
+        }
+
+        var predicatesArray = predicates.toArray(new Predicate[0]);
+
+        cq.select(loteContratoFrom).distinct(true);
+        if (!predicates.isEmpty()) {
+            cq.where(predicatesArray);
+        }
+
+        var query = entityManager.createQuery(cq);
+
+        return query.getResultList();
     }
 
     private List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size) {
@@ -113,7 +197,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     }
 
 
-    private List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, String numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
+    private List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
         var sqlTemplate = "SELECT " +
                 "       CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) as id, " +
                 "       contrato.vecr_ctrt_cod_contra as contrato_numero, " +
@@ -157,8 +241,8 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
             predicados.add(" actividad2.vecr_actv_id_acti_fk = :actividadEconomica");
             parametros.put("actividadEconomica", actividadEconomica);
         }
-        if (numeroAdenda != null && !numeroAdenda.isEmpty()) {
-            predicados.add(" adenda2.vead_aden_numeroaden LIKE CONCAT('%',:numeroAdenda,'%')");
+        if (numeroAdenda != null) {
+            predicados.add(" adenda2.vead_aden_numeroaden = :numeroAdenda");
             parametros.put("numeroAdenda", numeroAdenda);
         }
 
@@ -200,7 +284,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     }
 
 
-    private Integer contar1(String numeroContrato, UUID usuarioId, String numeroAdenda,
+    private Integer contar1(String numeroContrato, UUID usuarioId, Integer numeroAdenda,
                             String numeroLote, UUID tipoActividad, UUID actividadEconomica) {
         var sqlTemplate = "SELECT COUNT(DISTINCT(contrato2.vecr_ctrt_idllave_pk)) " +
                 "    FROM vuce_zee.vecr_ctrt contrato2 " +
@@ -232,8 +316,8 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
             predicados.add(" actividad2.vecr_actv_id_acti_fk = :actividadEconomica");
             parametros.put("actividadEconomica", actividadEconomica);
         }
-        if (numeroAdenda != null && !numeroAdenda.isEmpty()) {
-            predicados.add(" adenda2.vead_aden_numeroaden LIKE CONCAT('%',:numeroAdenda,'%')");
+        if (numeroAdenda != null) {
+            predicados.add(" adenda2.vead_aden_numeroaden = :numeroAdenda");
             parametros.put("numeroAdenda", numeroAdenda);
         }
 
