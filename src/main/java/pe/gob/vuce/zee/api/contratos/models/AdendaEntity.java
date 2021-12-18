@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -36,10 +36,10 @@ public class AdendaEntity {
     private UUID idUsuarioZee;
 
     @Column(name = "vead_aden_fecha_inic", nullable = false)
-    private Timestamp fechaInicial;
+    private LocalDate fechaInicial;
 
     @Column(name = "vead_aden_fecha_venc", nullable = false)
-    private Timestamp fechaVencimiento;
+    private LocalDate fechaVencimiento;
 
     @Column(name = "vead_aden_cliente_fk", nullable = false)
     private Integer idCliente;
@@ -54,13 +54,13 @@ public class AdendaEntity {
     private Integer activo;
 
     @Column(name = "vead_aden_datecreate",nullable = false)
-    private Timestamp fechaCreacion;
+    private LocalDate fechaCreacion;
 
     @Column(name = "vead_aden_usr_create",nullable = false)
     private UUID idUsuario;
 
     @Column(name = "vead_aden_dateupdate")
-    private Timestamp fechaActualizacion;
+    private LocalDate fechaActualizacion;
 
     @Column(name = "vead_aden_usr_update")
     private UUID UsuarioModificacion;

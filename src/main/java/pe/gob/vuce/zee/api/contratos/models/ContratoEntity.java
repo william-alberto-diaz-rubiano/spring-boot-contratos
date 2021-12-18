@@ -4,12 +4,9 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -96,10 +93,10 @@ public class ContratoEntity {
     private PersonaEntity usuarioModificacion;
 
     @Column(name = "vecr_ctrt_dateupdate")
-    private Timestamp fechaModificacio;
+    private LocalDate fechaModificacio;
 
     @Column(name = "vecr_ctrt_datecreate")
-    private Timestamp fechaCreacion;
+    private LocalDate fechaCreacion;
 
     @OneToMany(mappedBy="contrato")
     @ToString.Exclude

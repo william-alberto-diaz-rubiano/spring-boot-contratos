@@ -1,5 +1,6 @@
 package pe.gob.vuce.zee.api.contratos.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import pe.gob.vuce.zee.api.contratos.models.PersonaEntity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -22,15 +24,19 @@ import java.util.UUID;
 public class ActividadDTO {
     public UUID id;
     public MaestroDTO idActividad;
-    public Timestamp fechaInicial;
-    public Timestamp fechaFinl;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaInicial;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaFinl;
     public Integer idCliente;
     public Integer idOrganizacion;
     public Integer estado;
     public Integer activo;
-    public Timestamp fechaCreacionActividad;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaCreacionActividad;
     public PersonaDTO idUsuarioActividad;
-    public Timestamp fechaActualizacionActividad;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaActualizacionActividad;
     public PersonaDTO UsuarioModificacionActividad;
     public MaestroDTO tipoActividadEconomica;
 }

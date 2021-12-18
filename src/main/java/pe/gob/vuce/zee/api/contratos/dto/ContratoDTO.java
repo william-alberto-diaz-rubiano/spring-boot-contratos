@@ -1,11 +1,13 @@
 package pe.gob.vuce.zee.api.contratos.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,14 +21,19 @@ public class ContratoDTO {
     private String numeroContrato;
     private MaestroDTO tipoContrato;
     private String documento;
-    private Timestamp fechaInicial;
-    private Timestamp fechaVencimiento;
-    private Timestamp fechaInicioActividades;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaInicial;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaVencimiento;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaInicioActividades;
     private String numeroExpediente;
     private MaestroDTO motivoProrroga;
-    private Timestamp fechaProrroga;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaProrroga;
     private MaestroDTO motivoCancelacion;
-    private Timestamp fechaCancelacion;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaCancelacion;
     private Integer numeroContratoPosecion;
     private String documentoContratoPosecion;
     private Integer usuarioContratoPosecion;
@@ -37,8 +44,10 @@ public class ContratoDTO {
     private PersonaDTO idUsuario;
     private PersonaDTO usuarioCreacion;
     private PersonaDTO usuarioModificacion;
-    private Timestamp fechaModificacio;
-    private Timestamp fechaCreacion;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaModificacio;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate fechaCreacion;
     private Integer flag;
     private List<ActividadDTO> actividad;
     private List<AdendaDTO> adenda;
