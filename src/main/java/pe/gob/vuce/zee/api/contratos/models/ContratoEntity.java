@@ -14,9 +14,11 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "vecr_ctrt", schema = "vuce_zee", catalog = "zee_db")
 public class ContratoEntity {
+
     @Id
     @Column(name = "vecr_ctrt_idllave_pk")
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
@@ -32,6 +34,10 @@ public class ContratoEntity {
 
     @Column(name = "vecr_ctrt_ddocumento", nullable = false, length = 10)
     private String documento;
+
+    @ManyToOne
+    @JoinColumn(name = "vecr_ctrt_id_usuario", referencedColumnName = "vepr_pers_idllave_pk")
+    private PersonaEntity usuario;
 
     @Column(name = "vecr_ctrt_fecha_inic", nullable = false)
     private LocalDate fechaInicial;
@@ -65,8 +71,9 @@ public class ContratoEntity {
     @Column(name = "vecr_ctrt_docu_posec")
     private String documentoContratoPosecion;
 
-    @Column(name = "vecr_ctrt_usrn_posec")
-    private Integer usuarioContratoPosecion;
+    @ManyToOne
+    @JoinColumn(name = "vecr_ctrt_usrn_posec", referencedColumnName = "vepr_pers_idllave_pk")
+    private PersonaEntity usuarioContratoPosecion;
 
     @Column(name = "vecr_ctrt_cliente_fk", nullable = false)
     private Integer codigoCliente;
@@ -74,26 +81,21 @@ public class ContratoEntity {
     @Column(name = "vecr_ctrt_organiz_fk", nullable = false)
     private Integer codigoOrganizacion;
 
-    @Column(name = "vecr_ctrt_cod_estado", nullable = false)
-    private Integer estado;
+    @ManyToOne
+    @JoinColumn(name = "vecr_ctrt_cod_estado", referencedColumnName = "vems_gcon_idllave_pk")
+    private MaestroEntity estado;
 
     @Column(name = "vecr_ctrt_cod_active", nullable = false)
     private Integer activo;
 
-    @ManyToOne
-    @JoinColumn(name = "vecr_ctrt_id_usuario", referencedColumnName = "vepr_pers_idllave_pk")
-    private PersonaEntity usuario;
+    @Column(name = "vecr_ctrt_usr_create", nullable = false)
+    private UUID usuarioCreacion;
 
-    @ManyToOne
-    @JoinColumn(name = "vecr_ctrt_usr_create", referencedColumnName = "vepr_pers_idllave_pk")
-    private PersonaEntity usuarioCreacion;
-
-    @ManyToOne
-    @JoinColumn(name = "vecr_ctrt_usr_update", referencedColumnName = "vepr_pers_idllave_pk")
-    private PersonaEntity usuarioModificacion;
+    @Column(name = "vecr_ctrt_usr_update", nullable = false)
+    private UUID usuarioModificacion;
 
     @Column(name = "vecr_ctrt_dateupdate")
-    private LocalDate fechaModificacio;
+    private LocalDate fechaModificacion;
 
     @Column(name = "vecr_ctrt_datecreate")
     private LocalDate fechaCreacion;
@@ -106,16 +108,4 @@ public class ContratoEntity {
     @ToString.Exclude
     private List<AdendaEntity> adenda;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ContratoEntity that = (ContratoEntity) o;
-        return id.equals(that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

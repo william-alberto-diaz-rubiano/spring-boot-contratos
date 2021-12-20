@@ -5,8 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import pe.gob.vuce.zee.api.contratos.dto.ErrorDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ResponseDTO;
+import pe.gob.vuce.zee.api.contratos.exceptions.BadRequestException;
 import pe.gob.vuce.zee.api.contratos.exceptions.NotEntityFound;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -18,6 +22,12 @@ public class ExceptionHandlerController {
         log.error("Error encontrado: ", ex);
         var responseBody = new ResponseDTO<>(-1, ex.getMessage());
         return ResponseEntity.ok(responseBody);
+    }
+
+    @ExceptionHandler(value = BadRequestException.class)
+    public ResponseEntity<ErrorDTO> badRequestExceptionHandler(HttpServletRequest request, BadRequestException ex) {
+        ErrorDTO error = ErrorDTO.builder().code(ex.getCode()).path(request.getRequestURI()).statusValue(ex.getStatus().value()).errors(ex.getErrors()).message(ex.getMessage()).build();
+        return new ResponseEntity<>(error, ex.getStatus());
     }
 
 }

@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface MaestroRepository extends JpaRepository<MaestroEntity, UUID> {
     Set<MaestroEntity> findByPrefijoAndEstado(Integer prefijo, Integer estado);
     Optional<MaestroEntity> findByPrefijoAndCorrelativoAndEstado(Integer prefijo, Integer correlativo, Integer estado);
+    MaestroEntity findByPrefijoAndCorrelativo(Integer prefijo, Integer correlativo);
+
 }
