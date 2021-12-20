@@ -33,7 +33,7 @@ public class AdendaEntity {
     private ContratoEntity contrato;
 
     @Column(name = "vead_aden_id_usrn_fk", nullable = false)
-    private UUID idUsuarioZee;
+    private UUID usuario;
 
     @Column(name = "vead_aden_fecha_inic", nullable = false)
     private LocalDate fechaInicial;
