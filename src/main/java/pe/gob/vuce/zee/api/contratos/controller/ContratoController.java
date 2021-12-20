@@ -23,7 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("v1/contratos")
+@RequestMapping("v1/contrato")
 public class ContratoController {
 
     private final ContratoService contratoService;

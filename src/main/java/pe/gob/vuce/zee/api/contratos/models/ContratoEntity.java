@@ -72,6 +72,10 @@ public class ContratoEntity {
     private String documentoContratoPosecion;
 
     @ManyToOne
+    @JoinColumn(name = "vecr_ctrt_cod_estado", referencedColumnName = "vems_gcon_idllave_pk")
+    private MaestroEntity contratostate;
+
+    @ManyToOne
     @JoinColumn(name = "vecr_ctrt_usrn_posec", referencedColumnName = "vepr_pers_idllave_pk")
     private PersonaEntity usuarioContratoPosecion;
 
@@ -80,10 +84,6 @@ public class ContratoEntity {
 
     @Column(name = "vecr_ctrt_organiz_fk", nullable = false)
     private Integer codigoOrganizacion;
-
-    @ManyToOne
-    @JoinColumn(name = "vecr_ctrt_cod_estado", referencedColumnName = "vems_gcon_idllave_pk")
-    private MaestroEntity estado;
 
     @Column(name = "vecr_ctrt_cod_active", nullable = false)
     private Integer activo;

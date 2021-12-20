@@ -6,11 +6,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication
+@EnableConfigurationProperties
 public class MaestrosApplication {
 
 	public static void main(String[] args) {
@@ -19,6 +21,7 @@ public class MaestrosApplication {
 
 	@Autowired
 	private ObjectMapper objectMapper;
+
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();

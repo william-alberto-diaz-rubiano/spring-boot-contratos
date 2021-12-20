@@ -43,7 +43,7 @@ public class ContratoServiceImpl implements ContratoService {
         UUID estadoActivo=maestroRepository.findByPrefijoAndCorrelativo(70,1).getId();
 
         contratoPrincipalDTO.setActivo(Constantes.HABILITADO);
-        contratoPrincipalDTO.setEstadoId(estadoActivo);
+        contratoPrincipalDTO.setContratostateId(estadoActivo);
         contratoPrincipalDTO.setCodigoCliente(1);
         contratoPrincipalDTO.setCodigoOrganizacion(1);
         contratoPrincipalDTO.setUsuarioCreacion(UUID.randomUUID());

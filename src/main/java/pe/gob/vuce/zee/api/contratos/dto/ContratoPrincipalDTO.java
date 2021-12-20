@@ -62,12 +62,14 @@ public class ContratoPrincipalDTO {
 
     @Size(max = 10,message = "El numero de expediente soporta maximo 10 caracteres")
     private String documentoContratoPosecion;
+
+    private UUID contratostateId;
+
     private UUID usuarioContratoPosecionId;
 
     private Integer codigoCliente;
-    private Integer codigoOrganizacion;
 
-    private UUID estadoId;
+    private Integer codigoOrganizacion;
 
     private Integer activo;
 
