@@ -80,14 +80,14 @@ public class ContratoController {
 
         ContratoPrincipalDTO nuevoContratoPrincipal = contratoService.guardarPrincipal(contratoPrincipalDTO);
 
-        ResponseDTO responseBody = new ResponseDTO(nuevoContratoPrincipal,"Información principal guardada","success",nuevoContratoPrincipal.getId());
+        ResponseDTO responseBody = new ResponseDTO(nuevoContratoPrincipal,"Información principal guardada");
         return new ResponseEntity<ResponseDTO>(responseBody, HttpStatus.CREATED);
     }
 
     @GetMapping("/numeroContrato")
     public ResponseEntity<ResponseDTO> codigoSistema(){
         String codigo = contratoService.numeroContrato();
-        ResponseDTO responseBody = new ResponseDTO("success",codigo,"Codigo del sistema");
+        ResponseDTO responseBody = new ResponseDTO(codigo,"Codigo del sistema");
         return new ResponseEntity<ResponseDTO>(responseBody, HttpStatus.OK);
     }
 

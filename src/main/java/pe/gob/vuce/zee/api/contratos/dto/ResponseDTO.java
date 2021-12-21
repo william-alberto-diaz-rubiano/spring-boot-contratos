@@ -41,9 +41,8 @@ public class ResponseDTO<T> {
         this.id = id;
     }
 
-    public ResponseDTO(String status, Object object, String mensaje) {
-        this.status = status;
-        this.object = object;
+    public ResponseDTO(T data, String mensaje) {
+        this.data = data;
         this.mensaje = mensaje;
     }
 }

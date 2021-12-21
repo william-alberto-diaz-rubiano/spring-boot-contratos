@@ -24,16 +24,16 @@ public class ActividadEntity {
     private UUID id;
 
     @ManyToOne
+    @JoinColumn(name = "vecr_actv_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
+    private ContratoEntity contrato;
+
+    @ManyToOne
     @JoinColumn(name = "vecr_actv_id_econ_fk", referencedColumnName = "vems_gcon_idllave_pk")
     private MaestroEntity  actividad;
 
     @ManyToOne
     @JoinColumn(name = "vecr_actv_id_acti_fk", referencedColumnName = "vems_gcon_idllave_pk")
     private MaestroEntity tipoActividadEconomica;
-
-    @ManyToOne
-    @JoinColumn(name = "vecr_actv_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
-    private ContratoEntity contrato;
 
     @ManyToOne
     @JoinColumn(name = "vecr_actv_id_alma_fk", referencedColumnName = "vems_alma_idllave_pk")
@@ -43,7 +43,13 @@ public class ActividadEntity {
     private LocalDate fechaInicial;
 
     @Column(name = "vecr_actv_fecha_fina", nullable = false)
-    private LocalDate fechaFinl;
+    private LocalDate fechaFinal;
+
+    @Column(name = "vecr_actv_fch_ini-pv", nullable = false)
+    private LocalDate fechaInicialPV;
+
+    @Column(name = "vecr_actv_fch_fin_pv", nullable = false)
+    private LocalDate fechaFinalPV;
 
     @Column(name = "vecr_actv_cliente_fk", nullable = false)
     private Integer idCliente;
@@ -58,16 +64,14 @@ public class ActividadEntity {
     private Integer activo;
 
     @Column(name = "vecr_actv_datecreate",nullable = false)
-    private LocalDateTime fechaCreacionActividad;
+    private LocalDate fechaCreacion;
 
-    @ManyToOne
-    @JoinColumn(name = "vecr_actv_usr_create", referencedColumnName = "vepr_pers_idllave_pk")
-    private PersonaEntity idUsuarioActividad;
+    @Column(name = "vecr_actv_usr_create",nullable = false)
+    private UUID usuarioCreacion;
 
     @Column(name = "vecr_actv_dateupdate")
-    private LocalDateTime fechaActualizacionActividad;
+    private LocalDate fechaModificacion;
 
-    @ManyToOne
-    @JoinColumn(name = "vecr_actv_usr_update", referencedColumnName = "vepr_pers_idllave_pk")
-    private PersonaEntity UsuarioModificacionActividad;
+    @Column(name = "vecr_actv_usr_update")
+    private UUID usuarioModificacion;
 }

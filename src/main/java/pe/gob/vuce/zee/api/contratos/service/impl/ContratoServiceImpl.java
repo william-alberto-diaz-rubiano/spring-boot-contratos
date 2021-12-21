@@ -40,10 +40,10 @@ public class ContratoServiceImpl implements ContratoService {
     @Override
     public ContratoPrincipalDTO guardarPrincipal(ContratoPrincipalDTO contratoPrincipalDTO) {
 
-        UUID estadoActivo=maestroRepository.findByPrefijoAndCorrelativo(70,1).getId();
+        UUID estadoGuardado=maestroRepository.findByPrefijoAndCorrelativo(70,3).getId();
 
         contratoPrincipalDTO.setActivo(Constantes.HABILITADO);
-        contratoPrincipalDTO.setContratostateId(estadoActivo);
+        contratoPrincipalDTO.setContratostateId(estadoGuardado);
         contratoPrincipalDTO.setCodigoCliente(1);
         contratoPrincipalDTO.setCodigoOrganizacion(1);
         contratoPrincipalDTO.setUsuarioCreacion(UUID.randomUUID());

@@ -6,6 +6,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -31,6 +32,12 @@ public class LoteContratoEntity {
     @JoinColumn(name = "vecr_lote_codg_lotes", referencedColumnName = "velt_clot_idllave_pk")
     private LoteEntity lote;
 
+    @Column(name = "vecr_lote_blq_sel_fk", nullable = false)
+    private UUID bloque;
+
+    @Column(name = "vecr_lote_tip_mnd_fk", nullable = false)
+    private UUID tipoMoneda;
+
     @Column(name = "vecr_lote_mont_costo", nullable = false)
     private Integer costo;
 
@@ -55,14 +62,12 @@ public class LoteContratoEntity {
     @Column(name = "vecr_lote_datecreate", nullable = false)
     private Timestamp fechaCreacion;
 
-    @Type(type="pg-uuid")
     @Column(name = "vecr_lote_usr_create", nullable = false)
     private UUID usuarioCreacion;
 
     @Column(name = "vecr_lote_dateupdate", nullable = false)
     private Timestamp fechaModificacion;
 
-    @Type(type="pg-uuid")
     @Column(name = "vecr_lote_usr_update", nullable = false)
     private UUID usuarioModificacion;
 
