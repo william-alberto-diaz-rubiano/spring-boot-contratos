@@ -43,5 +43,5 @@ spring:
       maestroUrl: 'https://landing-desa.vuce.gob.pe/vuce-zee-api-lote/'
 app:
   contrato-etapas:
-    1: 'Datos principales'
+    1: 'Formulario principal'
     2: 'Lotes'

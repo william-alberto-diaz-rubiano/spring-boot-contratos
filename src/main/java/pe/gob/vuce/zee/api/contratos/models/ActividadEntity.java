@@ -40,16 +40,16 @@ public class ActividadEntity {
     private AlmacenEntity almacen;
 
     @Column(name = "vecr_actv_fecha_inic", nullable = false)
-    private LocalDate fechaInicial;
+    private LocalDateTime fechaInicial;
 
     @Column(name = "vecr_actv_fecha_fina", nullable = false)
-    private LocalDate fechaFinal;
+    private LocalDateTime fechaFinal;
 
     @Column(name = "vecr_actv_fch_ini-pv", nullable = false)
-    private LocalDate fechaInicialPV;
+    private LocalDateTime fechaInicialPV;
 
     @Column(name = "vecr_actv_fch_fin_pv", nullable = false)
-    private LocalDate fechaFinalPV;
+    private LocalDateTime fechaFinalPV;
 
     @Column(name = "vecr_actv_cliente_fk", nullable = false)
     private Integer idCliente;
@@ -64,13 +64,13 @@ public class ActividadEntity {
     private Integer activo;
 
     @Column(name = "vecr_actv_datecreate",nullable = false)
-    private LocalDate fechaCreacion;
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "vecr_actv_usr_create",nullable = false)
     private UUID usuarioCreacion;
 
     @Column(name = "vecr_actv_dateupdate")
-    private LocalDate fechaModificacion;
+    private LocalDateTime fechaModificacion;
 
     @Column(name = "vecr_actv_usr_update")
     private UUID usuarioModificacion;

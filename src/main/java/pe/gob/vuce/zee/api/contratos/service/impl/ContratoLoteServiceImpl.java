@@ -67,34 +67,6 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         throw new EntityNotFoundException(errorMsg);
     }
 
-
-    @Override
-    public List<LoteContratoSaveDTO> guardarAllLoteContrato(List<LoteContratoSaveDTO> listaObjetos) {
-
-        List<LoteContratoEntity> listaobjetosEntity = new ArrayList<>();
-
-        for(LoteContratoSaveDTO loteContratoSaveDTO : listaObjetos){
-
-            loteContratoSaveDTO.setEstado(1);
-            loteContratoSaveDTO.setActivo(Constantes.HABILITADO);
-            loteContratoSaveDTO.setIdCliente(1);
-            loteContratoSaveDTO.setIdOrganizacion(1);
-            loteContratoSaveDTO.setFechaCreacion(Timestamp.valueOf(LocalDateTime.now()));
-            loteContratoSaveDTO.setFechaModificacion(Timestamp.valueOf(LocalDateTime.now()));
-            loteContratoSaveDTO.setUsuarioCreacion(UUID.randomUUID());
-            loteContratoSaveDTO.setUsuarioModificacion(UUID.randomUUID());
-
-            LoteContratoEntity loteContratoEntity = modelMapper.map(loteContratoSaveDTO, LoteContratoEntity.class);
-
-            listaobjetosEntity.add(loteContratoEntity);
-        }
-
-        listaobjetosEntity = contratoLoteRepository.saveAll(listaobjetosEntity);
-
-        return listaobjetosEntity.stream().map(x -> modelMapper.map(x, LoteContratoSaveDTO.class)).collect(Collectors.toList());
-
-    }
-
     @Override
     public LoteContratoDTO findByContrato(UUID idContrato) throws IOException {
         List<LoteContratoEntity> listContrato = contratoLoteRepository.finByContrato(idContrato);

@@ -11,14 +11,18 @@ import pe.gob.vuce.zee.api.contratos.base.Constantes;
 import pe.gob.vuce.zee.api.contratos.config.AppConfig;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoMinimalDTO;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoPrincipalDTO;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoFormularioPrincipalDTO;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoSegundoFormularioDTO;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
+import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
+import pe.gob.vuce.zee.api.contratos.repository.ContratoLoteRepository;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoRepository;
 import pe.gob.vuce.zee.api.contratos.repository.MaestroRepository;
 import pe.gob.vuce.zee.api.contratos.service.ContratoService;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,29 +36,57 @@ public class ContratoServiceImpl implements ContratoService {
     private final ModelMapper modelMapper;
     private final ContratoRepository contratoRepository;
     private final AppConfig appConfig;
+    private final ContratoLoteRepository contratoLoteRepository;
+
 
     @Autowired
     private MaestroRepository maestroRepository;
 
     @Override
-    public ContratoPrincipalDTO guardarPrincipal(ContratoPrincipalDTO contratoPrincipalDTO) {
+    public ContratoFormularioPrincipalDTO guardarFormularioPrincipal(ContratoFormularioPrincipalDTO contratoFormularioPrincipalDTO) {
 
-        UUID estadoGuardado=maestroRepository.findByPrefijoAndCorrelativo(70,3).getId();
+        contratoFormularioPrincipalDTO.setActivo(Constantes.HABILITADO);
+        contratoFormularioPrincipalDTO.setEstado(1);
+        contratoFormularioPrincipalDTO.setCodigoCliente(1);
+        contratoFormularioPrincipalDTO.setCodigoOrganizacion(1);
+        contratoFormularioPrincipalDTO.setUsuarioCreacion(Constantes.UID_TEST);
+        contratoFormularioPrincipalDTO.setFechaCreacion(LocalDateTime.now());
+        contratoFormularioPrincipalDTO.setFechaModificacion(LocalDateTime.now());
+        contratoFormularioPrincipalDTO.setUsuarioModificacion(Constantes.UID_TEST);
 
-        contratoPrincipalDTO.setActivo(Constantes.HABILITADO);
-        contratoPrincipalDTO.setContratostateId(estadoGuardado);
-        contratoPrincipalDTO.setCodigoCliente(1);
-        contratoPrincipalDTO.setCodigoOrganizacion(1);
-        contratoPrincipalDTO.setUsuarioCreacion(UUID.randomUUID());
-        contratoPrincipalDTO.setFechaCreacion(LocalDate.now());
-        contratoPrincipalDTO.setFechaModificacion(LocalDate.now());
-        contratoPrincipalDTO.setUsuarioModificacion(UUID.randomUUID());
-
-        ContratoEntity contratoEntity = modelMapper.map(contratoPrincipalDTO, ContratoEntity.class);
+        ContratoEntity contratoEntity = modelMapper.map(contratoFormularioPrincipalDTO, ContratoEntity.class);
 
         contratoEntity = contratoRepository.save(contratoEntity);
 
-        return modelMapper.map(contratoEntity, ContratoPrincipalDTO.class);
+        return modelMapper.map(contratoEntity, ContratoFormularioPrincipalDTO.class);
+    }
+
+    @Override
+    public List<ContratoSegundoFormularioDTO> guardarSegundoFormulario(UUID contratoId, List<ContratoSegundoFormularioDTO> listaObjetos) {
+
+            List<LoteContratoEntity> listaobjetosEntity = new ArrayList<>();
+
+            for(ContratoSegundoFormularioDTO contratoSegundoFormularioDTO : listaObjetos){
+
+                contratoSegundoFormularioDTO.setContratoId(contratoId);
+                contratoSegundoFormularioDTO.setEstado(2);
+                contratoSegundoFormularioDTO.setActivo(Constantes.HABILITADO);
+                contratoSegundoFormularioDTO.setIdCliente(1);
+                contratoSegundoFormularioDTO.setIdOrganizacion(1);
+                contratoSegundoFormularioDTO.setFechaCreacion(LocalDateTime.now());
+                contratoSegundoFormularioDTO.setFechaModificacion(LocalDateTime.now());
+                contratoSegundoFormularioDTO.setUsuarioCreacion(Constantes.UID_TEST);
+                contratoSegundoFormularioDTO.setUsuarioModificacion(Constantes.UID_TEST);
+
+                LoteContratoEntity loteContratoEntity = modelMapper.map(contratoSegundoFormularioDTO, LoteContratoEntity.class);
+
+                listaobjetosEntity.add(loteContratoEntity);
+            }
+
+            listaobjetosEntity = contratoLoteRepository.saveAll(listaobjetosEntity);
+
+            return listaobjetosEntity.stream().map(x -> modelMapper.map(x, ContratoSegundoFormularioDTO.class)).collect(Collectors.toList());
+
     }
 
     @Override

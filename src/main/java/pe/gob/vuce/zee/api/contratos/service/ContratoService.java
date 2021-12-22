@@ -4,9 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoMinimalDTO;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoPrincipalDTO;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoFormularioPrincipalDTO;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoSegundoFormularioDTO;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
-import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -14,7 +14,9 @@ import java.util.UUID;
 
 public interface ContratoService {
 
-    ContratoPrincipalDTO guardarPrincipal(ContratoPrincipalDTO contratoPrincipalDTO);
+    ContratoFormularioPrincipalDTO guardarFormularioPrincipal(ContratoFormularioPrincipalDTO contratoFormularioPrincipalDTO);
+
+    List<ContratoSegundoFormularioDTO> guardarSegundoFormulario(UUID contratoId,List<ContratoSegundoFormularioDTO> listaObjetos);
 
     String numeroContrato();
 

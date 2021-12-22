@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -19,12 +20,12 @@ public class LoteContratoDetalleDTO {
     private String actividadDescripcion;
     private UUID almacenId;
     private String almacenCodigo;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaInicio;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaFin;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaInicioPv;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaFinPv;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaInicio;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaFin;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaInicioPv;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaFinPv;
 }

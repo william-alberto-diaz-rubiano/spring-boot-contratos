@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -16,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LoteContratoSaveDTO {
+public class ContratoSegundoFormularioDTO {
 
     private UUID id;
 
@@ -35,10 +36,10 @@ public class LoteContratoSaveDTO {
     private Integer idOrganizacion;
     private Integer estado;
     private Integer activo;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Timestamp fechaCreacion;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Timestamp fechaModificacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaCreacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaModificacion;
     private UUID usuarioCreacion;
     private UUID usuarioModificacion;
 }

@@ -8,6 +8,7 @@ import pe.gob.vuce.zee.api.contratos.models.AdendaEntity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ContratoPrincipalDTO {
+public class ContratoFormularioPrincipalDTO {
 
     private UUID id;
 
@@ -26,6 +27,8 @@ public class ContratoPrincipalDTO {
     @NotNull(message = "El tipo del contrato no puede ser nulo")
     private UUID tipoContratoId;
 
+    private String tipoContratoDescripcion;
+
     @Size(max = 20,message = "El documento soporta maximo 20 caracteres")
     @NotNull(message = "El documento no puede ser nulo")
     private String documento;
@@ -33,17 +36,23 @@ public class ContratoPrincipalDTO {
     @NotNull(message = "El UUID del usuario no puede ser nulo")
     private UUID usuarioId;
 
+    private String usuarioNombre;
+
+    private String usuarioApellidoP;
+
+    private String usuarioApellidoM;
+
     @NotNull(message = "La fecha inicial no puede ser nulo")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaInicial;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaInicial;
 
     @NotNull(message = "La fecha de vencimiento no puede ser nulo")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaVencimiento;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaVencimiento;
 
     @NotNull(message = "La fecha de inicio de actividades no puede ser nulo")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaInicioActividades;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaInicioActividades;
 
     @Size(max = 10,message = "El numero de expediente soporta maximo 10 caracteres")
     @NotNull(message = "El numero de expediente no puede ser nulo")
@@ -55,15 +64,15 @@ public class ContratoPrincipalDTO {
 
     private UUID motivoCancelacionId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaCancelacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaCancelacion;
 
     private Integer numeroContratoPosecion;
 
     @Size(max = 10,message = "El numero de expediente soporta maximo 10 caracteres")
     private String documentoContratoPosecion;
 
-    private UUID contratostateId;
+    private Integer estado;
 
     private UUID usuarioContratoPosecionId;
 
@@ -73,11 +82,10 @@ public class ContratoPrincipalDTO {
 
     private Integer activo;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaCreacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaCreacion;
     private UUID usuarioCreacion;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaModificacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaModificacion;
     private UUID usuarioModificacion;
-
 }
