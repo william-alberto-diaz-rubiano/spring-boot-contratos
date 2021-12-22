@@ -14,7 +14,6 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @Entity
 @Table(name = "vecr_ctrt", schema = "vuce_zee", catalog = "zee_db")
 public class ContratoEntity {
@@ -71,9 +70,8 @@ public class ContratoEntity {
     @Column(name = "vecr_ctrt_docu_posec")
     private String documentoContratoPosecion;
 
-    @ManyToOne
-    @JoinColumn(name = "vecr_ctrt_cod_estado", referencedColumnName = "vems_gcon_idllave_pk")
-    private MaestroEntity contratostate;
+    @Column(name = "vecr_ctrt_cod_estado", nullable = false)
+    private Integer estado;
 
     @ManyToOne
     @JoinColumn(name = "vecr_ctrt_usrn_posec", referencedColumnName = "vepr_pers_idllave_pk")

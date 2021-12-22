@@ -2,11 +2,10 @@ package pe.gob.vuce.zee.api.contratos.models;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -14,7 +13,6 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 @Entity
 @Table(name = "vecr_lote", schema = "vuce_zee", catalog = "zee_db")
 public class LoteContratoEntity {
@@ -60,14 +58,27 @@ public class LoteContratoEntity {
     private Integer activo;
 
     @Column(name = "vecr_lote_datecreate", nullable = false)
-    private Timestamp fechaCreacion;
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "vecr_lote_usr_create", nullable = false)
     private UUID usuarioCreacion;
 
     @Column(name = "vecr_lote_dateupdate", nullable = false)
-    private Timestamp fechaModificacion;
+    private LocalDateTime fechaModificacion;
 
     @Column(name = "vecr_lote_usr_update", nullable = false)
     private UUID usuarioModificacion;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LoteContratoEntity that = (LoteContratoEntity) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
