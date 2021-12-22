@@ -1,5 +1,6 @@
 package pe.gob.vuce.zee.api.contratos.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pe.gob.vuce.zee.api.contratos.base.Constantes;
+import pe.gob.vuce.zee.api.contratos.config.AppConfig;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoMinimalDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoPrincipalDTO;
@@ -24,15 +26,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ContratoServiceImpl implements ContratoService {
 
     private final ModelMapper modelMapper;
     private final ContratoRepository contratoRepository;
-
-    public ContratoServiceImpl(ModelMapper modelMapper, ContratoRepository contratoRepository) {
-        this.modelMapper = modelMapper;
-        this.contratoRepository = contratoRepository;
-    }
+    private final AppConfig appConfig;
 
     @Autowired
     private MaestroRepository maestroRepository;
