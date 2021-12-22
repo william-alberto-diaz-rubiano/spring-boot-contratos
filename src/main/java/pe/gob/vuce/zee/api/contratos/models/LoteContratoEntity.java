@@ -14,6 +14,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @Entity
 @Table(name = "vecr_lote", schema = "vuce_zee", catalog = "zee_db")
 public class LoteContratoEntity {
@@ -21,10 +22,9 @@ public class LoteContratoEntity {
     @Column(name = "vecr_lote_idllave_pk")
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "UUIDGenerator")
-    @Type(type="pg-uuid")
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "vecr_lote_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
     private ContratoEntity contrato;
 
@@ -70,6 +70,4 @@ public class LoteContratoEntity {
 
     @Column(name = "vecr_lote_usr_update", nullable = false)
     private UUID usuarioModificacion;
-
-
 }

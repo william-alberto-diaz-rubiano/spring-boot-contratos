@@ -20,12 +20,12 @@ import java.util.UUID;
 public class ContratoEntity {
 
     @Id
-    @Column(name = "vecr_ctrt_idllave_pk")
+    @Column(name = "vecr_ctrt_idllave_pk",nullable = false)
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "UUIDGenerator")
     private UUID id;
 
-    @Column(name = "vecr_ctrt_cod_contra", nullable = false)
+    @Column(name = "vecr_ctrt_cod_contra")
     private String numeroContrato;
 
     @ManyToOne

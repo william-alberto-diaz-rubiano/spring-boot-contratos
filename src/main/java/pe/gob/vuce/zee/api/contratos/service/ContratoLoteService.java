@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ContratoLoteService {
+
+    List<LoteContratoSaveDTO> guardarAllLoteContrato(List<LoteContratoSaveDTO> listaObjetos);
+
     LoteContratoDTO findByContrato(UUID idContrato) throws IOException;
     LoteContratoDTO findbyId(UUID idContratoLote) throws IOException;
 

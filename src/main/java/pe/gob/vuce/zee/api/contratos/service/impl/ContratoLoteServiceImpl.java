@@ -3,6 +3,7 @@ package pe.gob.vuce.zee.api.contratos.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,9 @@ import pe.gob.vuce.zee.api.contratos.service.ContratoLoteService;
 
 import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,10 +34,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ContratoLoteServiceImpl implements ContratoLoteService {
 
-    private final ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
+
     private final LoteAPI loteAPI;
-    private final ContratoLoteRepository contratoLoteRepository;
+
+    @Autowired
+    private ContratoLoteRepository contratoLoteRepository;
+
     private final LoteRepository loteRepository;
+
 
     public LoteDTO buscarPorId(UUID uuid) throws IOException {
         var response = loteAPI.getLote(uuid).execute();
@@ -55,6 +65,34 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         }
 
         throw new EntityNotFoundException(errorMsg);
+    }
+
+
+    @Override
+    public List<LoteContratoSaveDTO> guardarAllLoteContrato(List<LoteContratoSaveDTO> listaObjetos) {
+
+        List<LoteContratoEntity> listaobjetosEntity = new ArrayList<>();
+
+        for(LoteContratoSaveDTO loteContratoSaveDTO : listaObjetos){
+
+            loteContratoSaveDTO.setEstado(1);
+            loteContratoSaveDTO.setActivo(Constantes.HABILITADO);
+            loteContratoSaveDTO.setIdCliente(1);
+            loteContratoSaveDTO.setIdOrganizacion(1);
+            loteContratoSaveDTO.setFechaCreacion(Timestamp.valueOf(LocalDateTime.now()));
+            loteContratoSaveDTO.setFechaModificacion(Timestamp.valueOf(LocalDateTime.now()));
+            loteContratoSaveDTO.setUsuarioCreacion(UUID.randomUUID());
+            loteContratoSaveDTO.setUsuarioModificacion(UUID.randomUUID());
+
+            LoteContratoEntity loteContratoEntity = modelMapper.map(loteContratoSaveDTO, LoteContratoEntity.class);
+
+            listaobjetosEntity.add(loteContratoEntity);
+        }
+
+        listaobjetosEntity = contratoLoteRepository.saveAll(listaobjetosEntity);
+
+        return listaobjetosEntity.stream().map(x -> modelMapper.map(x, LoteContratoSaveDTO.class)).collect(Collectors.toList());
+
     }
 
     @Override
