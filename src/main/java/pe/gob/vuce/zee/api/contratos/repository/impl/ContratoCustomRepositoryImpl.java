@@ -61,14 +61,18 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
         }
 
         if(nombreUsuario != null){
+            Expression<String> usuarioNombreExpr = cb.coalesce(root.get("usuario").get("nombre"), "");
+            Expression<String> usuarioApellidoPaternoExpr = cb.coalesce(root.get("usuario").get("apellidoP"), "");
+            Expression<String> usuarioApellidoMaternoExpr = cb.coalesce(root.get("usuario").get("apellidoM"), "");
 
             Expression<String>
-            expr = cb.concat(root.get("usuario").get("nombre"), " ");
-            expr = cb.concat(expr, root.get("usuario").get("apellidoP"));
-            expr = cb.concat(expr, " ");
-            expr = cb.concat(expr, root.get("usuario").get("apellidoM"));
+            usuarioNombreCompletoExpr = cb.concat(usuarioNombreExpr, " ");
+            usuarioNombreCompletoExpr = cb.concat(usuarioNombreCompletoExpr, usuarioApellidoPaternoExpr);
+            usuarioNombreCompletoExpr = cb.concat(usuarioNombreCompletoExpr, " ");
+            usuarioNombreCompletoExpr = cb.concat(usuarioNombreCompletoExpr, usuarioApellidoMaternoExpr);
+            usuarioNombreCompletoExpr = cb.upper(usuarioNombreCompletoExpr);
 
-            predicates.add(cb.like(expr, "%" + nombreUsuario + "%"));
+            predicates.add(cb.like(usuarioNombreCompletoExpr, "%" + nombreUsuario.toUpperCase() + "%"));
 
             //predicates.add(cb.equal(root.get("usuario").get("nombre"), nombreUsuario));
         }
