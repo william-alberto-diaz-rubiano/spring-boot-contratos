@@ -120,43 +120,25 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public List<ContratoEntity> findAll(){
-        return contratoRepository.findAll();
+    public Page<ContratoFormularioPrincipalDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador) {
+
+        var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
+        var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoFormularioPrincipalDTO.class)).collect(Collectors.toList());
+        return new PageImpl<>(resultDTO, paginador, result.getTotalElements());
+
     }
 
     @Override
-    public  ContratoDTO createContrato(ContratoDTO contrato){
-        ContratoEntity contratoEntity = modelMapper.map(contrato, ContratoEntity.class);
-        contratoRepository.save(contratoEntity);
-        return contrato;
+    public Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador) {
+
+        var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
+        var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoMinimalDTO.class)).collect(Collectors.toList());
+        return new PageImpl<>(resultDTO, paginador, result.getTotalElements());
     }
 
     @Override
-    public Page<ContratoDTO> finByCorrelativo(String numeroContrato,
-                                              UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, Timestamp fechaInicial, Timestamp fechaFinal, Pageable pageable){
-        Page<ContratoEntity> contratoList = contratoRepository.busquedaPageable(numeroContrato,tipoContrato, estado,lote,documento,tipoDocumento,usuario,tipoActividad,
-                fechaInicial,fechaFinal,pageable);
-        List<ContratoDTO> dtos = contratoList
-                .stream()
-                .map(contrato -> modelMapper.map(contrato, ContratoDTO.class))
-                .collect(Collectors.toList());
-       return new PageImpl<>(dtos, pageable, contratoList.getTotalElements());
-    }
-
-    @Override
-    public Page<ContratoMinimalDTO> busquedaAvanzadaSeleccion(String numeroContrato,
-                                                              UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, Timestamp fechaInicial, Timestamp fechaFinal, Pageable pageable){
-        Page<ContratoEntity> contratoList = contratoRepository.busquedaPageable(numeroContrato,tipoContrato, estado,lote,documento,tipoDocumento,usuario,tipoActividad,
-                fechaInicial,fechaFinal,pageable);
-        List<ContratoMinimalDTO> dtos = contratoList
-                .stream()
-                .map(contrato -> modelMapper.map(contrato, ContratoMinimalDTO.class))
-                .collect(Collectors.toList());
-        return new PageImpl<>(dtos, pageable, contratoList.getTotalElements());
-    }
-
-    @Override
-    public Page<ContratoDTO> finByUsuario(UUID usuarioId, Pageable pageable) {
+    public List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
         return null;
     }
+
 }

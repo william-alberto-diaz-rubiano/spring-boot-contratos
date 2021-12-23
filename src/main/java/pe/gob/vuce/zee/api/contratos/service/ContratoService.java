@@ -9,6 +9,7 @@ import pe.gob.vuce.zee.api.contratos.dto.ContratoSegundoFormularioDTO;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,14 +21,15 @@ public interface ContratoService {
 
     String numeroContrato();
 
-    List<ContratoEntity> findAll();
+    Page<ContratoFormularioPrincipalDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador);
 
-    ContratoDTO createContrato(ContratoDTO contrato);
+    Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador);
 
-    Page<ContratoDTO> finByCorrelativo(String numeroContrato,
-                                       UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, Timestamp fechaInicial, Timestamp fechaFinal, Pageable pageable);
+    List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal);
 
-    Page<ContratoDTO> finByUsuario(UUID usuarioId, Pageable pageable);
 
-    Page<ContratoMinimalDTO> busquedaAvanzadaSeleccion(String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, Timestamp fechaInicial, Timestamp fechaFinal, Pageable pageable);
+
+
+
+
 }
