@@ -25,18 +25,20 @@ public class ContratoBandejaDTO {
     private String usuarioNombre;
     private Integer cantidadLotes;
     private Integer cantidadActividades;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime fechaInicioActividades;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime fechaInicial;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime fechaVencimiento;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDateTime fechaProrroga;
     private UUID motivoProrrogaDescripcion;
     private Integer estado;
     private String estadoDescripcion;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate inicioAdenda;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate vencimientoAdenda;
     private String estadoAdendaDescripcion;
 }

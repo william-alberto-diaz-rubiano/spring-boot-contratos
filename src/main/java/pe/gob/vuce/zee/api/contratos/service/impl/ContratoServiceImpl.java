@@ -158,7 +158,7 @@ public class ContratoServiceImpl implements ContratoService {
 
         return new PageImpl<>(resultDTO, paginador, result.getTotalElements());
     }
-    
+
 
     @Override
     public Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad,LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador) {
