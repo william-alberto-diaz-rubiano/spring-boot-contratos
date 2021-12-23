@@ -10,8 +10,7 @@ import pe.gob.vuce.zee.api.contratos.repository.ContratoCustomRepository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
-import java.sql.Timestamp;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -25,12 +24,12 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
 
 
     @Override
-    public List<ContratoEntity> busqueda(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
+    public List<ContratoEntity> busqueda(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, String nombreUsuario, UUID usuario, UUID tipoActividad,LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
         return busqueda(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario,usuario,tipoActividad,fechaInicial,fechaFinal,-1,-1);
     }
 
     @Override
-    public List<ContratoEntity> busqueda(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, int offset, int size) {
+    public List<ContratoEntity> busqueda(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal, int offset, int size) {
 
         var cb = em.getCriteriaBuilder();
         var cq = cb.createQuery(ContratoEntity.class);
@@ -42,7 +41,7 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
             predicates.add(cb.equal(root.get("id"), id));
         }
         if(numeroContrato != null){
-            predicates.add(cb.equal(root.get("numeroContrato"), numeroContrato));
+            predicates.add(cb.like(root.get("numeroContrato"), "%" + numeroContrato + "%"));
         }
         if(tipoContrato != null){
             predicates.add(cb.equal(root.get("tipoContrato").get("id"), tipoContrato));
@@ -103,7 +102,7 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
     }
 
     @Override
-    public Page<ContratoEntity> busquedaPageable(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable pageable) {
+    public Page<ContratoEntity> busquedaPageable(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable pageable) {
         var offset = pageable.getPageNumber() * pageable.getPageSize();
         var resultList =busqueda(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario,usuario,tipoActividad,fechaInicial,fechaFinal,offset,pageable.getPageSize());
         var count =contar(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal);
@@ -112,7 +111,7 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
     }
 
     @Override
-    public Long contar(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
+    public Long contar(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
 
         var cb = em.getCriteriaBuilder();
         var cq = cb.createQuery(Long.class);

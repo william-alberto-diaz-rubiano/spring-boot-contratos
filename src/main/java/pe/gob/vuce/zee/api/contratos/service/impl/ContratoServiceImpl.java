@@ -23,6 +23,7 @@ import pe.gob.vuce.zee.api.contratos.service.ContratoService;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -118,7 +119,19 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public Page<ContratoFormularioPrincipalDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador) {
+    public Page<ContratoFormularioPrincipalDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador) {
+
+        if(fechaInicial != null && fechaFinal != null){
+
+            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaFin = LocalTime.of(23,59,59);
+
+            LocalDate fechaInicioDate = fechaInicial.toLocalDate();
+            LocalDate fechaFinDate = fechaFinal.toLocalDate();
+
+            fechaInicial = LocalDateTime.of(fechaInicioDate,horaInicio);
+            fechaFinal = LocalDateTime.of(fechaFinDate,horaFin);
+        }
 
         var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
         var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoFormularioPrincipalDTO.class)).collect(Collectors.toList());
@@ -127,7 +140,19 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador) {
+    public Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad,LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador) {
+
+        if(fechaInicial != null && fechaFinal != null){
+
+            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaFin = LocalTime.of(23,59,59);
+
+            LocalDate fechaInicioDate = fechaInicial.toLocalDate();
+            LocalDate fechaFinDate = fechaFinal.toLocalDate();
+
+            fechaInicial = LocalDateTime.of(fechaInicioDate,horaInicio);
+            fechaFinal = LocalDateTime.of(fechaFinDate,horaFin);
+        }
 
         var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
         var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoMinimalDTO.class)).collect(Collectors.toList());
@@ -135,7 +160,7 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
+    public List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
         return null;
     }
 

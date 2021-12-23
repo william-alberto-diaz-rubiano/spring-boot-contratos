@@ -2,6 +2,7 @@ package pe.gob.vuce.zee.api.contratos.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import pe.gob.vuce.zee.api.contratos.service.ContratoService;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -41,9 +43,9 @@ public class ContratoController {
                                                        @RequestParam(name= "nombreUsuario",required = false) String nombreUsuario,
                                                        @RequestParam(name = "usuarioZEE", required = false) UUID usuario,
                                                        @RequestParam(name = "tipoActividad", required = false) UUID tipoActividad,
-                                                       @RequestParam(name = "fechaInicial", required = false) LocalDate fechaInicial,
+                                                       @RequestParam(name = "fechaInicial", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime fechaInicial,
                                                        @RequestParam(name = "tipo") Integer tipo, // 1 -> normal, 2-> para seleccion
-                                                       @RequestParam(name = "fechaFinal", required = false) LocalDate fechaFinal, Pageable pageable) {
+                                                       @RequestParam(name = "fechaFinal", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime fechaFinal, Pageable pageable) {
 
         if(numeroContrato == ""){
             numeroContrato=null;
