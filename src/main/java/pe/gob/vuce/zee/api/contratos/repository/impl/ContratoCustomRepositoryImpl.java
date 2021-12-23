@@ -25,12 +25,12 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
 
 
     @Override
-    public List<ContratoEntity> busqueda(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
-        return busqueda(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,usuario,tipoActividad,fechaInicial,fechaFinal,-1,-1);
+    public List<ContratoEntity> busqueda(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
+        return busqueda(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario,usuario,tipoActividad,fechaInicial,fechaFinal,-1,-1);
     }
 
     @Override
-    public List<ContratoEntity> busqueda(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, int offset, int size) {
+    public List<ContratoEntity> busqueda(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, int offset, int size) {
 
         var cb = em.getCriteriaBuilder();
         var cq = cb.createQuery(ContratoEntity.class);
@@ -52,6 +52,7 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
         }
         if(lote != null){
 
+
         }
         if (documento != null) {
             predicates.add(cb.equal(root.get("documento"), documento));
@@ -59,10 +60,24 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
         if (tipoDocumento != null) {
             predicates.add(cb.equal(root.get("usuario").get("tipoDocumento").get("id"), tipoDocumento));
         }
+
+        if(nombreUsuario != null){
+
+            Expression<String>
+            expr = cb.concat(root.get("usuario").get("nombre"), " ");
+            expr = cb.concat(expr, root.get("usuario").get("apellidoP"));
+            expr = cb.concat(expr, " ");
+            expr = cb.concat(expr, root.get("usuario").get("apellidoM"));
+
+            predicates.add(cb.like(expr, "%" + nombreUsuario + "%"));
+
+            //predicates.add(cb.equal(root.get("usuario").get("nombre"), nombreUsuario));
+        }
         if(usuario != null){
             predicates.add(cb.equal(root.get("usuario").get("id"), usuario));
         }
         if(tipoActividad != null){
+
 
         }
         if (!((fechaInicial == null) && (fechaFinal == null))
@@ -88,16 +103,16 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
     }
 
     @Override
-    public Page<ContratoEntity> busquedaPageable(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable pageable) {
+    public Page<ContratoEntity> busquedaPageable(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable pageable) {
         var offset = pageable.getPageNumber() * pageable.getPageSize();
-        var resultList =busqueda(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,usuario,tipoActividad,fechaInicial,fechaFinal,offset,pageable.getPageSize());
-        var count =contar(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,usuario,tipoActividad,fechaInicial,fechaFinal);
+        var resultList =busqueda(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario,usuario,tipoActividad,fechaInicial,fechaFinal,offset,pageable.getPageSize());
+        var count =contar(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal);
         return new PageImpl<>(resultList, pageable, count);
 
     }
 
     @Override
-    public Long contar(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
+    public Long contar(UUID id,String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
 
         var cb = em.getCriteriaBuilder();
         var cq = cb.createQuery(Long.class);

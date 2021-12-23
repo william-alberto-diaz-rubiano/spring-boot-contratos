@@ -21,11 +21,11 @@ public interface ContratoService {
 
     String numeroContrato();
 
-    Page<ContratoFormularioPrincipalDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador);
+    Page<ContratoFormularioPrincipalDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador);
 
-    Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador);
+    Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador);
 
-    List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal);
+    List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal);
 
 
 

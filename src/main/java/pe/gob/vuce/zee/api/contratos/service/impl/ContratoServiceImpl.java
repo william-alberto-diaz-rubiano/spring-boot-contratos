@@ -37,16 +37,14 @@ public class ContratoServiceImpl implements ContratoService {
     private final ContratoRepository contratoRepository;
     private final AppConfig appConfig;
     private final ContratoLoteRepository contratoLoteRepository;
+    private final MaestroRepository maestroRepository;
 
-
-    @Autowired
-    private MaestroRepository maestroRepository;
 
     @Override
     public ContratoFormularioPrincipalDTO guardarFormularioPrincipal(ContratoFormularioPrincipalDTO contratoFormularioPrincipalDTO) {
 
         contratoFormularioPrincipalDTO.setActivo(Constantes.HABILITADO);
-        contratoFormularioPrincipalDTO.setEstado(1);
+        contratoFormularioPrincipalDTO.setEstado(3);
         contratoFormularioPrincipalDTO.setCodigoCliente(1);
         contratoFormularioPrincipalDTO.setCodigoOrganizacion(1);
         contratoFormularioPrincipalDTO.setUsuarioCreacion(Constantes.UID_TEST);
@@ -69,7 +67,7 @@ public class ContratoServiceImpl implements ContratoService {
             for(ContratoSegundoFormularioDTO contratoSegundoFormularioDTO : listaObjetos){
 
                 contratoSegundoFormularioDTO.setContratoId(contratoId);
-                contratoSegundoFormularioDTO.setEstado(2);
+                contratoSegundoFormularioDTO.setEstado(1);
                 contratoSegundoFormularioDTO.setActivo(Constantes.HABILITADO);
                 contratoSegundoFormularioDTO.setIdCliente(1);
                 contratoSegundoFormularioDTO.setIdOrganizacion(1);
@@ -120,24 +118,24 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public Page<ContratoFormularioPrincipalDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador) {
+    public Page<ContratoFormularioPrincipalDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador) {
 
-        var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
+        var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
         var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoFormularioPrincipalDTO.class)).collect(Collectors.toList());
         return new PageImpl<>(resultDTO, paginador, result.getTotalElements());
 
     }
 
     @Override
-    public Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador) {
+    public Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal, Pageable paginador) {
 
-        var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
+        var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
         var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoMinimalDTO.class)).collect(Collectors.toList());
         return new PageImpl<>(resultDTO, paginador, result.getTotalElements());
     }
 
     @Override
-    public List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
+    public List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDate fechaInicial, LocalDate fechaFinal) {
         return null;
     }
 

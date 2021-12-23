@@ -15,27 +15,28 @@ public interface ContratoCustomRepository {
     List<ContratoEntity> busqueda(UUID id,String numeroContrato,
                                      UUID tipoContrato, Integer estado,
                                      UUID lote, String documento,
-                                     UUID tipoDocumento, UUID usuario,
+                                     UUID tipoDocumento,String nombreUsuario, UUID usuario,
                                      UUID tipoActividad, LocalDate fechaInicial,
                                      LocalDate fechaFinal);
 
     List<ContratoEntity> busqueda(UUID id,String numeroContrato,
                                      UUID tipoContrato, Integer estado,
                                      UUID lote, String documento,
-                                     UUID tipoDocumento, UUID usuario,
+                                     UUID tipoDocumento,String nombreUsuario, UUID usuario,
                                      UUID tipoActividad, LocalDate fechaInicial,
                                      LocalDate fechaFinal,int offset, int size);
+
     Page<ContratoEntity> busquedaPageable(UUID id,String numeroContrato,
                                              UUID tipoContrato, Integer estado,
                                              UUID lote, String documento,
-                                             UUID tipoDocumento, UUID usuario,
+                                             UUID tipoDocumento,String nombreUsuario, UUID usuario,
                                              UUID tipoActividad, LocalDate fechaInicial,
                                              LocalDate fechaFinal, Pageable pageable);
 
     Long contar(UUID id,String numeroContrato,
                 UUID tipoContrato, Integer estado,
                 UUID lote, String documento,
-                UUID tipoDocumento, UUID usuario,
+                UUID tipoDocumento,String nombreUsuario, UUID usuario,
                 UUID tipoActividad, LocalDate fechaInicial,
                 LocalDate fechaFinal);
 

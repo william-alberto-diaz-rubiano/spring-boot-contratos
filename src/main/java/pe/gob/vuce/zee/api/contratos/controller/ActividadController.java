@@ -1,43 +1,49 @@
 package pe.gob.vuce.zee.api.contratos.controller;
 
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.gob.vuce.zee.api.contratos.base.Constantes;
 import pe.gob.vuce.zee.api.contratos.dto.ActividadDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ResponseDTO;
+import pe.gob.vuce.zee.api.contratos.exceptions.BadRequestException;
+import pe.gob.vuce.zee.api.contratos.service.ActividadService;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+@RestController
+@RequestMapping("v1/actividades")
 public class ActividadController {
 
-    @GetMapping
-    public ResponseEntity<ResponseDTO<?>> getActividad(@RequestParam(name = "idTipoActividad", required = false) UUID idTipoActividad,
-                                                       @RequestParam(name = "idActividadEconomica", required = false) UUID idActividadEconomica,
-                                                       @RequestParam(name = "idAlmacen", required = false) UUID idAlmacen,
-                                                       @RequestParam(name = "fechaInicio", required = false) Timestamp fechaInicio,
-                                                       @RequestParam(name = "fechaFinal", required = false) UUID fechaFinal, Pageable pageable) {
-        ResponseDTO<?> response;
-        response = new ResponseDTO<>(Constantes.NO_ERROR, null);
-        return ResponseEntity.ok(response);
+    @Autowired
+    private ActividadService actividadService;
+
+    @PostMapping("/{contratoId}/actividad")
+    public ResponseEntity<ResponseDTO> guardarSegundoFormulario(@Valid
+                                                                @PathVariable("contratoId") UUID contratoId,
+                                                                @RequestBody List<ActividadDTO> listaActividades, BindingResult result) {
+
+        if(result.hasErrors()){
+
+            List<String> listaErrores = new ArrayList<>();
+            result.getFieldErrors()
+                    .stream().collect(Collectors.toList()).forEach(x -> listaErrores.add(x.getDefaultMessage()));
+
+            throw new BadRequestException("FAILED", HttpStatus.BAD_REQUEST,listaErrores,"Verificar los campos");
+        }
+
+        List<ActividadDTO> nuevoListaActividades = actividadService.guardarTercerformulario(contratoId,listaActividades);
+
+        ResponseDTO responseBody = new ResponseDTO(nuevoListaActividades,"Lista de actividades guardada");
+        return new ResponseEntity<ResponseDTO>(responseBody, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<ResponseDTO<?>> crearActividad(@RequestBody @Valid ActividadDTO actividadDTO) {
-        ResponseDTO<?> response;
-        response = new ResponseDTO<>(Constantes.NO_ERROR, actividadDTO);
-        return ResponseEntity.ok(response);
-    }
 
-    @DeleteMapping
-    public ResponseEntity<ResponseDTO<?>> eliminarActividad(@RequestBody @Valid ActividadDTO actividadDTO) {
-        ResponseDTO<?> response;
-
-        response = new ResponseDTO<>(Constantes.NO_ERROR, null);
-        return ResponseEntity.ok(response);
-    }
 
 
 }

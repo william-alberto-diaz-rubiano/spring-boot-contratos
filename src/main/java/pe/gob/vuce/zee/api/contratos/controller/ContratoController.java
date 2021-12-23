@@ -38,6 +38,7 @@ public class ContratoController {
                                                        @RequestParam(name = "lote", required = false) UUID lote,
                                                        @RequestParam(name = "documento", required = false) String documento,
                                                        @RequestParam(name = "tipoDocumento", required = false) UUID tipoDocumento,
+                                                       @RequestParam(name= "nombreUsuario",required = false) String nombreUsuario,
                                                        @RequestParam(name = "usuarioZEE", required = false) UUID usuario,
                                                        @RequestParam(name = "tipoActividad", required = false) UUID tipoActividad,
                                                        @RequestParam(name = "fechaInicial", required = false) LocalDate fechaInicial,
@@ -49,6 +50,9 @@ public class ContratoController {
         }
         if(documento == ""){
             documento=null;
+        }
+        if(nombreUsuario == ""){
+            nombreUsuario=null;
         }
 
         if((fechaInicial != null && fechaFinal == null) || (fechaFinal !=null && fechaInicial == null)){
@@ -65,11 +69,11 @@ public class ContratoController {
         Page<?> resultado = null;
 
         if(tipo == 1){
-            resultado = contratoService.busquedaPorFiltrosTipoUno(null,numeroContrato, tipoContrato, estado, lote, documento, tipoDocumento, usuario, tipoActividad, fechaInicial, fechaFinal, pageable);
+            resultado = contratoService.busquedaPorFiltrosTipoUno(null,numeroContrato, tipoContrato, estado, lote, documento, tipoDocumento,nombreUsuario, usuario, tipoActividad, fechaInicial, fechaFinal, pageable);
         }
 
         if(tipo == 2){
-            resultado = contratoService.busquedaPorFiltrosTipoDos(null,numeroContrato, tipoContrato, estado, lote, documento, tipoDocumento, usuario, tipoActividad, fechaInicial, fechaFinal, pageable);
+            resultado = contratoService.busquedaPorFiltrosTipoDos(null,numeroContrato, tipoContrato, estado, lote, documento, tipoDocumento,nombreUsuario, usuario, tipoActividad, fechaInicial, fechaFinal, pageable);
         }
 
         ResponseDTO responseBody = new ResponseDTO(resultado,"Listado de contratos");

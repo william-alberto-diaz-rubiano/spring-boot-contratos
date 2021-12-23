@@ -45,7 +45,7 @@ public class ActividadEntity {
     @Column(name = "vecr_actv_fecha_fina", nullable = false)
     private LocalDateTime fechaFinal;
 
-    @Column(name = "vecr_actv_fch_ini-pv", nullable = false)
+    @Column(name = "vecr_actv_fch_ini_pv", nullable = false)
     private LocalDateTime fechaInicialPV;
 
     @Column(name = "vecr_actv_fch_fin_pv", nullable = false)

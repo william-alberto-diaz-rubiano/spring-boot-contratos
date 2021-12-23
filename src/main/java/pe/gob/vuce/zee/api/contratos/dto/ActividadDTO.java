@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -26,26 +26,26 @@ public class ActividadDTO {
     public UUID almacenId;
 
     @NotNull(message = "La fecha inicial no puede ser nulo")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaInicial;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaInicial;
 
     @NotNull(message = "La fecha final no puede ser nulo")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaFinal;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaFinal;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaInicialPV;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaFinlPV;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaInicialPV;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaFinlPV;
 
     public Integer idCliente;
     public Integer idOrganizacion;
     public Integer estado;
     public Integer activo;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaCreacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaCreacion;
     public UUID usuarioCreacion;
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate fechaModificacion;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaModificacion;
     public UUID UsuarioModificacion;
 }

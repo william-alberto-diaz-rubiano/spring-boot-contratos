@@ -88,4 +88,8 @@ public class ContratoFormularioPrincipalDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaModificacion;
     private UUID usuarioModificacion;
+
+    private List<ActividadDTO> actividad;
+    private List<AdendaDTO> adenda;
+
 }
