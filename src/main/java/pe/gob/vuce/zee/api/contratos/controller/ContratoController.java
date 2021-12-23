@@ -44,10 +44,10 @@ public class ContratoController {
                                                        @RequestParam(name = "tipo") Integer tipo, // 1 -> normal, 2-> para seleccion
                                                        @RequestParam(name = "fechaFinal", required = false) LocalDate fechaFinal, Pageable pageable) {
 
-        if(numeroContrato.equals("")){
+        if(numeroContrato == ""){
             numeroContrato=null;
         }
-        if(documento.equals("")){
+        if(documento == ""){
             documento=null;
         }
 
