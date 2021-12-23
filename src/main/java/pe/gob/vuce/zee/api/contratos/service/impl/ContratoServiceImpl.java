@@ -9,15 +9,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pe.gob.vuce.zee.api.contratos.base.Constantes;
 import pe.gob.vuce.zee.api.contratos.config.AppConfig;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoDTO;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoMinimalDTO;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoFormularioPrincipalDTO;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoSegundoFormularioDTO;
+import pe.gob.vuce.zee.api.contratos.dto.*;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
 import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
+import pe.gob.vuce.zee.api.contratos.repository.AdendaRepository;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoLoteRepository;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoRepository;
 import pe.gob.vuce.zee.api.contratos.repository.MaestroRepository;
+import pe.gob.vuce.zee.api.contratos.service.AdendaService;
 import pe.gob.vuce.zee.api.contratos.service.ContratoService;
 
 import java.sql.Timestamp;
@@ -39,6 +38,7 @@ public class ContratoServiceImpl implements ContratoService {
     private final AppConfig appConfig;
     private final ContratoLoteRepository contratoLoteRepository;
     private final MaestroRepository maestroRepository;
+    private final AdendaRepository adendaRepository;
 
 
     @Override
@@ -119,7 +119,8 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public Page<ContratoFormularioPrincipalDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador) {
+    public Page<ContratoBandejaDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador) {
+
 
         if(fechaInicial != null && fechaFinal != null){
 
@@ -134,10 +135,30 @@ public class ContratoServiceImpl implements ContratoService {
         }
 
         var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
-        var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoFormularioPrincipalDTO.class)).collect(Collectors.toList());
-        return new PageImpl<>(resultDTO, paginador, result.getTotalElements());
+        var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoBandejaDTO.class)).collect(Collectors.toList());
 
+        for(ContratoBandejaDTO contratoBandejaDTO : resultDTO){
+
+            var estadoString= maestroRepository.findByPrefijoAndCorrelativo(70,contratoBandejaDTO.getEstado()).getDescripcion();
+            contratoBandejaDTO.setEstadoDescripcion(estadoString);
+
+            var listaAdendaActiva = adendaRepository.busquedaAvanzada(null,contratoBandejaDTO.getId(),null,null,-1,-1).stream().filter(adenda -> adenda.getEstado().equals(1)).collect(Collectors.toList());
+
+            if(!listaAdendaActiva.isEmpty()){
+
+                contratoBandejaDTO.setInicioAdenda(listaAdendaActiva.get(0).getFechaInicial());
+                contratoBandejaDTO.setVencimientoAdenda(listaAdendaActiva.get(0).getFechaVencimiento());
+
+                var estadoDescripcion= maestroRepository.findByPrefijoAndCorrelativo(71,listaAdendaActiva.get(0).getEstado()).getDescripcion();
+
+                contratoBandejaDTO.setEstadoAdendaDescripcion(estadoDescripcion);
+            }
+
+        }
+
+        return new PageImpl<>(resultDTO, paginador, result.getTotalElements());
     }
+    
 
     @Override
     public Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad,LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador) {

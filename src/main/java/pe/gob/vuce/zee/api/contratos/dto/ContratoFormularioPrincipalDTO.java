@@ -74,6 +74,8 @@ public class ContratoFormularioPrincipalDTO {
 
     private Integer estado;
 
+    private String estadoDescripcion;
+
     private UUID usuarioContratoPosecionId;
 
     private Integer codigoCliente;
