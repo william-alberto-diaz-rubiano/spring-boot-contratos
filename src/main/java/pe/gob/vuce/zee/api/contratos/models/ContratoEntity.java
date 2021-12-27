@@ -66,7 +66,7 @@ public class ContratoEntity {
     private LocalDateTime fechaCancelacion;
 
     @Column(name = "vecr_ctrt_cotr_posec")
-    private Integer numeroContratoPosecion;
+    private String numeroContratoPosecion;
 
     @Column(name = "vecr_ctrt_docu_posec")
     private String documentoContratoPosecion;

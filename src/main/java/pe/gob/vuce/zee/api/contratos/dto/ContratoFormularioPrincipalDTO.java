@@ -36,12 +36,6 @@ public class ContratoFormularioPrincipalDTO {
     @NotNull(message = "El UUID del usuario no puede ser nulo")
     private UUID usuarioId;
 
-    private String usuarioNombre;
-
-    private String usuarioApellidoP;
-
-    private String usuarioApellidoM;
-
     @NotNull(message = "La fecha inicial no puede ser nulo")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaInicial;
@@ -67,16 +61,14 @@ public class ContratoFormularioPrincipalDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaCancelacion;
 
-    private Integer numeroContratoPosecion;
+    private String numeroContratoPosecion;
 
     @Size(max = 10,message = "El numero de expediente soporta maximo 10 caracteres")
     private String documentoContratoPosecion;
 
-    private Integer estado;
-
-    private String estadoDescripcion;
-
     private UUID usuarioContratoPosecionId;
+
+    private Integer estado;
 
     private Integer codigoCliente;
 
