@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pe.gob.vuce.zee.api.contratos.base.Constantes;
 import pe.gob.vuce.zee.api.contratos.config.AppConfig;
@@ -181,8 +183,30 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
-        return null;
+    public List<ContratoBandejaDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal) {
+
+        if(fechaInicial != null && fechaFinal != null){
+
+            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaFin = LocalTime.of(23,59,59);
+
+            LocalDate fechaInicioDate = fechaInicial.toLocalDate();
+            LocalDate fechaFinDate = fechaFinal.toLocalDate();
+
+            fechaInicial = LocalDateTime.of(fechaInicioDate,horaInicio);
+            fechaFinal = LocalDateTime.of(fechaFinDate,horaFin);
+        }
+        var result =contratoRepository.busqueda(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal);
+        return result.stream().map(x -> modelMapper.map(x, ContratoBandejaDTO.class)).collect(Collectors.toList());
+    }
+
+    @Override
+    public FechasContratoDTO fechasContrato(UUID idContrato) {
+
+        var contrato= busquedaPorFiltros(idContrato,null,null,null,null,null,null,null,null,null,null,null).get(0);
+
+        FechasContratoDTO fechasContratoDTO=modelMapper.map(contrato,FechasContratoDTO.class);
+        return fechasContratoDTO;
     }
 
 }

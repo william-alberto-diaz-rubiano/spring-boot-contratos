@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pe.gob.vuce.zee.api.contratos.base.Constantes;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoBandejaDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoFormularioPrincipalDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ContratoSegundoFormularioDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ResponseDTO;
@@ -18,9 +19,7 @@ import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -132,5 +131,13 @@ public class ContratoController {
         return new ResponseEntity<ResponseDTO>(responseBody, HttpStatus.OK);
     }
 
+    @GetMapping("/fechasContrato/{idContrato}")
+    public  ResponseEntity<ResponseDTO> fechasActividades(@PathVariable("idContrato") UUID idContrato){
+
+     var result=contratoService.fechasContrato(idContrato);
+
+        ResponseDTO responseBody = new ResponseDTO(result,"Fechas inicio y vencimiento del contrato");
+        return new ResponseEntity<ResponseDTO>(responseBody, HttpStatus.OK);
+    }
 
 }

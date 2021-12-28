@@ -1,19 +1,21 @@
 package pe.gob.vuce.zee.api.contratos.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pe.gob.vuce.zee.api.contratos.dto.ActividadDTO;
+import pe.gob.vuce.zee.api.contratos.dto.ContratoBandejaDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ResponseDTO;
 import pe.gob.vuce.zee.api.contratos.exceptions.BadRequestException;
 import pe.gob.vuce.zee.api.contratos.service.ActividadService;
+import pe.gob.vuce.zee.api.contratos.service.ContratoService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,8 +25,11 @@ public class ActividadController {
     @Autowired
     private ActividadService actividadService;
 
+    @Autowired
+    private ContratoService contratoService;
+
     @PostMapping("/{contratoId}/actividad")
-    public ResponseEntity<ResponseDTO> guardarSegundoFormulario(@Valid
+    public ResponseEntity<ResponseDTO> guardarTercerFormulario(@Valid
                                                                 @PathVariable("contratoId") UUID contratoId,
                                                                 @RequestBody List<ActividadDTO> listaActividades, BindingResult result) {
 
@@ -43,7 +48,12 @@ public class ActividadController {
         return new ResponseEntity<ResponseDTO>(responseBody, HttpStatus.CREATED);
     }
 
-
+    @GetMapping("/numeroCorrelativo/{actividadEconomica}")
+    public ResponseEntity<ResponseDTO> numeroCorrelativo(@PathVariable("actividadEconomica") UUID actividadEconomica){
+        String codigo = actividadService.correlativoAlmacen(actividadEconomica);
+        ResponseDTO responseBody = new ResponseDTO(codigo,"Codigo correlativo");
+        return new ResponseEntity<ResponseDTO>(responseBody, HttpStatus.OK);
+    }
 
 
 }

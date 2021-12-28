@@ -16,14 +16,18 @@ import java.util.UUID;
 public class ActividadDTO {
 
     public UUID id;
-    @NotNull(message = "El id del contrato no puede ser nulo")
+
     private UUID contratoId;
+
     @NotNull(message = "El id de la actividad no puede ser nulo")
     public UUID actividadId;
     @NotNull(message = "El id del tipo de actividad no puede ser nulo")
     public UUID tipoActividadEconomicaId;
     @NotNull(message = "El id del almacen no puede ser nulo")
-    public UUID almacenId;
+    public UUID almacen;
+
+    @NotNull(message = "El codigo del correlativo no puede ser nulo")
+    private String v;
 
     @NotNull(message = "La fecha inicial no puede ser nulo")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

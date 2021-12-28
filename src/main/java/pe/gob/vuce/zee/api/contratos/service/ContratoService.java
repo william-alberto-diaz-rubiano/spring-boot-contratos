@@ -23,9 +23,9 @@ public interface ContratoService {
 
     Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador);
 
-    List<ContratoFormularioPrincipalDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal);
+    List<ContratoBandejaDTO> busquedaPorFiltros(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal);
 
-
+    FechasContratoDTO fechasContrato(UUID idContrato);
 
 
 

@@ -23,7 +23,7 @@ public class ActividadEntity {
     @GeneratedValue(generator = "UUIDGenerator")
     private UUID id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "vecr_actv_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
     private ContratoEntity contrato;
 
@@ -35,9 +35,13 @@ public class ActividadEntity {
     @JoinColumn(name = "vecr_actv_id_acti_fk", referencedColumnName = "vems_gcon_idllave_pk")
     private MaestroEntity tipoActividadEconomica;
 
-    @ManyToOne
-    @JoinColumn(name = "vecr_actv_id_alma_fk", referencedColumnName = "vems_alma_idllave_pk")
-    private AlmacenEntity almacen;
+    //@ManyToOne(optional = false)
+    //@JoinColumn(name = "vecr_actv_id_alma_fk", referencedColumnName = "vems_alma_idllave_pk")
+    @Column(name = "vecr_actv_id_alma_fk")
+    private UUID almacen;
+
+    @Column(name = "vecr_actv_cod_corre")
+    private String v;
 
     @Column(name = "vecr_actv_fecha_inic", nullable = false)
     private LocalDateTime fechaInicial;

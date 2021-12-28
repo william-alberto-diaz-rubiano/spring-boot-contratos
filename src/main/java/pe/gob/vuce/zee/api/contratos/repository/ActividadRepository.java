@@ -6,4 +6,5 @@ import pe.gob.vuce.zee.api.contratos.models.ActividadEntity;
 import java.util.UUID;
 
 public interface ActividadRepository extends JpaRepository<ActividadEntity, UUID> {
+    ActividadEntity findByTipoActividadEconomicaId(UUID tipoActividad);
 }

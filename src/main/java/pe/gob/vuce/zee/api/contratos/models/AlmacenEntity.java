@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,6 +29,9 @@ public class AlmacenEntity {
     @Column(name = "vems_alma_id_creg_fk", nullable = false)
     private UUID regimenId;
 
+    @Column(name = "vems_alma_codigo_ref", nullable = false, length = 20)
+    private String codigo;
+
     @Column(name = "vems_alma_cliente_fk", nullable = false)
     private Integer clienteId;
 
@@ -41,19 +45,16 @@ public class AlmacenEntity {
     private Integer activo;
 
     @Column(name = "vems_alma_datecreate", nullable = false)
-    private Instant creadoEn;
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "vems_alma_usr_create", nullable = false)
-    private UUID creadoPor;
+    private UUID usuarioCreacion;
 
     @Column(name = "vems_alma_dateupdate")
-    private Instant actualizadoEn;
+    private LocalDateTime fechaActualizacion;
 
     @Column(name = "vems_alma_usr_update")
-    private UUID actualizadoPor;
-
-    @Column(name = "vems_alma_codigo_ref", nullable = false, length = 20)
-    private String codigo;
+    private UUID usuarioActualizacion;
 
     @Override
     public boolean equals(Object o) {
