@@ -33,7 +33,7 @@ public class AdendaCustomRepositoryImpl implements AdendaCustomRepository {
         var predicates = new ArrayList<Predicate>();
 
         if (usuarioId != null) {
-            predicates.add(cb.equal(entityRoot.get("usuario").get("id"), usuarioId));
+            predicates.add(cb.equal(entityRoot.get("usuario"), usuarioId));
         }
         if (contratoId != null) {
             predicates.add(cb.equal(entityRoot.get("contrato").get("id"), contratoId));

@@ -26,6 +26,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(value = BadRequestException.class)
     public ResponseEntity<ErrorDTO> badRequestExceptionHandler(HttpServletRequest request, BadRequestException ex) {
+        log.error("ex");
         ErrorDTO error = ErrorDTO.builder().code(ex.getCode()).path(request.getRequestURI()).statusValue(ex.getStatus().value()).errors(ex.getErrors()).message(ex.getMessage()).build();
         return new ResponseEntity<>(error, ex.getStatus());
     }

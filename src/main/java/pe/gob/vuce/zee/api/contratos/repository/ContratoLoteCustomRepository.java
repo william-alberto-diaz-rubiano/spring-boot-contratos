@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ContratoLoteCustomRepository {
-    Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda,
+    Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda,
                                                    String numeroLote, UUID tipoActividad, UUID actividadEconomica,
                                                    Pageable pageable);
 
@@ -19,4 +19,7 @@ public interface ContratoLoteCustomRepository {
 
     List<LoteContratoEntity> busquedaAvanzadaMapa(String numeroContrato, UUID usuarioId, Integer numeroAdenda,
                                                   String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId);
+
+    List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size);
+    List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size);
 }

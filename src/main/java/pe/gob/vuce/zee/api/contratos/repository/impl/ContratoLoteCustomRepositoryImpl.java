@@ -18,10 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -32,11 +29,11 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     private final EntityManager entityManager;
 
     @Override
-    public Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
+    public Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
         var offset = pageable.getPageNumber() * pageable.getPageSize();
         int size = pageable.getPageSize();
-        List<ContratoLoteBandejaDTO> resultList = busquedaAvanzada1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
-        var total = contar1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica);
+        List<ContratoLoteBandejaDTO> resultList = busquedaAvanzada1(numeroContrato, loteId, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
+        var total = contar1(numeroContrato, loteId, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica);
         return new PageImpl<>(resultList, pageable, total);
     }
 
@@ -128,7 +125,8 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         return query.getResultList();
     }
 
-    private List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size) {
+    @Override
+    public List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size) {
         var sqlTemplate = "SELECT " +
                 "CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) id, " +
                 "tipo_contrato.vems_gcon_descripcin contrato_tipo, " +
@@ -139,9 +137,10 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
                 "lote.velt_clot_tamanio_m2 lote_tamanio " +
                 "FROM vuce_zee.vecr_ctrt contrato " +
                 "INNER JOIN vuce_zee.vems_gcon tipo_contrato ON contrato.vecr_ctrt_id_tipo_cn = tipo_contrato.vems_gcon_idllave_pk " +
-                "INNER JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
-                "INNER JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
                 "INNER JOIN vuce_zee.vepr_pers usuario ON contrato.vecr_ctrt_id_usuario = usuario.vepr_pers_idllave_pk " +
+                "LEFT JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
+                "LEFT JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
+
                 "WHERE " +
                 "contrato.vecr_ctrt_cod_active != 9 %s ";
         var predicados = new ArrayList<String>();
@@ -189,15 +188,16 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
                                 .contratoTipo(x[1].toString())
                                 .contratoNumero(x[2].toString())
                                 .cantidadAdendas(Integer.parseInt(x[3].toString()))
-                                .loteNombre(x[4].toString())
-                                .costo(new BigDecimal(x[5].toString()))
-                                .tamanio(new BigDecimal(x[6].toString()))
+                                .loteNombre(Optional.ofNullable(x[4]).map(Objects::toString).orElse(null))
+                                .costo(Optional.ofNullable(x[5]).map(Objects::toString).map(BigDecimal::new).orElse(null))
+                                .tamanio(Optional.ofNullable(x[6]).map(Objects::toString).map(BigDecimal::new).orElse(null))
                                 .build())
                 .collect(Collectors.toList());
     }
 
 
-    private List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
+    @Override
+    public List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
         var sqlTemplate = "SELECT " +
                 "       CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) as id, " +
                 "       contrato.vecr_ctrt_cod_contra as contrato_numero, " +
@@ -212,9 +212,9 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
                 "WHERE contrato.vecr_ctrt_idllave_pk IN ( " +
                 "    SELECT DISTINCT(contrato2.vecr_ctrt_idllave_pk) " +
                 "    FROM vuce_zee.vecr_ctrt contrato2 " +
-                "             INNER JOIN vuce_zee.vecr_lote contrato_lote2 ON contrato_lote2.vecr_lote_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
-                "             INNER JOIN vuce_zee.vecr_actv actividad2 ON actividad2.vecr_actv_id_cont_fk = contrato2.vecr_ctrt_idllave_pk" +
-                "             INNER JOIN vuce_zee.velt_clot lote ON contrato_lote2.vecr_lote_codg_lotes = lote.velt_clot_idllave_pk " +
+                "             LEFT JOIN vuce_zee.vecr_lote contrato_lote2 ON contrato_lote2.vecr_lote_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
+                "             LEFT JOIN vuce_zee.vecr_actv actividad2 ON actividad2.vecr_actv_id_cont_fk = contrato2.vecr_ctrt_idllave_pk" +
+                "             LEFT JOIN vuce_zee.velt_clot lote ON contrato_lote2.vecr_lote_codg_lotes = lote.velt_clot_idllave_pk " +
                 "             LEFT JOIN vuce_zee.vead_aden adenda2 ON adenda2.vead_aden_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
                 "             LEFT JOIN vuce_zee.vepr_pers usuario2 ON contrato2.vecr_ctrt_id_usuario = usuario2.vepr_pers_idllave_pk " +
                 "    %s" +
@@ -224,6 +224,14 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         if (numeroContrato != null && !numeroContrato.isEmpty()) {
             predicados.add(" contrato2.vecr_ctrt_cod_contra LIKE CONCAT('%',:numeroContrato,'%')");
             parametros.put("numeroContrato", numeroContrato);
+        }
+        if (contratoId != null) {
+            predicados.add(" contrato2.vecr_ctrt_idllave_pk = :contratoId");
+            parametros.put("contratoId", contratoId);
+        }
+        if (loteId != null) {
+            predicados.add(" lote.velt_clot_idllave_pk = :loteId");
+            parametros.put("loteId", loteId);
         }
         if (numeroLote != null && !numeroLote.isEmpty()) {
             predicados.add(" lote.velt_clot_nombre_lot LIKE CONCAT('%',:numeroLote,'%')");
@@ -284,13 +292,13 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     }
 
 
-    private Integer contar1(String numeroContrato, UUID usuarioId, Integer numeroAdenda,
+    private Integer contar1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda,
                             String numeroLote, UUID tipoActividad, UUID actividadEconomica) {
         var sqlTemplate = "SELECT COUNT(DISTINCT(contrato2.vecr_ctrt_idllave_pk)) " +
                 "    FROM vuce_zee.vecr_ctrt contrato2 " +
-                "             INNER JOIN vuce_zee.vecr_lote contrato_lote2 ON contrato_lote2.vecr_lote_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
-                "             INNER JOIN vuce_zee.vecr_actv actividad2 ON actividad2.vecr_actv_id_cont_fk = contrato2.vecr_ctrt_idllave_pk" +
-                "             INNER JOIN vuce_zee.velt_clot lote ON contrato_lote2.vecr_lote_codg_lotes = lote.velt_clot_idllave_pk " +
+                "             LEFT JOIN vuce_zee.vecr_lote contrato_lote2 ON contrato_lote2.vecr_lote_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
+                "             LEFT JOIN vuce_zee.vecr_actv actividad2 ON actividad2.vecr_actv_id_cont_fk = contrato2.vecr_ctrt_idllave_pk" +
+                "             LEFT JOIN vuce_zee.velt_clot lote ON contrato_lote2.vecr_lote_codg_lotes = lote.velt_clot_idllave_pk " +
                 "             LEFT JOIN vuce_zee.vead_aden adenda2 ON adenda2.vead_aden_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
                 "             LEFT JOIN vuce_zee.vepr_pers usuario2 ON contrato2.vecr_ctrt_id_usuario = usuario2.vepr_pers_idllave_pk " +
                 "    %s";
@@ -300,9 +308,17 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
             predicados.add(" contrato2.vecr_ctrt_cod_contra LIKE CONCAT('%',:numeroContrato,'%')");
             parametros.put("numeroContrato", numeroContrato);
         }
+        if (loteId != null) {
+            predicados.add(" lote.velt_clot_idllave_pk = :loteId");
+            parametros.put("loteId", loteId);
+        }
         if (numeroLote != null && !numeroLote.isEmpty()) {
             predicados.add(" lote.velt_clot_nombre_lot LIKE CONCAT('%',:numeroLote,'%')");
             parametros.put("numeroLote", numeroLote);
+        }
+        if (contratoId != null) {
+            predicados.add(" contrato2.vecr_ctrt_idllave_pk = :contratoId");
+            parametros.put("contratoId", contratoId);
         }
         if (usuarioId != null) {
             predicados.add(" contrato2.vecr_ctrt_id_usuario = :usuarioId");
@@ -338,9 +354,9 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         var sqlTemplate = "SELECT COUNT(*) " +
                 "FROM vuce_zee.vecr_ctrt contrato " +
                 "INNER JOIN vuce_zee.vems_gcon tipo_contrato ON contrato.vecr_ctrt_id_tipo_cn = tipo_contrato.vems_gcon_idllave_pk " +
-                "INNER JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
-                "INNER JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
                 "INNER JOIN vuce_zee.vepr_pers usuario ON contrato.vecr_ctrt_id_usuario = usuario.vepr_pers_idllave_pk " +
+                "LEFT JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
+                "LEFT JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
                 "WHERE " +
                 "      contrato.vecr_ctrt_cod_active != 9 %s ";
         var predicados = new ArrayList<String>();
