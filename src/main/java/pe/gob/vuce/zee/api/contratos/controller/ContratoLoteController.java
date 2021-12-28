@@ -16,6 +16,8 @@ import pe.gob.vuce.zee.api.contratos.utils.ExportarUtil;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -94,8 +96,8 @@ public class ContratoLoteController {
                     x.getContratoNumero(),
                     x.getCantidadAdendas().toString(),
                     x.getLoteNombre(),
-                    x.getCosto().toString(),
-                    x.getTamanio().toString()
+                    Optional.ofNullable(x.getCosto()).map(Objects::toString).orElse("-"),
+                    Optional.ofNullable(x.getTamanio()).map(Objects::toString).orElse("-")
             }).collect(Collectors.toList());
         }
 
