@@ -139,9 +139,10 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
                 "lote.velt_clot_tamanio_m2 lote_tamanio " +
                 "FROM vuce_zee.vecr_ctrt contrato " +
                 "INNER JOIN vuce_zee.vems_gcon tipo_contrato ON contrato.vecr_ctrt_id_tipo_cn = tipo_contrato.vems_gcon_idllave_pk " +
-                "INNER JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
-                "INNER JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
                 "INNER JOIN vuce_zee.vepr_pers usuario ON contrato.vecr_ctrt_id_usuario = usuario.vepr_pers_idllave_pk " +
+                "LEFT JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
+                "LEFT JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
+
                 "WHERE " +
                 "contrato.vecr_ctrt_cod_active != 9 %s ";
         var predicados = new ArrayList<String>();
@@ -212,9 +213,9 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
                 "WHERE contrato.vecr_ctrt_idllave_pk IN ( " +
                 "    SELECT DISTINCT(contrato2.vecr_ctrt_idllave_pk) " +
                 "    FROM vuce_zee.vecr_ctrt contrato2 " +
-                "             INNER JOIN vuce_zee.vecr_lote contrato_lote2 ON contrato_lote2.vecr_lote_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
-                "             INNER JOIN vuce_zee.vecr_actv actividad2 ON actividad2.vecr_actv_id_cont_fk = contrato2.vecr_ctrt_idllave_pk" +
-                "             INNER JOIN vuce_zee.velt_clot lote ON contrato_lote2.vecr_lote_codg_lotes = lote.velt_clot_idllave_pk " +
+                "             LEFT JOIN vuce_zee.vecr_lote contrato_lote2 ON contrato_lote2.vecr_lote_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
+                "             LEFT JOIN vuce_zee.vecr_actv actividad2 ON actividad2.vecr_actv_id_cont_fk = contrato2.vecr_ctrt_idllave_pk" +
+                "             LEFT JOIN vuce_zee.velt_clot lote ON contrato_lote2.vecr_lote_codg_lotes = lote.velt_clot_idllave_pk " +
                 "             LEFT JOIN vuce_zee.vead_aden adenda2 ON adenda2.vead_aden_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
                 "             LEFT JOIN vuce_zee.vepr_pers usuario2 ON contrato2.vecr_ctrt_id_usuario = usuario2.vepr_pers_idllave_pk " +
                 "    %s" +
@@ -288,9 +289,9 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
                             String numeroLote, UUID tipoActividad, UUID actividadEconomica) {
         var sqlTemplate = "SELECT COUNT(DISTINCT(contrato2.vecr_ctrt_idllave_pk)) " +
                 "    FROM vuce_zee.vecr_ctrt contrato2 " +
-                "             INNER JOIN vuce_zee.vecr_lote contrato_lote2 ON contrato_lote2.vecr_lote_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
-                "             INNER JOIN vuce_zee.vecr_actv actividad2 ON actividad2.vecr_actv_id_cont_fk = contrato2.vecr_ctrt_idllave_pk" +
-                "             INNER JOIN vuce_zee.velt_clot lote ON contrato_lote2.vecr_lote_codg_lotes = lote.velt_clot_idllave_pk " +
+                "             LEFT JOIN vuce_zee.vecr_lote contrato_lote2 ON contrato_lote2.vecr_lote_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
+                "             LEFT JOIN vuce_zee.vecr_actv actividad2 ON actividad2.vecr_actv_id_cont_fk = contrato2.vecr_ctrt_idllave_pk" +
+                "             LEFT JOIN vuce_zee.velt_clot lote ON contrato_lote2.vecr_lote_codg_lotes = lote.velt_clot_idllave_pk " +
                 "             LEFT JOIN vuce_zee.vead_aden adenda2 ON adenda2.vead_aden_id_cont_fk = contrato2.vecr_ctrt_idllave_pk " +
                 "             LEFT JOIN vuce_zee.vepr_pers usuario2 ON contrato2.vecr_ctrt_id_usuario = usuario2.vepr_pers_idllave_pk " +
                 "    %s";
@@ -338,9 +339,9 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         var sqlTemplate = "SELECT COUNT(*) " +
                 "FROM vuce_zee.vecr_ctrt contrato " +
                 "INNER JOIN vuce_zee.vems_gcon tipo_contrato ON contrato.vecr_ctrt_id_tipo_cn = tipo_contrato.vems_gcon_idllave_pk " +
-                "INNER JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
-                "INNER JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
                 "INNER JOIN vuce_zee.vepr_pers usuario ON contrato.vecr_ctrt_id_usuario = usuario.vepr_pers_idllave_pk " +
+                "LEFT JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
+                "LEFT JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
                 "WHERE " +
                 "      contrato.vecr_ctrt_cod_active != 9 %s ";
         var predicados = new ArrayList<String>();

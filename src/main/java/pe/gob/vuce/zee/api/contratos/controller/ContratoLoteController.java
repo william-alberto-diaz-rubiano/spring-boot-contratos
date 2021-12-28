@@ -2,6 +2,7 @@ package pe.gob.vuce.zee.api.contratos.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import pe.gob.vuce.zee.api.contratos.dto.ContratoLoteMapaDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ResponseDTO;
 import pe.gob.vuce.zee.api.contratos.service.ContratoLoteService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -50,6 +52,25 @@ public class ContratoLoteController {
         var body = new ResponseDTO<>(Constantes.NO_ERROR, result);
         return ResponseEntity.ok(body);
     }
+
+    //TODO el exportar
+//    @GetMapping("exportar")
+//    public ResponseEntity<ResponseDTO<?>> getExportar(
+//            @RequestParam(name="contrato", required=false) String numeroContrato,
+//            @RequestParam(name="contratoId", required=false) UUID contratoId,
+//            @RequestParam(name="adendaId", required=false) UUID adendaId,
+//            @RequestParam(name="loteId", required=false) UUID loteId,
+//            @RequestParam(name="usuario", required=false) UUID usuarioId,
+//            @RequestParam(name="adenda", required=false) Integer numeroAdenda,
+//            @RequestParam(name="lote", required=false) String numeroLote,
+//            @RequestParam(name="tipo-actividad", required=false) UUID tipoActividadId,
+//            @RequestParam(name="actividad-economica", required=false) UUID actividadEconomicaId,
+//            HttpServletResponse response
+//    ) {
+//        var pageable = PageRequest.of(-1, -1);
+//        var result = contratoLoteService.busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, pageable);
+//        return null;
+//    }
 
     @GetMapping("{idContrato}/lotes")
     public ResponseEntity<ResponseDTO<Page<ContratoLoteMapaDTO>>> getLotes(@PathVariable UUID idContrato, Pageable pageable) {
