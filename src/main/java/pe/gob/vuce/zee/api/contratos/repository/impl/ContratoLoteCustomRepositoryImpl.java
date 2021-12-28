@@ -128,7 +128,8 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         return query.getResultList();
     }
 
-    private List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size) {
+    @Override
+    public List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size) {
         var sqlTemplate = "SELECT " +
                 "CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) id, " +
                 "tipo_contrato.vems_gcon_descripcin contrato_tipo, " +
@@ -198,7 +199,8 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     }
 
 
-    private List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
+    @Override
+    public List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
         var sqlTemplate = "SELECT " +
                 "       CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) as id, " +
                 "       contrato.vecr_ctrt_cod_contra as contrato_numero, " +

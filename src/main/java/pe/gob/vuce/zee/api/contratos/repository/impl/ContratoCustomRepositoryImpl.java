@@ -41,7 +41,9 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
             predicates.add(cb.equal(root.get("id"), id));
         }
         if(numeroContrato != null){
-            predicates.add(cb.like(root.get("numeroContrato"), "%" + numeroContrato + "%"));
+            Expression<String> numeroContratoExp = root.get("numeroContrato");
+            numeroContratoExp = cb.upper(numeroContratoExp);
+            predicates.add(cb.like(numeroContratoExp, String.join("", "%", numeroContrato.toUpperCase(), "%") ));
         }
         if(tipoContrato != null){
             predicates.add(cb.equal(root.get("tipoContrato").get("id"), tipoContrato));
@@ -51,10 +53,10 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
         }
         if(lote != null){
 
-
         }
         if (documento != null) {
-            predicates.add(cb.equal(root.get("documento"), documento));
+            Expression<String> numeroContratoExp = cb.upper(root.get("documento"));
+            predicates.add(cb.like(numeroContratoExp, String.join("", "%", documento.toUpperCase(), "%")));
         }
         if (tipoDocumento != null) {
             predicates.add(cb.equal(root.get("usuario").get("tipoDocumento").get("id"), tipoDocumento));
@@ -128,7 +130,9 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
             predicates.add(cb.equal(root.get("id"), id));
         }
         if(numeroContrato != null){
-            predicates.add(cb.equal(root.get("numeroContrato"), numeroContrato));
+            Expression<String> numeroContratoExp = root.get("numeroContrato");
+            numeroContratoExp = cb.upper(numeroContratoExp);
+            predicates.add(cb.like(numeroContratoExp, String.join("", "%", numeroContrato.toUpperCase(), "%") ));
         }
         if(tipoContrato != null){
             predicates.add(cb.equal(root.get("tipoContrato").get("id"), tipoContrato));
@@ -140,13 +144,28 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
 
         }
         if (documento != null) {
-            predicates.add(cb.equal(root.get("documento"), documento));
+            Expression<String> numeroContratoExp = cb.upper(root.get("documento"));
+            predicates.add(cb.like(numeroContratoExp, String.join("", "%", documento.toUpperCase(), "%")));
         }
         if (tipoDocumento != null) {
             predicates.add(cb.equal(root.get("usuario").get("tipoDocumento").get("id"), tipoDocumento));
         }
         if(usuario != null){
             predicates.add(cb.equal(root.get("usuario").get("id"), usuario));
+        }
+        if(nombreUsuario != null){
+            Expression<String> usuarioNombreExpr = cb.coalesce(root.get("usuario").get("nombre"), "");
+            Expression<String> usuarioApellidoPaternoExpr = cb.coalesce(root.get("usuario").get("apellidoP"), "");
+            Expression<String> usuarioApellidoMaternoExpr = cb.coalesce(root.get("usuario").get("apellidoM"), "");
+
+            Expression<String>
+                    usuarioNombreCompletoExpr = cb.concat(usuarioNombreExpr, " ");
+            usuarioNombreCompletoExpr = cb.concat(usuarioNombreCompletoExpr, usuarioApellidoPaternoExpr);
+            usuarioNombreCompletoExpr = cb.concat(usuarioNombreCompletoExpr, " ");
+            usuarioNombreCompletoExpr = cb.concat(usuarioNombreCompletoExpr, usuarioApellidoMaternoExpr);
+            usuarioNombreCompletoExpr = cb.upper(usuarioNombreCompletoExpr);
+
+            predicates.add(cb.like(usuarioNombreCompletoExpr, "%" + nombreUsuario.toUpperCase() + "%"));
         }
         if(tipoActividad != null){
 

@@ -195,8 +195,8 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         var resultEntity = contratoLoteRepository.findByContratoAndActivo(contratoId, Constantes.HABILITADO, pageable);
         List<LoteContratoDetalleDTO> resultDto = new ArrayList<>();
         for (var loteContratoEntity : resultEntity) {
+            var dto = modelMapper.map(loteContratoEntity, LoteContratoDetalleDTO.class);
             for (var actividadEntity : loteContratoEntity.getContrato().getActividad()) {
-                var dto = modelMapper.map(loteContratoEntity, LoteContratoDetalleDTO.class);
                 dto.setActividadId(actividadEntity.getId());
                 dto.setActividadDescripcion(actividadEntity.getActividad().getDescripcion());
                 dto.setTipoActividadId(actividadEntity.getTipoActividadEconomica().getId());
@@ -207,8 +207,8 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
                 dto.setFechaFin(loteContratoEntity.getContrato().getFechaVencimiento());
                 dto.setFechaInicioPv(actividadEntity.getFechaInicial());
                 dto.setFechaFinPv(actividadEntity.getFechaInicial());
-                resultDto.add(dto);
             }
+            resultDto.add(dto);
         }
         return new PageImpl<>(resultDto, pageable, resultEntity.getTotalElements());
     }
@@ -262,5 +262,15 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
             resultDto.add(dto);
         }
         return resultDto;
+    }
+
+    @Override
+    public List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
+        return contratoLoteRepository.busquedaAvanzada1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
+    }
+
+    @Override
+    public List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size) {
+        return contratoLoteRepository.busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, offset, size);
     }
 }
