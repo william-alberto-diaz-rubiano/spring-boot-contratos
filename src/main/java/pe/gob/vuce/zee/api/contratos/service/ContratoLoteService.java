@@ -19,7 +19,7 @@ public interface ContratoLoteService {
 
     Page<LoteContratoDTO> findAll(org.springframework.data.domain.Pageable pageable);
 
-    Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable);
+    Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable);
 
     Page<ContratoLoteBandeja2DTO> busquedaAvanzada2(@NotNull UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, Pageable pageable);
 
@@ -30,6 +30,6 @@ public interface ContratoLoteService {
     List<ContratoLoteMapaDTO> busquedaAvanzadaMapa(String numeroContrato, UUID usuarioId, Integer numeroAdenda,
                                                   String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId);
 
-    List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size);
+    List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size);
     List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size);
 }

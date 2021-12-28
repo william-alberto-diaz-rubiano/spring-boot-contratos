@@ -44,7 +44,7 @@ public class ContratoLoteController {
     ) {
         Object result = null;
         if (tipoBandeja == 1) {
-            result = contratoLoteService.busquedaAvanzada(numeroContrato, usuarioId, numeroAdenda,
+            result = contratoLoteService.busquedaAvanzada(numeroContrato, contratoId, usuarioId, numeroAdenda,
                     numeroLote, tipoActividadId, actividadEconomicaId, pageable);
         }
         if (tipoBandeja == 2) {
@@ -76,7 +76,7 @@ public class ContratoLoteController {
         String[] columnas = null;
         List<String[]> data = null;
         if (tipoBandeja == 1) {
-            var result = contratoLoteService.busquedaAvanzada1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividadId, actividadEconomicaId, -1, -1);
+            var result = contratoLoteService.busquedaAvanzada1(numeroContrato, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividadId, actividadEconomicaId, -1, -1);
             columnas = new String[]{"Usuario ZEE", "Nro Contrato", "Cant. Adendas", "Cant. Lotes", "Cant. tipo de actividad económica", "Cant. almacenes"};
             data = result.stream().map(x -> new String[]{
                     x.getUsuarioNombre(),

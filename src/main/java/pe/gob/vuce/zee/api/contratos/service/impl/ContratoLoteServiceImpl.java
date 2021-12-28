@@ -181,8 +181,8 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     }
 
     @Override
-    public Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
-        return contratoLoteRepository.busquedaAvanzada1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, pageable);
+    public Page<ContratoLoteBandejaDTO> busquedaAvanzada(String numeroContrato, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
+        return contratoLoteRepository.busquedaAvanzada1(numeroContrato, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, pageable);
     }
 
     @Override
@@ -265,8 +265,8 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     }
 
     @Override
-    public List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
-        return contratoLoteRepository.busquedaAvanzada1(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
+    public List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
+        return contratoLoteRepository.busquedaAvanzada1(numeroContrato, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
     }
 
     @Override
