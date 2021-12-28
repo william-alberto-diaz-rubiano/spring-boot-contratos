@@ -29,11 +29,11 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     private final EntityManager entityManager;
 
     @Override
-    public Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
+    public Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
         var offset = pageable.getPageNumber() * pageable.getPageSize();
         int size = pageable.getPageSize();
-        List<ContratoLoteBandejaDTO> resultList = busquedaAvanzada1(numeroContrato, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
-        var total = contar1(numeroContrato, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica);
+        List<ContratoLoteBandejaDTO> resultList = busquedaAvanzada1(numeroContrato, loteId, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);
+        var total = contar1(numeroContrato, loteId, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica);
         return new PageImpl<>(resultList, pageable, total);
     }
 
@@ -197,7 +197,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
 
 
     @Override
-    public List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
+    public List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size) {
         var sqlTemplate = "SELECT " +
                 "       CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) as id, " +
                 "       contrato.vecr_ctrt_cod_contra as contrato_numero, " +
@@ -228,6 +228,10 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         if (contratoId != null) {
             predicados.add(" contrato2.vecr_ctrt_idllave_pk = :contratoId");
             parametros.put("contratoId", contratoId);
+        }
+        if (loteId != null) {
+            predicados.add(" lote.velt_clot_idllave_pk = :loteId");
+            parametros.put("loteId", loteId);
         }
         if (numeroLote != null && !numeroLote.isEmpty()) {
             predicados.add(" lote.velt_clot_nombre_lot LIKE CONCAT('%',:numeroLote,'%')");
@@ -288,7 +292,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     }
 
 
-    private Integer contar1(String numeroContrato, UUID contratoId, UUID usuarioId, Integer numeroAdenda,
+    private Integer contar1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda,
                             String numeroLote, UUID tipoActividad, UUID actividadEconomica) {
         var sqlTemplate = "SELECT COUNT(DISTINCT(contrato2.vecr_ctrt_idllave_pk)) " +
                 "    FROM vuce_zee.vecr_ctrt contrato2 " +
@@ -303,6 +307,10 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         if (numeroContrato != null && !numeroContrato.isEmpty()) {
             predicados.add(" contrato2.vecr_ctrt_cod_contra LIKE CONCAT('%',:numeroContrato,'%')");
             parametros.put("numeroContrato", numeroContrato);
+        }
+        if (loteId != null) {
+            predicados.add(" lote.velt_clot_idllave_pk = :loteId");
+            parametros.put("loteId", loteId);
         }
         if (numeroLote != null && !numeroLote.isEmpty()) {
             predicados.add(" lote.velt_clot_nombre_lot LIKE CONCAT('%',:numeroLote,'%')");
