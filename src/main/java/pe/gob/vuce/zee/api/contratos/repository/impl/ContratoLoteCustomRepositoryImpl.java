@@ -239,7 +239,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         }
         if (usuarioId != null) {
             predicados.add(" contrato2.vecr_ctrt_id_usuario = :usuarioId");
-            parametros.put("usuarioid", usuarioId);
+            parametros.put("usuarioId", usuarioId);
         }
         if (tipoActividad != null) {
             predicados.add(" actividad2.vecr_actv_idllave_pk = :tipoActividad");
@@ -322,7 +322,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         }
         if (usuarioId != null) {
             predicados.add(" contrato2.vecr_ctrt_id_usuario = :usuarioId");
-            parametros.put("usuarioid", usuarioId);
+            parametros.put("usuarioId", usuarioId);
         }
         if (tipoActividad != null) {
             predicados.add(" actividad2.vecr_actv_idllave_pk = :tipoActividad");
