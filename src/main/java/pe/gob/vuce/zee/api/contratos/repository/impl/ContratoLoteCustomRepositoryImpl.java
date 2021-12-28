@@ -18,10 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Repository
@@ -191,9 +188,9 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
                                 .contratoTipo(x[1].toString())
                                 .contratoNumero(x[2].toString())
                                 .cantidadAdendas(Integer.parseInt(x[3].toString()))
-                                .loteNombre(x[4].toString())
-                                .costo(new BigDecimal(x[5].toString()))
-                                .tamanio(new BigDecimal(x[6].toString()))
+                                .loteNombre(Optional.ofNullable(x[4]).map(Objects::toString).orElse(null))
+                                .costo(Optional.ofNullable(x[5]).map(Objects::toString).map(BigDecimal::new).orElse(null))
+                                .tamanio(Optional.ofNullable(x[6]).map(Objects::toString).map(BigDecimal::new).orElse(null))
                                 .build())
                 .collect(Collectors.toList());
     }
