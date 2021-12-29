@@ -48,6 +48,9 @@ public class RepresentanteLegalDTO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaFinal;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime fechaFirma;
+
     private Boolean firmaContrato;
 
     private Integer idCliente;

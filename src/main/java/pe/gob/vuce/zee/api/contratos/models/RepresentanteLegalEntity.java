@@ -50,6 +50,9 @@ public class RepresentanteLegalEntity {
     @Column(name = "vecr_repl_fecha_fina", nullable = false)
     private LocalDateTime fechaFinal;
 
+    @Column(name = "vecr_repl_fecha_firm", nullable = false)
+    private LocalDateTime fechaFirma;
+
     @Column(name = "vecr_repl_check_firm")
     private Boolean firmaContrato;
 
