@@ -41,7 +41,7 @@ public class ActividadEntity {
     private UUID almacen;
 
     @Column(name = "vecr_actv_cod_corre")
-    private String v;
+    private String codigoAlmacen;
 
     @Column(name = "vecr_actv_fecha_inic", nullable = false)
     private LocalDateTime fechaInicial;

@@ -4,7 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -21,29 +21,25 @@ public class SubastaEntity {
     @GeneratedValue(generator = "UUIDGenerator")
     private UUID id;
 
-    @Column(name = "vecr_ctrt_cod_contra", nullable = false)
-    private UUID numeroContrato;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "vecr_subs_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
+    private ContratoEntity contrato;
 
-    @Column(name = "vecr_subs_codg_etapa")
-    private Integer codigoEtapa;
-
-    @Column(name = "vecr_subs_codg_manza")
-    private Integer codigoManzana;
-
-    @Column(name = "vecr_subs_codg_lotes")
-    private Integer codigoLote;
+    @ManyToOne
+    @JoinColumn(name = "vecr_subs_codg_lotes", referencedColumnName = "velt_clot_idllave_pk")
+    private LoteEntity lote;
 
     @Column(name = "vecr_subs_codg_bloqu")
-    private Integer codigoBloque;
+    private UUID codigoBloque;
 
     @Column(name = "vecr_subs_codg_numer")
-    private Integer numeroSubasta;
+    private String numeroSubasta;
 
     @Column(name = "vecr_subs_fecha_inic", nullable = false)
-    private Timestamp fechaInicial;
+    private LocalDateTime fechaInicial;
 
     @Column(name = "vecr_subs_fecha_acta", nullable = false)
-    private Timestamp fechaActa;
+    private LocalDateTime fechaActa;
 
     @Column(name = "vecr_subs_mont_costo", nullable = false)
     private Integer monto;
@@ -52,25 +48,25 @@ public class SubastaEntity {
     private Integer tamano;
 
     @Column(name = "vecr_subs_cliente_fk", nullable = false)
-    private Integer codigoCliente;
+    private Integer idCliente;
 
     @Column(name = "vecr_subs_organiz_fk", nullable = false)
-    private Integer codigoOrganizacion;
+    private Integer idOrganizacion;
 
     @Column(name = "vecr_subs_cod_estado", nullable = false)
-    private Integer codigoEstado;
+    private Integer estado;
 
     @Column(name = "vecr_subs_cod_active", nullable = false)
-    private String codigoActivo;
+    private Integer activo;
 
     @Column(name = "vecr_subs_datecreate", nullable = false)
-    private Timestamp fechaCreacion;
+    private LocalDateTime fechaCreacion;
 
     @Column(name = "vecr_subs_usr_create", nullable = false)
     private UUID usuarioCreacion;
 
     @Column(name = "vecr_subs_dateupdate")
-    private Timestamp fechaModificacion ;
+    private LocalDateTime fechaModificacion ;
 
     @Column(name = "vecr_subs_usr_update")
     private UUID usuarioModificacion;

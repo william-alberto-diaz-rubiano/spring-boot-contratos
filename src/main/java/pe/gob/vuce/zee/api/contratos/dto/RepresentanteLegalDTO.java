@@ -1,11 +1,16 @@
 package pe.gob.vuce.zee.api.contratos.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
+
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,35 +19,36 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class SubastaDTO {
+public class RepresentanteLegalDTO {
 
     private UUID id;
 
     private UUID contratoId;
 
-    @NotNull(message = "El id del lote no puede ser nulo")
-    private UUID loteId;
+    @NotNull(message = "El id de la actividad no puede ser nulo")
+    private UUID tipoDocumento;
 
-    @NotNull(message = "El id del bloque no puede ser nulo")
-    private UUID codigoBloque;
+    @NotNull(message = "El id de la actividad no puede ser nulo")
+    private String numeroDocumento;
 
-    @NotNull(message = "El numero de subasta no puede ser nulo")
-    private String numeroSubasta;
+    @NotNull(message = "El id de la actividad no puede ser nulo")
+    private String nombres;
 
-    @NotNull(message = "La fecha inicial no puede ser nulo")
+    @NotNull(message = "El id de la actividad no puede ser nulo")
+    private String apellidoPaterno;
+
+    private String apellidoMaterno;
+
+    @NotNull(message = "El id de la actividad no puede ser nulo")
+    private UUID codigoCargo;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaInicial;
 
-    @NotNull(message = "La fecha de acta no puede ser nulo")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime fechaActa;
+    private LocalDateTime fechaFinal;
 
-    @NotNull(message = "El monto no puede ser nulo")
-    private Integer monto;
-
-    @NotNull(message = "El tamaño no puede ser nulo")
-    private Integer tamano;
+    private Boolean firmaContrato;
 
     private Integer idCliente;
 
@@ -61,5 +67,4 @@ public class SubastaDTO {
     private LocalDateTime fechaModificacion ;
 
     private UUID usuarioModificacion;
-
 }

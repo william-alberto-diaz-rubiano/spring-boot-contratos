@@ -75,7 +75,7 @@ public class ActividadServiceImpl implements ActividadService {
             List<Integer> listadoCodigos = new ArrayList<>();
 
             for(ActividadEntity actividadEntity : listaActividades){
-                String cod = actividadEntity.getV();
+                String cod = actividadEntity.getCodigoAlmacen();
                 String cadenaNumerica = cod.substring(5);
                 Integer codigoInteger = Integer.parseInt(cadenaNumerica);
                 listadoCodigos.add(codigoInteger);
@@ -96,7 +96,7 @@ public class ActividadServiceImpl implements ActividadService {
             return codigo;
         }else{
 
-            String correlativo = actividadBuscada.getV();
+            String correlativo = actividadBuscada.getCodigoAlmacen();
 
             if(correlativo == null){
 
@@ -108,7 +108,7 @@ public class ActividadServiceImpl implements ActividadService {
                 List<Integer> listadoCodigos = new ArrayList<>();
 
                 for(ActividadEntity actividadEntity : listaActividades){
-                    String cod = actividadEntity.getV();
+                    String cod = actividadEntity.getCodigoAlmacen();
                     String cadenaNumerica = cod.substring(5);
                     Integer codigoInteger = Integer.parseInt(cadenaNumerica);
                     listadoCodigos.add(codigoInteger);

@@ -28,7 +28,7 @@ public class ActividadController {
     @Autowired
     private ContratoService contratoService;
 
-    @PostMapping("/{contratoId}/actividad")
+    @PostMapping("/{contratoId}")
     public ResponseEntity<ResponseDTO> guardarTercerFormulario(@Valid
                                                                 @PathVariable("contratoId") UUID contratoId,
                                                                 @RequestBody List<ActividadDTO> listaActividades, BindingResult result) {

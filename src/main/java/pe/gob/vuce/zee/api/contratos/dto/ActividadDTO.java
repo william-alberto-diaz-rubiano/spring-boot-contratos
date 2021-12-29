@@ -27,7 +27,7 @@ public class ActividadDTO {
     public UUID almacen;
 
     @NotNull(message = "El codigo del correlativo no puede ser nulo")
-    private String v;
+    private String codigoAlmacen;
 
     @NotNull(message = "La fecha inicial no puede ser nulo")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
