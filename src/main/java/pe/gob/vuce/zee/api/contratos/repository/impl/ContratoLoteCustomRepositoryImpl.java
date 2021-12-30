@@ -129,20 +129,20 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     public List<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, int offset, int size) {
         var sqlTemplate = "SELECT " +
                 "CAST(contrato.vecr_ctrt_idllave_pk AS VARCHAR) id, " +
-                "tipo_contrato.vems_gcon_descripcin contrato_tipo, " +
-                "contrato.vecr_ctrt_cod_contra contrato_numero, " +
+                "MIN(tipo_contrato.vems_gcon_descripcin) AS contrato_tipo, " +
+                "MIN(contrato.vecr_ctrt_cod_contra) AS contrato_numero, " +
                 "(SELECT COUNT(adenda.vead_aden_idllave_pk) FROM vuce_zee.vead_aden adenda WHERE adenda.vead_aden_id_cont_fk = contrato.vecr_ctrt_idllave_pk) adendas_cantidad, " +
-                "lote.velt_clot_nombre_lot lote_nombre, " +
-                "lote.velt_clot_precio_lot lote_costo, " +
-                "lote.velt_clot_tamanio_m2 lote_tamanio " +
+                "COUNT(lote_contrato.vecr_lote_codg_lotes) AS lote_cantidad, " +
+                "SUM(lote_contrato.vecr_lote_mont_costo) AS lote_costo, " +
+                "SUM(lote_contrato.vecr_lote_mont_taman) AS lote_tamanio " +
                 "FROM vuce_zee.vecr_ctrt contrato " +
                 "INNER JOIN vuce_zee.vems_gcon tipo_contrato ON contrato.vecr_ctrt_id_tipo_cn = tipo_contrato.vems_gcon_idllave_pk " +
                 "INNER JOIN vuce_zee.vepr_pers usuario ON contrato.vecr_ctrt_id_usuario = usuario.vepr_pers_idllave_pk " +
                 "LEFT JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
                 "LEFT JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
-
                 "WHERE " +
-                "contrato.vecr_ctrt_cod_active != 9 %s ";
+                "contrato.vecr_ctrt_cod_active != 9 AND lote_contrato.vecr_lote_cod_active != 9 %s " +
+                "GROUP BY contrato.vecr_ctrt_idllave_pk ";
         var predicados = new ArrayList<String>();
         var parametros = new HashMap<String, Object>();
         predicados.add("CAST(contrato.vecr_ctrt_id_usuario AS VARCHAR) = :usuarioId");
@@ -188,7 +188,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
                                 .contratoTipo(x[1].toString())
                                 .contratoNumero(x[2].toString())
                                 .cantidadAdendas(Integer.parseInt(x[3].toString()))
-                                .loteNombre(Optional.ofNullable(x[4]).map(Objects::toString).orElse(null))
+                                .loteCantidad(Integer.parseInt(x[4].toString()))
                                 .costo(Optional.ofNullable(x[5]).map(Objects::toString).map(BigDecimal::new).orElse(null))
                                 .tamanio(Optional.ofNullable(x[6]).map(Objects::toString).map(BigDecimal::new).orElse(null))
                                 .build())

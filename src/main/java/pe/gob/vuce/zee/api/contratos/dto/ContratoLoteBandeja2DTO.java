@@ -17,7 +17,7 @@ public class ContratoLoteBandeja2DTO {
     private String contratoTipo;
     private String contratoNumero;
     private Integer cantidadAdendas;
-    private String loteNombre;
+    private Integer loteCantidad;
     private BigDecimal costo;
     private BigDecimal tamanio;
 }

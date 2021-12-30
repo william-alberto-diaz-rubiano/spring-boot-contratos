@@ -90,12 +90,12 @@ public class ContratoLoteController {
 
         if (tipoBandeja == 2) {
             var result = contratoLoteService.busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, -1, -1);
-            columnas = new String[]{"Tipo contrato", "Nro Contrato", "Cant. Adendas", "Lote", "Costo", "Tamaño"};
+            columnas = new String[]{"Tipo contrato", "Nro Contrato", "Cant. Adendas", "Cant. Lote", "Costo", "Tamaño"};
             data = result.stream().map(x -> new String[]{
                     x.getContratoTipo(),
                     x.getContratoNumero(),
                     x.getCantidadAdendas().toString(),
-                    x.getLoteNombre(),
+                    x.getLoteCantidad().toString(),
                     Optional.ofNullable(x.getCosto()).map(Objects::toString).orElse("-"),
                     Optional.ofNullable(x.getTamanio()).map(Objects::toString).orElse("-")
             }).collect(Collectors.toList());
