@@ -107,4 +107,8 @@ public class ContratoEntity {
     @ToString.Exclude
     private List<AdendaEntity> adenda;
 
+    @OneToMany(mappedBy = "contrato", targetEntity = LoteContratoEntity.class)
+    @ToString.Exclude
+    private List<LoteContratoEntity> loteContratos;
+
 }
