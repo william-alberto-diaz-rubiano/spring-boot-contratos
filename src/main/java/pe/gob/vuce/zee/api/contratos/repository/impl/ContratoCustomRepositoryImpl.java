@@ -4,7 +4,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import pe.gob.vuce.zee.api.contratos.models.ActividadEntity;
 import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
+import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
 import pe.gob.vuce.zee.api.contratos.repository.ContratoCustomRepository;
 
 import javax.persistence.EntityManager;
@@ -34,13 +36,15 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
         var cb = em.getCriteriaBuilder();
         var cq = cb.createQuery(ContratoEntity.class);
         var root = cq.from(ContratoEntity.class);
+        Join<LoteContratoEntity, ContratoEntity> joinLoteContrato = root.join("loteContratos", JoinType.LEFT);
+        Join<ActividadEntity, ContratoEntity> joinActividad = root.join("actividad", JoinType.LEFT);
         Predicate[] predicatesArray;
         var predicates = new ArrayList<Predicate>();
 
         if (id != null) {
             predicates.add(cb.equal(root.get("id"), id));
         }
-        if(numeroContrato != null){
+        if(numeroContrato != null && !numeroContrato.isEmpty()){
             Expression<String> numeroContratoExp = root.get("numeroContrato");
             numeroContratoExp = cb.upper(numeroContratoExp);
             predicates.add(cb.like(numeroContratoExp, String.join("", "%", numeroContrato.toUpperCase(), "%") ));
@@ -52,9 +56,9 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
             predicates.add(cb.equal(root.get("estado"),estado));
         }
         if(lote != null){
-
+            predicates.add(cb.equal(joinLoteContrato.get("lote").get("id"), lote));
         }
-        if (documento != null) {
+        if (documento != null && !documento.isEmpty()) {
             Expression<String> numeroContratoExp = cb.upper(root.get("documento"));
             predicates.add(cb.like(numeroContratoExp, String.join("", "%", documento.toUpperCase(), "%")));
         }
@@ -62,7 +66,7 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
             predicates.add(cb.equal(root.get("usuario").get("tipoDocumento").get("id"), tipoDocumento));
         }
 
-        if(nombreUsuario != null){
+        if(nombreUsuario != null && !nombreUsuario.isEmpty()){
             Expression<String> usuarioNombreExpr = cb.coalesce(root.get("usuario").get("nombre"), "");
             Expression<String> usuarioApellidoPaternoExpr = cb.coalesce(root.get("usuario").get("apellidoP"), "");
             Expression<String> usuarioApellidoMaternoExpr = cb.coalesce(root.get("usuario").get("apellidoM"), "");
@@ -82,8 +86,7 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
             predicates.add(cb.equal(root.get("usuario").get("id"), usuario));
         }
         if(tipoActividad != null){
-
-
+            predicates.add(cb.equal(joinActividad.get("actividad").get("id"), tipoActividad));
         }
         if (!((fechaInicial == null) && (fechaFinal == null))
         ) {
@@ -94,6 +97,7 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
         if (!predicates.isEmpty()) {
             cq.where(predicatesArray);
         }
+        cq.select(root).distinct(true);
         cq.orderBy(cb.desc(root.get("fechaCreacion")));
 
         var result = em.createQuery(cq);
@@ -103,7 +107,8 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
         if (size != -1) {
             result = result.setMaxResults(size);
         }
-        return result.getResultList();
+        var resultList = result.getResultList();
+        return resultList;
 
     }
 
