@@ -6,11 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pe.gob.vuce.zee.api.contratos.dto.RepresentanteLegalDTO;
+import pe.gob.vuce.zee.api.contratos.dto.RepresentanteLegalContratoDTO;
 import pe.gob.vuce.zee.api.contratos.dto.ResponseDTO;
-import pe.gob.vuce.zee.api.contratos.dto.SubastaDTO;
 import pe.gob.vuce.zee.api.contratos.exceptions.BadRequestException;
-import pe.gob.vuce.zee.api.contratos.service.RepresentanteLegalService;
+import pe.gob.vuce.zee.api.contratos.service.RepresentanteLegalContratoService;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -19,16 +18,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("v1/representanteLegal")
-public class RepresentanteLegalController {
+@RequestMapping("v1/representanteContrato")
+public class RepresentanteLegalContratoController {
 
     @Autowired
-    private RepresentanteLegalService representanteLegalService;
+    private RepresentanteLegalContratoService representanteLegalContratoService;
 
-    @PostMapping("/{contratoId}")
+    @PostMapping
     public ResponseEntity<ResponseDTO> guardarTercerFormulario(@Valid
-                                                               @PathVariable("contratoId") UUID contratoId,
-                                                               @RequestBody List<RepresentanteLegalDTO> listRepresentantes, BindingResult result) {
+                                                               @RequestBody List<RepresentanteLegalContratoDTO> listRepresentantes, BindingResult result) {
 
         if (result.hasErrors()) {
 
@@ -39,9 +37,9 @@ public class RepresentanteLegalController {
             throw new BadRequestException("FAILED", HttpStatus.BAD_REQUEST, listaErrores, "Verificar los campos");
         }
 
-        List<RepresentanteLegalDTO> nuevoListaRepresentantes = representanteLegalService.guardarFormularioRepresentante(contratoId, listRepresentantes);
+        List<RepresentanteLegalContratoDTO> nuevoListaRepresentantes = representanteLegalContratoService.guardarFormularioRepresentante(listRepresentantes);
 
-        ResponseDTO responseBody = new ResponseDTO(nuevoListaRepresentantes, "Lista de subastas guardada");
+        ResponseDTO responseBody = new ResponseDTO(nuevoListaRepresentantes, "Lista de representantes guardada");
         return new ResponseEntity<ResponseDTO>(responseBody, HttpStatus.CREATED);
     }
 }

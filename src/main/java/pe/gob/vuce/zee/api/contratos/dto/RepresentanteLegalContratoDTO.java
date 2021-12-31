@@ -6,11 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pe.gob.vuce.zee.api.contratos.models.ContratoEntity;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,35 +15,17 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RepresentanteLegalDTO {
+public class RepresentanteLegalContratoDTO {
 
     private UUID id;
 
+    @NotNull(message = "El id del contrato no puede ser nulo")
     private UUID contratoId;
 
-    @NotNull(message = "El id de la actividad no puede ser nulo")
-    private UUID tipoDocumento;
+    @NotNull(message = "El id del representante legal no puede ser nulo")
+    private UUID representanteLegalId;
 
-    @NotNull(message = "El id de la actividad no puede ser nulo")
-    private String numeroDocumento;
-
-    @NotNull(message = "El id de la actividad no puede ser nulo")
-    private String nombres;
-
-    @NotNull(message = "El id de la actividad no puede ser nulo")
-    private String apellidoPaterno;
-
-    private String apellidoMaterno;
-
-    @NotNull(message = "El id de la actividad no puede ser nulo")
-    private UUID codigoCargo;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime fechaInicial;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime fechaFinal;
-
+    @NotNull(message = "La fecha de firma de contrato no puede ser nulo")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaFirma;
 
