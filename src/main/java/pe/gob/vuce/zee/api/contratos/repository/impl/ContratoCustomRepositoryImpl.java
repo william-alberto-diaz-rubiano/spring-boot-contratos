@@ -79,8 +79,6 @@ public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
             usuarioNombreCompletoExpr = cb.upper(usuarioNombreCompletoExpr);
 
             predicates.add(cb.like(usuarioNombreCompletoExpr, "%" + nombreUsuario.toUpperCase() + "%"));
-
-            //predicates.add(cb.equal(root.get("usuario").get("nombre"), nombreUsuario));
         }
         if(usuario != null){
             predicates.add(cb.equal(root.get("usuario").get("id"), usuario));

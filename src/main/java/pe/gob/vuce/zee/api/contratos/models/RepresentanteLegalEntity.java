@@ -13,71 +13,70 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "vecr_repl", schema = "vuce_zee", catalog = "zee_db")
+@Table(name = "vepr_relg", schema = "vuce_zee", catalog = "zee_db")
 public class RepresentanteLegalEntity {
 
     @Id
-    @Column(name = "vecr_repl_idllave_pk")
+    @Column(name = "vepr_relg_idllave_pk", nullable = false)
     @GenericGenerator(name = "UUIDGenerator", strategy = "uuid2")
     @GeneratedValue(generator = "UUIDGenerator")
     private UUID id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "vecr_repl_id_cont_fk", referencedColumnName = "vecr_ctrt_idllave_pk")
-    private ContratoEntity contrato;
+    @JoinColumn(name = "vepr_relg_id_pers_fk", referencedColumnName = "vepr_pers_idllave_pk")
+    private PersonaEntity persona;
 
-    @Column(name = "vecr_repl_id_tdoc_fk")
-    private UUID tipoDocumento;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "vepr_relg_cod_tdocum", referencedColumnName = "vems_gcon_idllave_pk")
+    private MaestroEntity tipoDocumento;
 
-    @Column(name = "vecr_repl_numerodocu")
+    @Column(name = "vepr_relg_ddocumento", nullable = false, length = 11)
     private String numeroDocumento;
 
-    @Column(name = "vecr_repl_desnombres")
-    private String nombres;
+    @Column(name = "vepr_relg_desnombres", nullable = false, length = 50)
+    private String nombre;
 
-    @Column(name = "vecr_repl_apellido_p")
-    private String apellidoPaterno;
+    @Column(name = "vepr_relg_apellido_p", nullable = false, length = 50)
+    private String apellidoP;
 
-    @Column(name = "vecr_repl_apellido_m")
-    private String apellidoMaterno;
+    @Column(name = "vepr_relg_apellido_m", nullable = false, length = 50)
+    private String apellidoM;
 
-    @Column(name = "vecr_repl_cod_car_fk")
-    private UUID codigoCargo;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "vepr_relg_cod_cargos", referencedColumnName = "vems_gcon_idllave_pk")
+    private MaestroEntity cargos;
 
-    @Column(name = "vecr_repl_fecha_inic", nullable = false)
+    @Column(name = "vepr_relg_fecha_inic", nullable = false)
     private LocalDateTime fechaInicial;
 
-    @Column(name = "vecr_repl_fecha_fina", nullable = false)
+    @Column(name = "vepr_relg_fecha_fina")
     private LocalDateTime fechaFinal;
 
-    @Column(name = "vecr_repl_fecha_firm", nullable = false)
-    private LocalDateTime fechaFirma;
+    @Column(name = "vepr_relg_ruta_foto", length = 250)
+    private String rutaFoto;
 
-    @Column(name = "vecr_repl_check_firm")
-    private Boolean firmaContrato;
+    @Column(name = "vepr_relg_cliente_fk", nullable = false)
+    private Integer idCliente = 1;
 
-    @Column(name = "vecr_repl_cliente_fk", nullable = false)
-    private Integer idCliente;
+    @Column(name = "vepr_relg_organiz_fk", nullable = false)
+    private Integer idOrganizacion = 1;
 
-    @Column(name = "vecr_repl_organiz_fk", nullable = false)
-    private Integer idOrganizacion;
+    @Column(name = "vepr_relg_cod_estado", nullable = false)
+    private Integer estado = 0;
 
-    @Column(name = "vecr_repl_cod_estado", nullable = false)
-    private Integer estado;
+    @Column(name = "vepr_relg_cod_active", nullable = false)
+    private Integer activo = 0;
 
-    @Column(name = "vecr_repl_cod_active", nullable = false)
-    private Integer activo;
+    @Column(name = "vepr_relg_datecreate", nullable = false)
+    private LocalDateTime fechaCreacion = LocalDateTime.now();
 
-    @Column(name = "vecr_repl_datecreate", nullable = false)
-    private LocalDateTime fechaCreacion;
+    @Column(name = "vepr_relg_usr_create", nullable = false)
+    private Integer idUsuarioCreacion = 0;
 
-    @Column(name = "vecr_repl_usr_create", nullable = false)
-    private UUID usuarioCreacion;
+    @Column(name = "vepr_relg_dateupdate")
+    private LocalDateTime fechaModificacion;
 
-    @Column(name = "vecr_repl_dateupdate")
-    private LocalDateTime fechaModificacion ;
-
-    @Column(name = "vecr_repl_usr_update")
-    private UUID usuarioModificacion;
+    @Column(name = "vepr_relg_usr_update")
+    private Integer idUsuarioModificacion = 0;
 
 }
