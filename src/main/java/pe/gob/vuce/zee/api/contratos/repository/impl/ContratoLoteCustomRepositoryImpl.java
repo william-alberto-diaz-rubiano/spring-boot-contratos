@@ -84,7 +84,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
         var cq = cb.createQuery(LoteContratoEntity.class);
         var loteContratoFrom = cq.from(LoteContratoEntity.class);
         var contratoJoin = loteContratoFrom.join("contrato", JoinType.INNER);
-        var actividadJoin = contratoJoin.join("actividad", JoinType.INNER);
+        var actividadJoin = contratoJoin.join("actividad", JoinType.LEFT);
         var adendaJoin = contratoJoin.join("adenda", JoinType.LEFT);
 
         var predicates = new ArrayList<Predicate>();
