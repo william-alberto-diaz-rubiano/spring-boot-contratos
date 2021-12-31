@@ -52,7 +52,7 @@ public class ContratoLoteController {
         }
 
         if (tipoBandeja == 3) {
-            result = this.contratoLoteService.busquedaAvanzadaMapa(numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividadId, actividadEconomicaId);
+            result = this.contratoLoteService.busquedaAvanzadaMapa(contratoId, numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividadId, actividadEconomicaId);
         }
         var body = new ResponseDTO<>(Constantes.NO_ERROR, result);
         return ResponseEntity.ok(body);

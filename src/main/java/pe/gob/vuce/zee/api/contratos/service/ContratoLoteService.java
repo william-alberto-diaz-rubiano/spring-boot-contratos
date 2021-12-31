@@ -27,7 +27,7 @@ public interface ContratoLoteService {
 
     Page<ContratoLoteMapaDTO> buscarLotesPorContrato(UUID contratoID, Pageable pageable);
 
-    List<ContratoLoteMapaDTO> busquedaAvanzadaMapa(String numeroContrato, UUID usuarioId, Integer numeroAdenda,
+    List<ContratoLoteMapaDTO> busquedaAvanzadaMapa(UUID contratoId, String numeroContrato, UUID usuarioId, Integer numeroAdenda,
                                                   String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId);
 
     List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size);

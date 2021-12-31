@@ -239,8 +239,8 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
     }
 
     @Override
-    public List<ContratoLoteMapaDTO> busquedaAvanzadaMapa(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId) {
-        var resultEntity = contratoLoteRepository.busquedaAvanzadaMapa(numeroContrato, usuarioId, numeroAdenda,
+    public List<ContratoLoteMapaDTO> busquedaAvanzadaMapa(UUID contratoId, String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId) {
+        var resultEntity = contratoLoteRepository.busquedaAvanzadaMapa(contratoId, numeroContrato, usuarioId, numeroAdenda,
                 numeroLote, tipoActividadId, actividadEconomicaId);
         List<ContratoLoteMapaDTO> resultDto = new ArrayList<>();
         for (var entity : resultEntity) {

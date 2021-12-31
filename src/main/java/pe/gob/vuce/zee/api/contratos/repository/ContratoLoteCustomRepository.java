@@ -17,7 +17,7 @@ public interface ContratoLoteCustomRepository {
 
     Page<ContratoLoteBandeja2DTO> busquedaAvanzada2(UUID usuarioId, UUID contratoId, UUID adendaId, UUID loteId, Pageable pageable);
 
-    List<LoteContratoEntity> busquedaAvanzadaMapa(String numeroContrato, UUID usuarioId, Integer numeroAdenda,
+    List<LoteContratoEntity> busquedaAvanzadaMapa(UUID contratoId, String numeroContrato, UUID usuarioId, Integer numeroAdenda,
                                                   String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId);
 
     List<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, int offset, int size);

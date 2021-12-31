@@ -79,7 +79,7 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     }
 
     @Override
-    public List<LoteContratoEntity> busquedaAvanzadaMapa(String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId) {
+    public List<LoteContratoEntity> busquedaAvanzadaMapa(UUID contratoId, String numeroContrato, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividadId, UUID actividadEconomicaId) {
         var cb = entityManager.getCriteriaBuilder();
         var cq = cb.createQuery(LoteContratoEntity.class);
         var loteContratoFrom = cq.from(LoteContratoEntity.class);
@@ -91,6 +91,10 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
 
         if(numeroContrato != null && !numeroContrato.isEmpty()){
             predicates.add(cb.like(cb.upper(contratoJoin.get("numeroContrato")), "%" + numeroContrato.toUpperCase() + "%"));
+        }
+
+        if(contratoId != null){
+            predicates.add(cb.equal(contratoJoin.get("id"), contratoId));
         }
 
         if(usuarioId != null){
