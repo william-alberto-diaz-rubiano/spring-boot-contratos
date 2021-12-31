@@ -138,10 +138,10 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
                 "FROM vuce_zee.vecr_ctrt contrato " +
                 "INNER JOIN vuce_zee.vems_gcon tipo_contrato ON contrato.vecr_ctrt_id_tipo_cn = tipo_contrato.vems_gcon_idllave_pk " +
                 "INNER JOIN vuce_zee.vepr_pers usuario ON contrato.vecr_ctrt_id_usuario = usuario.vepr_pers_idllave_pk " +
-                "LEFT JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk " +
+                "LEFT JOIN vuce_zee.vecr_lote lote_contrato ON lote_contrato.vecr_lote_id_cont_fk = contrato.vecr_ctrt_idllave_pk AND lote_contrato.vecr_lote_cod_active != 9 " +
                 "LEFT JOIN vuce_zee.velt_clot lote ON lote.velt_clot_idllave_pk = lote_contrato.vecr_lote_codg_lotes " +
                 "WHERE " +
-                "contrato.vecr_ctrt_cod_active != 9 AND lote_contrato.vecr_lote_cod_active != 9 %s " +
+                "contrato.vecr_ctrt_cod_active != 9 %s " +
                 "GROUP BY contrato.vecr_ctrt_idllave_pk ";
         var predicados = new ArrayList<String>();
         var parametros = new HashMap<String, Object>();
