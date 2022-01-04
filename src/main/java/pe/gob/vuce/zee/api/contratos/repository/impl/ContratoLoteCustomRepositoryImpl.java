@@ -246,11 +246,11 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
             parametros.put("usuarioId", usuarioId);
         }
         if (tipoActividad != null) {
-            predicados.add(" actividad2.vecr_actv_idllave_pk = :tipoActividad");
+            predicados.add(" actividad2.vecr_actv_id_acti_fk = :tipoActividad");
             parametros.put("tipoActividad", tipoActividad);
         }
         if (actividadEconomica != null) {
-            predicados.add(" actividad2.vecr_actv_id_acti_fk = :actividadEconomica");
+            predicados.add(" actividad2.vecr_actv_id_econ_fk = :actividadEconomica");
             parametros.put("actividadEconomica", actividadEconomica);
         }
         if (numeroAdenda != null) {
