@@ -199,7 +199,10 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
                 dto.setActividadDescripcion(actividadEntity.getActividad().getDescripcion());
                 dto.setTipoActividadId(actividadEntity.getTipoActividadEconomica().getId());
                 dto.setTipoActividadDescripcion(actividadEntity.getTipoActividadEconomica().getDescripcion());
-                dto.setAlmacenId(actividadEntity.getAlmacen());
+                Optional.ofNullable(actividadEntity.getAlmacen()).ifPresent(x -> {
+                    dto.setAlmacenId(x.getId());
+                    dto.setAlmacenCodigo(x.getCodigo());
+                });
                 //dto.setAlmacenCodigo(actividadEntity.getAlmacen());
                 dto.setFechaInicio(loteContratoEntity.getContrato().getFechaInicial());
                 dto.setFechaFin(loteContratoEntity.getContrato().getFechaVencimiento());

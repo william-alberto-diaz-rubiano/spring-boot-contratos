@@ -35,10 +35,10 @@ public class ActividadEntity {
     @JoinColumn(name = "vecr_actv_id_acti_fk", referencedColumnName = "vems_gcon_idllave_pk")
     private MaestroEntity tipoActividadEconomica;
 
-    //@ManyToOne(optional = false)
-    //@JoinColumn(name = "vecr_actv_id_alma_fk", referencedColumnName = "vems_alma_idllave_pk")
-    @Column(name = "vecr_actv_id_alma_fk")
-    private UUID almacen;
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "vecr_actv_id_alma_fk", referencedColumnName = "vems_alma_idllave_pk", nullable = true)
+    // @Column(name = "vecr_actv_id_alma_fk")
+    private AlmacenEntity almacen;
 
     @Column(name = "vecr_actv_cod_corre")
     private String codigoAlmacen;
