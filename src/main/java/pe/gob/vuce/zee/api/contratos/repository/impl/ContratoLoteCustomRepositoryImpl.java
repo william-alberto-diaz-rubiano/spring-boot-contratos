@@ -29,7 +29,8 @@ public class ContratoLoteCustomRepositoryImpl implements ContratoLoteCustomRepos
     private final EntityManager entityManager;
 
     @Override
-    public Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable) {
+    public Page<ContratoLoteBandejaDTO> busquedaAvanzada1(String numeroContrato, UUID loteId, UUID contratoId, UUID usuarioId, Integer numeroAdenda, String numeroLote, UUID tipoActividad, UUID actividadEconomica, Pageable pageable)
+    {
         var offset = pageable.getPageNumber() * pageable.getPageSize();
         int size = pageable.getPageSize();
         List<ContratoLoteBandejaDTO> resultList = busquedaAvanzada1(numeroContrato, loteId, contratoId, usuarioId, numeroAdenda, numeroLote, tipoActividad, actividadEconomica, offset, size);

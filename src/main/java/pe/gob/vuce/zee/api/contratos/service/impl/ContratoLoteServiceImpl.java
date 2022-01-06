@@ -167,12 +167,15 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
                 .map(contrato -> modelMapper.map(contrato, LoteContratoDTO.class))
                 .collect(Collectors.toList());
         List<LoteContratoDTO> contratosDTO = new ArrayList<>();
-        for (LoteContratoDTO loteContratoDTO : dtos
-        ) {
-            try {
+        for (LoteContratoDTO loteContratoDTO : dtos)
+        {
+            try
+            {
                 loteContratoDTO.setLote(buscarPorId(loteContratoDTO.getIdLote()));
                 contratosDTO.add(loteContratoDTO);
-            } catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
         }
