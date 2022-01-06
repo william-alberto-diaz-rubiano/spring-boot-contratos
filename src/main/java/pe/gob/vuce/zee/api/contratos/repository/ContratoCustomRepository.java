@@ -40,4 +40,5 @@ public interface ContratoCustomRepository {
                 UUID tipoActividad, LocalDateTime fechaInicial,
                 LocalDateTime fechaFinal);
 
+
 }

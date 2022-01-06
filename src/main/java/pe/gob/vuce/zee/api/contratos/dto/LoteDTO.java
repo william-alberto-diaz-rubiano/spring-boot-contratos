@@ -63,6 +63,7 @@ public class LoteDTO
         this.latitud = loteEntity.getLatitud().toString();
         this.manzanaNombre = loteEntity.getManzana().getNombre();
         this.etapaNombre = loteEntity.getEtapa().getNombre();
+
         this.etapa = new EtapaManzanaBloqueDTO(loteEntity.getEtapa());
         this.manzana = new EtapaManzanaBloqueDTO(loteEntity.getManzana());
 

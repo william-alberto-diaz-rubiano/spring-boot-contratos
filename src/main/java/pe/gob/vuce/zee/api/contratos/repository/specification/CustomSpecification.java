@@ -1,4 +1,4 @@
-package pe.gob.vuce.zee.api.contratos.repository;
+package pe.gob.vuce.zee.api.contratos.repository.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 

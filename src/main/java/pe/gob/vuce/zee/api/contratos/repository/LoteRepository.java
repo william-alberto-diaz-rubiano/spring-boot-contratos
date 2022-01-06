@@ -8,7 +8,8 @@ import pe.gob.vuce.zee.api.contratos.models.LoteEntity;
 
 import java.util.UUID;
 
-public interface LoteRepository extends JpaRepository<LoteEntity, UUID> {
+public interface LoteRepository extends JpaRepository<LoteEntity, UUID>
+{
     @Query("SELECT DISTINCT(lc.lote) FROM LoteContratoEntity lc WHERE lc.contrato.id = ?1 AND lc.activo = ?2")
     Page<LoteEntity> findLoteByContratoAndActivo(UUID contratoId, Integer activo, Pageable pageable);
 }

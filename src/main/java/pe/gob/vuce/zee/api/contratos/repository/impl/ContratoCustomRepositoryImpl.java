@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class ContratoCustomRepositoryImpl implements ContratoCustomRepository {
+public class ContratoCustomRepositoryImpl implements ContratoCustomRepository
+{
 
 
     @PersistenceContext

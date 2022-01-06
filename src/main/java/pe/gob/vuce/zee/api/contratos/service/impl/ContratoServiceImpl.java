@@ -139,7 +139,8 @@ public class ContratoServiceImpl implements ContratoService {
         var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
         var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoBandejaDTO.class)).collect(Collectors.toList());
 
-        for(ContratoBandejaDTO contratoBandejaDTO : resultDTO){
+        for(ContratoBandejaDTO contratoBandejaDTO : resultDTO)
+        {
 
             var estadoString= maestroRepository.findByPrefijoAndCorrelativo(70,contratoBandejaDTO.getEstado()).getDescripcion();
             contratoBandejaDTO.setEstadoDescripcion(estadoString);
@@ -155,6 +156,9 @@ public class ContratoServiceImpl implements ContratoService {
 
                 contratoBandejaDTO.setEstadoAdendaDescripcion(estadoDescripcion);
             }
+
+            contratoBandejaDTO.setCantidadActividades(contratoRepository.countActividad(contratoBandejaDTO.getId()));
+            contratoBandejaDTO.setCantidadLotes(contratoRepository.countLoteContratos(contratoBandejaDTO.getId()));
 
         }
 

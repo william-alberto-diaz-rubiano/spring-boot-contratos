@@ -5,12 +5,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import pe.gob.vuce.zee.api.contratos.dto.LoteContratoFilterDTO;
+import pe.gob.vuce.zee.api.contratos.models.LoteContratoEntity;
 import pe.gob.vuce.zee.api.contratos.models.LoteEntity;
-import pe.gob.vuce.zee.api.contratos.repository.specification.LoteSpecification;
+import pe.gob.vuce.zee.api.contratos.repository.impl.LoteContratoCustomRepositoryImpl;
 import pe.gob.vuce.zee.api.contratos.repository.impl.LoteCustomRepositoryImpl;
+import pe.gob.vuce.zee.api.contratos.repository.specification.LoteSpecification;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -19,13 +25,13 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
-@Service("loteServiceImpl")
+@Service("loteContratoServiceImpl")
 @RequiredArgsConstructor
-public class LoteServiceImpl
+public class LoteContratoServiceImpl
 {
     @Autowired
-    @Qualifier("loteCustomRepositoryImpl")
-    private LoteCustomRepositoryImpl loteCustomRepository;
+    @Qualifier("loteContratoCustomRepositoryImpl")
+    private LoteContratoCustomRepositoryImpl loteContratoCRepo;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -57,35 +63,35 @@ public class LoteServiceImpl
         return Sort.by(direction, fieldname);
     }
 
-    public List<LoteEntity> findAll(List<String> filterList, String order)
+    public List<LoteContratoEntity> findAll(List<String> filterList, String order)
     {
         try
         {
-            List<LoteEntity> loteEntities = new ArrayList<>();
+            List<LoteContratoEntity> lcEntities = new ArrayList<>();
 
             if (filterList != null && !filterList.isEmpty())
             {
                 Specification specification = new LoteSpecification().getSpecificationByAndOperator(filterList);
                 if (order == null || order.isEmpty())
                 {
-                    loteEntities = loteCustomRepository.findAll(specification);
+                    lcEntities = loteContratoCRepo.findAll(specification);
                 }
                 else
                 {
                     Sort sortOrder = this.getSortOrder(order);
-                    loteEntities = loteCustomRepository.findAll(specification, sortOrder);
+                    lcEntities = loteContratoCRepo.findAll(specification, sortOrder);
                 }
             }
             else
             {
                 if (order == null || order.isEmpty())
                 {
-                    loteEntities = loteCustomRepository.findAll();
+                    lcEntities = loteContratoCRepo.findAll();
                 }
                 else
                 {
                     Sort sortOrder = this.getSortOrder(order);
-                    loteEntities = loteCustomRepository.findAll(sortOrder);
+                    lcEntities = loteContratoCRepo.findAll(sortOrder);
                 }
             }
 
@@ -102,7 +108,7 @@ public class LoteServiceImpl
 
 //            var resultDTO = loteEntities.stream().map(x -> modelMapper.map(x, LoteDTO.class)).collect(Collectors.toList());
 
-            return loteEntities;
+            return lcEntities;
         }
         catch (Throwable error)
         {
@@ -110,39 +116,39 @@ public class LoteServiceImpl
         }
     }
 
-    public Page<LoteEntity> findAll(List<String> filterList, String order, Integer pageNumber, Integer itemsPerPage)
+    public Page<LoteContratoEntity> findAll(List<String> filterList, String order, Integer pageNumber, Integer itemsPerPage)
     {
         try
         {
-            Page<LoteEntity> lotePage = null;
+            Page<LoteContratoEntity> lcPage = null;
 
             if (filterList != null && !filterList.isEmpty())
             {
                 Specification specification = new LoteSpecification().getSpecificationByAndOperator(filterList);
                 if (order == null || order.isEmpty())
                 {
-                    lotePage = loteCustomRepository.findAll(specification, PageRequest.of(pageNumber, itemsPerPage));
+                    lcPage = loteContratoCRepo.findAll(specification, PageRequest.of(pageNumber, itemsPerPage));
                 }
                 else
                 {
                     Sort sortOrder = this.getSortOrder(order);
-                    lotePage = loteCustomRepository.findAll(specification, PageRequest.of(pageNumber, itemsPerPage, sortOrder));
+                    lcPage = loteContratoCRepo.findAll(specification, PageRequest.of(pageNumber, itemsPerPage, sortOrder));
                 }
             }
             else
             {
                 if (order == null || order.isEmpty())
                 {
-                    lotePage = loteCustomRepository.findAll(PageRequest.of(pageNumber, itemsPerPage));
+                    lcPage = loteContratoCRepo.findAll(PageRequest.of(pageNumber, itemsPerPage));
                 }
                 else
                 {
                     Sort sortOrder = this.getSortOrder(order);
-                    lotePage = loteCustomRepository.findAll(PageRequest.of(pageNumber, itemsPerPage, sortOrder));
+                    lcPage = loteContratoCRepo.findAll(PageRequest.of(pageNumber, itemsPerPage, sortOrder));
                 }
             }
 
-            return lotePage;
+            return lcPage;
         }
         catch (Throwable error)
         {
@@ -150,11 +156,11 @@ public class LoteServiceImpl
         }
     }
 
-    public LoteEntity findById(UUID id)
+    public LoteContratoEntity findById(UUID id)
     {
         try
         {
-            Optional<LoteEntity> entityOptional = loteCustomRepository.findById(id);
+            Optional<LoteContratoEntity> entityOptional = loteContratoCRepo.findById(id);
             return (entityOptional.isPresent())? entityOptional.get() : null;
         }
         catch (Throwable error)
@@ -163,7 +169,17 @@ public class LoteServiceImpl
         }
     }
 
-
+    public List<LoteContratoFilterDTO> loteContratoFilter()
+    {
+        try
+        {
+            return loteContratoCRepo.getLoteContratoFilterDTO();
+        }
+        catch (Throwable error)
+        {
+            throw error;
+        }
+    }
 
 
 
