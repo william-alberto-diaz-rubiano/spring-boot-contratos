@@ -23,10 +23,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -198,21 +195,26 @@ public class ContratoLoteServiceImpl implements ContratoLoteService {
         var resultEntity = contratoLoteRepository.findByContratoAndActivo(contratoId, Constantes.HABILITADO, pageable);
         List<LoteContratoDetalleDTO> resultDto = new ArrayList<>();
         for (var loteContratoEntity : resultEntity) {
-            var dto = modelMapper.map(loteContratoEntity, LoteContratoDetalleDTO.class);
-            for (var actividadEntity : loteContratoEntity.getContrato().getActividad()) {
+            var actividades = loteContratoEntity.getContrato().getActividad();
+            for (var actividadEntity : actividades) {
+                var dto = modelMapper.map(loteContratoEntity, LoteContratoDetalleDTO.class);
                 dto.setActividadId(actividadEntity.getId());
                 dto.setActividadDescripcion(actividadEntity.getActividad().getDescripcion());
                 dto.setTipoActividadId(actividadEntity.getTipoActividadEconomica().getId());
                 dto.setTipoActividadDescripcion(actividadEntity.getTipoActividadEconomica().getDescripcion());
-                dto.setAlmacenId(actividadEntity.getAlmacen());
+                Optional.ofNullable(actividadEntity.getAlmacen()).ifPresent(x -> {
+                    dto.setAlmacenId(x.getId());
+                    dto.setAlmacenCodigo(x.getCodigo());
+                });
                 //dto.setAlmacenCodigo(actividadEntity.getAlmacen());
                 dto.setFechaInicio(loteContratoEntity.getContrato().getFechaInicial());
                 dto.setFechaFin(loteContratoEntity.getContrato().getFechaVencimiento());
                 dto.setFechaInicioPv(actividadEntity.getFechaInicial());
                 dto.setFechaFinPv(actividadEntity.getFechaInicial());
+                resultDto.add(dto);
             }
-            resultDto.add(dto);
         }
+        resultDto.sort(Comparator.comparing(LoteContratoDetalleDTO::getLoteNombre));
         return new PageImpl<>(resultDto, pageable, resultEntity.getTotalElements());
     }
 
