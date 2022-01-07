@@ -13,25 +13,29 @@ import java.util.List;
 
 
 @Slf4j
-public class ExportarUtil {
-
-    public static void crearCSV(List<String[]> lista, String[] columnas, PrintWriter out) throws IOException {
-        try (
-                CSVWriter csvWriter = new CSVWriter(out,
-                        CSVWriter.DEFAULT_SEPARATOR,
-                        CSVWriter.DEFAULT_QUOTE_CHARACTER,
-                        CSVWriter.DEFAULT_ESCAPE_CHARACTER,
-                        CSVWriter.DEFAULT_LINE_END);
-        ){
+public class ExportarUtil
+{
+    public static void crearCSV(List<String[]> lista, String[] columnas, PrintWriter out) throws IOException
+    {
+        try (CSVWriter csvWriter = new CSVWriter(out,
+                                                CSVWriter.DEFAULT_SEPARATOR,
+                                                CSVWriter.DEFAULT_QUOTE_CHARACTER,
+                                                CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+                                                CSVWriter.DEFAULT_LINE_END);
+            )
+        {
             csvWriter.writeNext(columnas);
             lista.forEach(csvWriter::writeNext);
             log.info("CSV generado exitosamente");
-        }catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             log.error("Error al generar CSV", e);
         }
     }
 
-    public static void crearExcel(List<String[]> lista, String titulo, String nombreHoja, String[] columnas, OutputStream out){
+    public static void crearExcel(List<String[]> lista, String titulo, String nombreHoja, String[] columnas, OutputStream out)
+    {
         var wb = new XSSFWorkbook();
 
         // Crear hoja
@@ -61,7 +65,8 @@ public class ExportarUtil {
         Row filaData = hoja.createRow(2);
 
         // Llenar columnas cabeceras en fila 2
-        for(int i=0; i<columnas.length;i++){
+        for(int i=0; i<columnas.length;i++)
+        {
             celda = filaData.createCell(i);
             celda.setCellValue(columnas[i]);
             celda.setCellStyle(estilo);
@@ -72,9 +77,11 @@ public class ExportarUtil {
         int posCelda = 0;
 
         // Llenar filas cuerpo
-        for (var obj : lista) {
+        for (var obj : lista)
+        {
             filaData = hoja.createRow(numFila);
-            for(var valor : obj){
+            for(var valor : obj)
+            {
                 filaData.createCell(posCelda).setCellValue(String.valueOf(valor));
                 posCelda++;
             }
@@ -83,17 +90,21 @@ public class ExportarUtil {
         }
 
         //AutoSize Columnas
-        for(int i=0; i<columnas.length;i++){
+        for(int i=0; i<columnas.length;i++)
+        {
             hoja.autoSizeColumn(i);
         }
 
         // Exportar excel
-        try {
+        try
+        {
             wb.write(out);
             wb.close();
             out.close();
             log.info("XLS generado existosamente");
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             log.error("Error al generar XLS", e);
         }
     }

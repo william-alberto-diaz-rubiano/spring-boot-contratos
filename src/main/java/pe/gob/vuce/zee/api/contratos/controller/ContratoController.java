@@ -8,14 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pe.gob.vuce.zee.api.contratos.base.Constantes;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoBandejaDTO;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoFormularioPrincipalDTO;
-import pe.gob.vuce.zee.api.contratos.dto.ContratoSegundoFormularioDTO;
-import pe.gob.vuce.zee.api.contratos.dto.ResponseDTO;
+import pe.gob.vuce.zee.api.contratos.dto.*;
 import pe.gob.vuce.zee.api.contratos.exceptions.BadRequestException;
 import pe.gob.vuce.zee.api.contratos.service.ContratoService;
+import pe.gob.vuce.zee.api.contratos.utils.ExportarUtil;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -139,5 +139,100 @@ public class ContratoController {
         ResponseDTO responseBody = new ResponseDTO(result,"Fechas inicio y vencimiento del contrato");
         return new ResponseEntity<ResponseDTO>(responseBody, HttpStatus.OK);
     }
+
+    @GetMapping("exportar")
+    public void export(@RequestParam(name = "numeroContrato", required = false) String numeroContrato,
+                        @RequestParam(name = "tipoContrato", required = false) UUID tipoContrato,
+                        @RequestParam(name = "estado", required = false) Integer estado,
+                        @RequestParam(name = "lote", required = false) UUID lote,
+                        @RequestParam(name = "documento", required = false) String documento,
+                        @RequestParam(name = "tipoDocumento", required = false) UUID tipoDocumento,
+                        @RequestParam(name= "nombreUsuario",required = false) String nombreUsuario,
+                        @RequestParam(name = "usuarioZEE", required = false) UUID usuario,
+                        @RequestParam(name = "tipoActividad", required = false) UUID tipoActividad,
+                        @RequestParam(name = "fechaInicial", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime fechaInicial,
+                        @RequestParam(name = "tipo") Integer tipo, // 1 -> normal, 2-> para seleccion
+                        @RequestParam(name = "fechaFinal", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime fechaFinal,
+                        @RequestParam(name = "extension", required = false, defaultValue = "xls") String formato,
+                        HttpServletResponse response) throws IOException
+    {
+        if (!formato.equalsIgnoreCase("xls") && !formato.equalsIgnoreCase("xlsx") && !formato.equalsIgnoreCase("csv"))
+        {
+            throw new BadRequestException("FAILED", HttpStatus.NOT_ACCEPTABLE, "Formato '" + formato + "' no admitido'");
+        }
+
+        if(numeroContrato == "")
+        {
+            numeroContrato = null;
+        }
+        if(documento == "")
+        {
+            documento=null;
+        }
+        if(nombreUsuario == "")
+        {
+            nombreUsuario=null;
+        }
+
+        if((fechaInicial != null && fechaFinal == null) || (fechaFinal !=null && fechaInicial == null))
+        {
+
+            throw new BadRequestException("FAILED", HttpStatus.BAD_REQUEST,"Los campos de las fechas no pueden ser nulos");
+        }
+        if(fechaInicial != null && fechaFinal != null)
+        {
+            if(fechaFinal.compareTo(fechaInicial) < 0)
+            {
+                throw new BadRequestException("FAILED",HttpStatus.BAD_REQUEST,"La fecha final no puede ser menor a la fecha inicial");
+            }
+        }
+
+        String[] columnas = null;
+        List<String[]> data = null;
+
+        if(tipo == 1)
+        {
+            List<ContratoBandejaDTO> resultado = contratoService.busquedaPorFiltrosTipoUno(null,numeroContrato, tipoContrato, estado, lote, documento, tipoDocumento,nombreUsuario, usuario, tipoActividad, fechaInicial, fechaFinal);
+            columnas = new String[]{"USUARIO", "NO. CONTRATO", "TIPO DE CONTRATO", "ESTADO", "CANT. LOTES", " CANT. ACTIVIDADES"};
+            data = resultado.stream().map(x -> new String[]{x.getUsuarioNombre(),
+                                                            x.getNumeroContrato(),
+                                                            x.getTipoContratoDescripcion(),
+                                                            x.getEstadoDescripcion(),
+                                                            x.getCantidadLotes().toString(),
+                                                            x.getCantidadActividades().toString()}
+                                        ).collect(Collectors.toList());
+        }
+
+        if(tipo == 2)
+        {
+            List<ContratoMinimalDTO> resultado = contratoService.busquedaPorFiltrosTipoDos(null,numeroContrato, tipoContrato, estado, lote, documento, tipoDocumento,nombreUsuario, usuario, tipoActividad, fechaInicial, fechaFinal);
+            columnas = new String[]{"NO. CONTRATO"};
+            data = resultado.stream().map(x -> new String[]{x.getNumeroContrato()}).collect(Collectors.toList());
+        }
+
+        if (columnas != null && data != null)
+        {
+            var contentDispositionTmpl = "attachment; filename=%s";
+            if (formato.equalsIgnoreCase("csv"))
+            {
+                response.setContentType(Constantes.CONTENT_TYPE_CSV);
+                var contentDisposition = String.format(contentDispositionTmpl, "contratos.csv");
+                response.setHeader("Content-Disposition", contentDisposition);
+                ExportarUtil.crearCSV(data, columnas, response.getWriter());
+            }
+            else if (formato.equalsIgnoreCase("xls") || formato.equalsIgnoreCase("xlsx"))
+            {
+                response.setContentType(Constantes.CONTENT_TYPE_XLSX);
+                var contentDisposition = String.format(contentDispositionTmpl, "contratos.xlsx");
+                response.setHeader("Content-Disposition", contentDisposition);
+                ExportarUtil.crearExcel(data, "Contratos", "Contratos", columnas, response.getOutputStream());
+            }
+        }
+        else
+        {
+            throw new BadRequestException("FAILED", HttpStatus.NO_CONTENT, "Nada que retornar");
+        }
+    }
+
 
 }

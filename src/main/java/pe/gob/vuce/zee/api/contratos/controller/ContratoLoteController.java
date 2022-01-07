@@ -45,14 +45,15 @@ public class ContratoLoteController {
         Object result = null;
         if (tipoBandeja == 1) {
             result = contratoLoteService.busquedaAvanzada(numeroContrato, loteId, contratoId, usuarioId, numeroAdenda,
-                    numeroLote, tipoActividadId, actividadEconomicaId, pageable);
+                                                          numeroLote, tipoActividadId, actividadEconomicaId, pageable);
         }
         if (tipoBandeja == 2) {
             result = contratoLoteService.busquedaAvanzada2(usuarioId, contratoId, adendaId, loteId, pageable);
         }
 
         if (tipoBandeja == 3) {
-            result = this.contratoLoteService.busquedaAvanzadaMapa(contratoId, numeroContrato, usuarioId, numeroAdenda, numeroLote, tipoActividadId, actividadEconomicaId);
+            result = this.contratoLoteService.busquedaAvanzadaMapa(contratoId, numeroContrato, usuarioId, numeroAdenda,
+                                                                   numeroLote, tipoActividadId, actividadEconomicaId);
         }
         var body = new ResponseDTO<>(Constantes.NO_ERROR, result);
         return ResponseEntity.ok(body);

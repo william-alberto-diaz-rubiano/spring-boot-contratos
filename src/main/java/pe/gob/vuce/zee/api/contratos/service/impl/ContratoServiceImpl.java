@@ -121,11 +121,10 @@ public class ContratoServiceImpl implements ContratoService {
     }
 
     @Override
-    public Page<ContratoBandejaDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador) {
-
-
-        if(fechaInicial != null && fechaFinal != null){
-
+    public Page<ContratoBandejaDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador)
+    {
+        if(fechaInicial != null && fechaFinal != null)
+        {
             LocalTime horaInicio = LocalTime.of(00,00,10);
             LocalTime horaFin = LocalTime.of(23,59,59);
 
@@ -137,6 +136,7 @@ public class ContratoServiceImpl implements ContratoService {
         }
 
         var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
+
         var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoBandejaDTO.class)).collect(Collectors.toList());
 
         for(ContratoBandejaDTO contratoBandejaDTO : resultDTO)
@@ -165,12 +165,57 @@ public class ContratoServiceImpl implements ContratoService {
         return new PageImpl<>(resultDTO, paginador, result.getTotalElements());
     }
 
+    @Override
+    public List<ContratoBandejaDTO> busquedaPorFiltrosTipoUno(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad, LocalDateTime fechaInicial, LocalDateTime fechaFinal)
+    {
+        if(fechaInicial != null && fechaFinal != null)
+        {
+            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaFin = LocalTime.of(23,59,59);
+
+            LocalDate fechaInicioDate = fechaInicial.toLocalDate();
+            LocalDate fechaFinDate = fechaFinal.toLocalDate();
+
+            fechaInicial = LocalDateTime.of(fechaInicioDate,horaInicio);
+            fechaFinal = LocalDateTime.of(fechaFinDate,horaFin);
+        }
+
+        var result =contratoRepository.busqueda(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal);
+
+        var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoBandejaDTO.class)).collect(Collectors.toList());
+
+        for(ContratoBandejaDTO contratoBandejaDTO : resultDTO)
+        {
+
+            var estadoString= maestroRepository.findByPrefijoAndCorrelativo(70,contratoBandejaDTO.getEstado()).getDescripcion();
+            contratoBandejaDTO.setEstadoDescripcion(estadoString);
+
+            var listaAdendaActiva = adendaRepository.busquedaAvanzada(null,contratoBandejaDTO.getId(),null,null,-1,-1).stream().filter(adenda -> adenda.getEstado().equals(1)).collect(Collectors.toList());
+
+            if(!listaAdendaActiva.isEmpty()){
+
+                contratoBandejaDTO.setInicioAdenda(listaAdendaActiva.get(0).getFechaInicial());
+                contratoBandejaDTO.setVencimientoAdenda(listaAdendaActiva.get(0).getFechaVencimiento());
+
+                var estadoDescripcion= maestroRepository.findByPrefijoAndCorrelativo(71,listaAdendaActiva.get(0).getEstado()).getDescripcion();
+
+                contratoBandejaDTO.setEstadoAdendaDescripcion(estadoDescripcion);
+            }
+
+            contratoBandejaDTO.setCantidadActividades(contratoRepository.countActividad(contratoBandejaDTO.getId()));
+            contratoBandejaDTO.setCantidadLotes(contratoRepository.countLoteContratos(contratoBandejaDTO.getId()));
+
+        }
+
+        return resultDTO;
+    }
+
 
     @Override
-    public Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad,LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador) {
-
-        if(fechaInicial != null && fechaFinal != null){
-
+    public Page<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad,LocalDateTime fechaInicial, LocalDateTime fechaFinal, Pageable paginador)
+    {
+        if(fechaInicial != null && fechaFinal != null)
+        {
             LocalTime horaInicio = LocalTime.of(00,00,10);
             LocalTime horaFin = LocalTime.of(23,59,59);
 
@@ -184,6 +229,26 @@ public class ContratoServiceImpl implements ContratoService {
         var result =contratoRepository.busquedaPageable(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal,paginador);
         var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoMinimalDTO.class)).collect(Collectors.toList());
         return new PageImpl<>(resultDTO, paginador, result.getTotalElements());
+    }
+
+    @Override
+    public List<ContratoMinimalDTO> busquedaPorFiltrosTipoDos(UUID id, String numeroContrato, UUID tipoContrato, Integer estado, UUID lote, String documento, UUID tipoDocumento,String nombreUsuario, UUID usuario, UUID tipoActividad,LocalDateTime fechaInicial, LocalDateTime fechaFinal)
+    {
+        if(fechaInicial != null && fechaFinal != null)
+        {
+            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaFin = LocalTime.of(23,59,59);
+
+            LocalDate fechaInicioDate = fechaInicial.toLocalDate();
+            LocalDate fechaFinDate = fechaFinal.toLocalDate();
+
+            fechaInicial = LocalDateTime.of(fechaInicioDate,horaInicio);
+            fechaFinal = LocalDateTime.of(fechaFinDate,horaFin);
+        }
+
+        var result = contratoRepository.busqueda(id,numeroContrato,tipoContrato,estado,lote,documento,tipoDocumento,nombreUsuario, usuario,tipoActividad,fechaInicial,fechaFinal);
+        var resultDTO = result.stream().map(x -> modelMapper.map(x, ContratoMinimalDTO.class)).collect(Collectors.toList());
+        return resultDTO;
     }
 
     @Override
