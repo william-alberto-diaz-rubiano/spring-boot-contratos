@@ -6,6 +6,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CarnetService {
-    List<CarnetDTO> guardarFormularioCarnet(List<CarnetDTO> listaObjetos);
+    CarnetDTO guardarFormularioCarnet(CarnetDTO carnetDTO);
     String numeroCarnet();
 }

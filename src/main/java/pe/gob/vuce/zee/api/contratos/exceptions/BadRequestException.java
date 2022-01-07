@@ -25,4 +25,7 @@ public class BadRequestException extends RuntimeException {
         this.status = status;
         this.errors = errors;
     }
+    public BadRequestException(String message) {
+        super(message);
+    }
 }

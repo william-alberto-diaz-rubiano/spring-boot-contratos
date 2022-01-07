@@ -30,11 +30,13 @@ public class CarnetEntity {
     @Column(name = "vecr_carn_num_carnet")
     private String numeroCarnet;
 
-    @Column(name = "vecr_carn_cod_mot_fk")
-    private UUID codigoMotivo;
+    @ManyToOne
+    @JoinColumn(name = "vecr_carn_cod_mot_fk", referencedColumnName = "vems_gcon_idllave_pk")
+    private MaestroEntity motivoCarnet;
 
-    @Column(name = "vecr_carn_id_tipo_cr")
-    private UUID tipoCarnet;
+    @ManyToOne
+    @JoinColumn(name = "vecr_carn_id_tipo_cr", referencedColumnName = "vems_gcon_idllave_pk")
+    private MaestroEntity tipoCarnet;
 
     @Column(name = "vecr_carn_fecha_entr", nullable = false)
     private LocalDateTime fechaEntregaCarnet;

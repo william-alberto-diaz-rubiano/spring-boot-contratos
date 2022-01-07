@@ -41,7 +41,15 @@ spring:
       max-request-size: 5MB
   services:
       maestroUrl: 'https://landing-desa.vuce.gob.pe/vuce-zee-api-lote/'
-app:
-  contrato-etapas:
-    1: 'Formulario principal'
-    2: 'Lotes'
+
+    # Otras propiedades
+  properties:
+    url-file-path:
+      contrato:
+        datos-principales: /mnt/ecm-zeeperu-container/contrato/datosprincipales
+        carnet: /mnt/ecm-zeeperu-container/contrato/carnet
+        archivos: /mnt/ecm-zeeperu-container/contrato/archivos
+  service:
+    baseUrl: 'https://landing-desa.vuce.gob.pe'
+    imgPath: //vuce-zee-api//images//contrato//datosprincipales//
+
