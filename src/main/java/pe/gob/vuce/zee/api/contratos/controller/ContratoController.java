@@ -193,13 +193,32 @@ public class ContratoController {
         if(tipo == 1)
         {
             List<ContratoBandejaDTO> resultado = contratoService.busquedaPorFiltrosTipoUno(null,numeroContrato, tipoContrato, estado, lote, documento, tipoDocumento,nombreUsuario, usuario, tipoActividad, fechaInicial, fechaFinal);
-            columnas = new String[]{"USUARIO", "NO. CONTRATO", "TIPO DE CONTRATO", "ESTADO", "CANT. LOTES", " CANT. ACTIVIDADES"};
-            data = resultado.stream().map(x -> new String[]{x.getUsuarioNombre(),
+            columnas = new String[]{"TIPO DE CONTRATO",
+                                    "N° DE CONTRATO",
+                                    "NOMBRE USUARIO",
+                                    "CANT. LOTE",
+                                    "CANT. TIPO DE ACTIVIDAD",
+                                    "INICIO ACTIVIDAD",
+                                    "INICIO CONTRATO",
+                                    "VENCIMIENTO CONTRATO",
+                                    "PRÓRROGRA CONTRATO",
+                                    "ESTADO CONTRATO",
+                                    "INICIO ADENDA",
+                                    "VENCIMIENTO ADENDA",
+                                    "ESTADO ADENDA"};
+            data = resultado.stream().map(x -> new String[]{x.getTipoContratoDescripcion(),
                                                             x.getNumeroContrato(),
-                                                            x.getTipoContratoDescripcion(),
+                                                            x.getUsuarioNombre(),
+                                                            Optional.ofNullable(x.getCantidadLotes()).map(Objects::toString).orElse("-"),
+                                                            Optional.ofNullable(x.getCantidadActividades()).map(Objects::toString).orElse("-"),
+                                                            Optional.ofNullable(x.getFechaInicioActividades()).map(Objects::toString).orElse("-"),
+                                                            Optional.ofNullable(x.getFechaInicial()).map(Objects::toString).orElse("-"),
+                                                            Optional.ofNullable(x.getFechaVencimiento()).map(Objects::toString).orElse("-"),
+                                                            Optional.ofNullable(x.getFechaProrroga()).map(Objects::toString).orElse("-"),
                                                             x.getEstadoDescripcion(),
-                                                            x.getCantidadLotes().toString(),
-                                                            x.getCantidadActividades().toString()}
+                                                            Optional.ofNullable(x.getInicioAdenda()).map(Objects::toString).orElse("-"),
+                                                            Optional.ofNullable(x.getVencimientoAdenda()).map(Objects::toString).orElse("-"),
+                                                            x.getEstadoAdendaDescripcion()}
                                         ).collect(Collectors.toList());
         }
 

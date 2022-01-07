@@ -23,10 +23,10 @@ public class ContratoBandejaDTO {
     private String tipoContratoDescripcion;
     private String numeroContrato;
     private String usuarioNombre;
-    private Integer cantidadLotes;
-    private Integer cantidadActividades;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime fechaInicioActividades;
+    private Integer cantidadLotes;
+    private Integer cantidadActividades;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime fechaInicial;
     @JsonFormat(pattern = "dd-MM-yyyy")
