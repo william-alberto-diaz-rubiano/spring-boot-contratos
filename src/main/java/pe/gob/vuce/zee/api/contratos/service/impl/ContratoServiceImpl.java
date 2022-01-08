@@ -125,7 +125,7 @@ public class ContratoServiceImpl implements ContratoService {
     {
         if(fechaInicial != null && fechaFinal != null)
         {
-            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaInicio = LocalTime.of(00,00,00);
             LocalTime horaFin = LocalTime.of(23,59,59);
 
             LocalDate fechaInicioDate = fechaInicial.toLocalDate();
@@ -170,7 +170,7 @@ public class ContratoServiceImpl implements ContratoService {
     {
         if(fechaInicial != null && fechaFinal != null)
         {
-            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaInicio = LocalTime.of(00,00,00);
             LocalTime horaFin = LocalTime.of(23,59,59);
 
             LocalDate fechaInicioDate = fechaInicial.toLocalDate();
@@ -216,7 +216,7 @@ public class ContratoServiceImpl implements ContratoService {
     {
         if(fechaInicial != null && fechaFinal != null)
         {
-            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaInicio = LocalTime.of(00,00,00);
             LocalTime horaFin = LocalTime.of(23,59,59);
 
             LocalDate fechaInicioDate = fechaInicial.toLocalDate();
@@ -236,7 +236,7 @@ public class ContratoServiceImpl implements ContratoService {
     {
         if(fechaInicial != null && fechaFinal != null)
         {
-            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaInicio = LocalTime.of(00,00,00);
             LocalTime horaFin = LocalTime.of(23,59,59);
 
             LocalDate fechaInicioDate = fechaInicial.toLocalDate();
@@ -256,7 +256,7 @@ public class ContratoServiceImpl implements ContratoService {
 
         if(fechaInicial != null && fechaFinal != null){
 
-            LocalTime horaInicio = LocalTime.of(00,00,10);
+            LocalTime horaInicio = LocalTime.of(00,00,00);
             LocalTime horaFin = LocalTime.of(23,59,59);
 
             LocalDate fechaInicioDate = fechaInicial.toLocalDate();
