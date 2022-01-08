@@ -26,6 +26,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @RestController
@@ -102,7 +103,11 @@ public class CarnetController {
             var contentType = photoValues[0];
             var photoUrl = Paths.get(photoValues[1]);
 
-            response.setHeader("Content-Disposition", "attachment; filename=" + id + ".jpeg");
+            var separador= Pattern.quote("\\");
+            String[] parts = carnet.getRutaFoto().split(separador);
+            String nombreExtension=parts[5];
+
+            response.setHeader("Content-Disposition", "attachment; filename=" + nombreExtension);
            // response.setHeader("Content-Disposition", "inline");
             response.setContentType(contentType);
             var os = response.getOutputStream();

@@ -1,5 +1,6 @@
 package pe.gob.vuce.zee.api.contratos.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class DocumentoDTO {
 
     private UUID id;
 
-    private ContratoEntity contrato;
+    private UUID contratoId;
 
     private String nombreDocumento;
 
@@ -31,10 +32,12 @@ public class DocumentoDTO {
 
     private Integer activo;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaCreacion;
 
     private UUID usuarioCreacion;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fechaModificacion;
 
     private UUID usuarioModificacion;

@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import pe.gob.vuce.zee.api.contratos.base.Constantes;
 import pe.gob.vuce.zee.api.contratos.dto.DocumentoDTO;
 import pe.gob.vuce.zee.api.contratos.exceptions.BadRequestException;
 import pe.gob.vuce.zee.api.contratos.exceptions.NotEntityFound;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 
 @Service
 public class DocumentoServiceImpl implements DocumentoService {
@@ -31,12 +33,11 @@ public class DocumentoServiceImpl implements DocumentoService {
 
     @Override
     public DocumentoDTO guardar(DocumentoDTO documentoDTO) {
-        var idContrato=documentoDTO.getContrato().getId();
+        var idContrato=documentoDTO.getContratoId();
 
         if(idContrato == null){
             throw new NotEntityFound("Debe existir un contrato registrado");
         }
-         var documento=new DocumentoEntity();
 
         String nombreArchivo = documentoDTO.getNombreDocumento();
         var parts = documentoDTO.getNombreDocumento().split("\\.");
@@ -62,9 +63,21 @@ public class DocumentoServiceImpl implements DocumentoService {
         }
         // Guardar imagen
         var ruta = ArchivoUtil.saveArchivo(documentoDTO.getDocumento(), rutaAbsoluta, nombreArchivo);
-        documento.setRutaArchivo(ruta);
-        documento.setNombreDocumento(nombreArchivo);
-        var documentoEntity=documentoRepository.save(documento);
+
+        documentoDTO.setRutaArchivo(ruta);
+        documentoDTO.setNombreDocumento(nombreArchivo);
+        documentoDTO.setEstado(1);
+        documentoDTO.setActivo(Constantes.HABILITADO);
+        documentoDTO.setIdCliente(1);
+        documentoDTO.setIdOrganizacion(1);
+        documentoDTO.setFechaCreacion(LocalDateTime.now());
+        documentoDTO.setFechaModificacion(LocalDateTime.now());
+        documentoDTO.setUsuarioCreacion(Constantes.UID_TEST);
+        documentoDTO.setUsuarioModificacion(Constantes.UID_TEST);
+
+        var nuevoDocumento=modelMapper.map(documentoDTO,DocumentoEntity.class);
+
+        var documentoEntity=documentoRepository.save(nuevoDocumento);
 
 
         return modelMapper.map(documentoEntity,DocumentoDTO.class);
